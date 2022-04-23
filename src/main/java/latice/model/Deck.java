@@ -9,12 +9,18 @@ public class Deck {
 		this.deckTile = deckTile;
 	}
 
-	public void getListTile() {
+	public void displayListTile() {
 		for (Tile tile : deckTile) {
 			System.out.println("tuile : couleur = " + tile.getColor() + "  forme = " + tile.getShape());
 		}
 		
 	}
+	
+	public ArrayList<Tile> getListTile() {
+		return this.deckTile;
+	}
+	
+	
 
 	
 }
