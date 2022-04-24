@@ -3,7 +3,7 @@ package latice.model;
 import java.util.ArrayList;
 
 public class Rack {
-	private ArrayList<Tile> listRackTile = new ArrayList<Tile>();
+	private static ArrayList<Tile> listRackTile = new ArrayList<Tile>();
 	
 	public Rack(Deck deck) {
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
@@ -20,6 +20,15 @@ public class Rack {
 		
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 	}
+
+	public static ArrayList<Tile> getListRackTile() {
+		return listRackTile;
+	}
+
+	public void setListRackTile(ArrayList<Tile> listRackTile) {
+		this.listRackTile = listRackTile;
+	}
+	
 	
 	
 	// TODO add method(s) javafx
