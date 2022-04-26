@@ -1,6 +1,5 @@
 package latice.application;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -9,9 +8,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -22,6 +28,8 @@ import latice.model.Shape;
 import latice.model.Tile;
 
 public class LaticeApplicationWindow extends Application{
+	
+	javafx.scene.paint.Color realColor = new javafx.scene.paint.Color(0, 0, 0, 0);
 	
 	Image image = new Image("C:/Users/cemal/saebut1/latice/src/main/resources/laticePlateau.png");
 	ImageView imageView = new ImageView(image);
@@ -47,7 +55,31 @@ public class LaticeApplicationWindow extends Application{
 		root.setAlignment(title, Pos.CENTER);
 		
 		//Image
-		root.setCenter(imageView);
+		Rectangle rectangle = new Rectangle();
+
+        rectangle.setWidth(50);
+        rectangle.setHeight(50);
+        //rectangle.setFill(realColor.TRANSPARENT);
+		
+		Pane pane = new Pane();
+		BackgroundImage myBG= new BackgroundImage(image,
+		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+		          BackgroundSize.DEFAULT);
+		pane.setBackground(new Background(myBG));
+		pane.getChildren().add(rectangle);
+		
+		for (int i=0; i<450 ;i += 50) {
+			for (int j=0; j < 450 ; j += 50) {
+				Rectangle r = new Rectangle(i,j,50,50);
+				r.setFill(realColor.TRANSPARENT);
+				r.setStroke(realColor.BLACK);
+
+				pane.getChildren().add(r);
+			}
+		}
+		pane.setLayoutX(100);
+		pane.setLayoutY(50);
+		root.setCenter(pane);
 		
 		//Rack
 		HBox rackBox = new HBox();
@@ -91,14 +123,18 @@ public class LaticeApplicationWindow extends Application{
 		rackTile4.setText(listRackTile.get(3).getShape().toString() + listRackTile.get(3).getColor().toString());
 		Text rackTile5 = new Text();
 		rackTile5.setText(listRackTile.get(4).getShape().toString() + listRackTile.get(4).getColor().toString());
-		
+        
+        
 		rackBox.getChildren().addAll(rackTile1, rackTile2, rackTile3, rackTile4, rackTile5);
 		rackBox.setAlignment(Pos.CENTER);
 		root.setBottom(rackBox);
+		root.setPadding(new Insets(20,20,20,20));
+		
 		
 		
 		Scene scene = new Scene(root, 1280, 720);
 		
+		primaryStage.setResizable(false);
 		primaryStage.setTitle("Latice");
 		primaryStage.setScene(scene);
 		primaryStage.show();

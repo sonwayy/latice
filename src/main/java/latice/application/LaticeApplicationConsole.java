@@ -1,7 +1,10 @@
 package latice.application;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
 import latice.model.Color;
 import latice.model.Deck;
 import latice.model.Rack;
@@ -24,6 +27,8 @@ public class LaticeApplicationConsole {
 				
 			}
 		}
+	
+
 		
 		System.out.println("-----------------");
 		System.out.println("Notre Deck :");
