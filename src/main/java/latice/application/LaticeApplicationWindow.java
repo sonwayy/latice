@@ -3,20 +3,26 @@ package latice.application;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -55,10 +61,7 @@ public class LaticeApplicationWindow extends Application{
 		root.setAlignment(title, Pos.CENTER);
 		
 		//Image
-		Rectangle rectangle = new Rectangle();
 
-        rectangle.setWidth(50);
-        rectangle.setHeight(50);
         //rectangle.setFill(realColor.TRANSPARENT);
 		
 		Pane pane = new Pane();
@@ -66,19 +69,20 @@ public class LaticeApplicationWindow extends Application{
 		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
 		          BackgroundSize.DEFAULT);
 		pane.setBackground(new Background(myBG));
-		pane.getChildren().add(rectangle);
-		
-		for (int i=0; i<450 ;i += 50) {
-			for (int j=0; j < 450 ; j += 50) {
-				Rectangle r = new Rectangle(i,j,50,50);
-				r.setFill(realColor.TRANSPARENT);
-				r.setStroke(realColor.BLACK);
 
-				pane.getChildren().add(r);
+		
+		Rectangle r[] = new Rectangle[81];
+		for (int i=1; i<10 ; i++) {
+			for (int j=1; j < 10 ; j++) {
+				r[i] = new Rectangle(i*52+336,j*52+15,50,50);
+				r[i].setFill(realColor.TRANSPARENT);
+				r[i].setStroke(realColor.BLACK);
+
+				pane.getChildren().add(r[i]);
+				System.out.println(r[i]);
 			}
 		}
-		pane.setLayoutX(100);
-		pane.setLayoutY(50);
+		
 		root.setCenter(pane);
 		
 		//Rack
@@ -125,6 +129,60 @@ public class LaticeApplicationWindow extends Application{
 		rackTile5.setText(listRackTile.get(4).getShape().toString() + listRackTile.get(4).getColor().toString());
         
         
+		rackTile1.setOnDragDetected(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				Dragboard dragboard = rackTile1.startDragAndDrop(TransferMode.ANY);
+				ClipboardContent content = new ClipboardContent();
+				content.putString("Hello !");
+				dragboard.setContent(content);
+				arg0.consume();
+			}
+			
+		});
+		
+		ImagePattern imagePattern = new ImagePattern(image);
+		r[1].setOnDragEntered(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(DragEvent arg0) {
+				if (arg0.getDragboard().hasString()){
+					r[1].setFill(imagePattern);
+				}
+				arg0.consume();
+			}
+		});
+		
+		r[1].setOnDragExited(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(DragEvent arg0) {
+				r[1].setFill(realColor.BLUE);
+				arg0.consume();
+			}
+			
+		});
+		
+		r[1].setOnDragDropped(new EventHandler<DragEvent>() {
+			@Override
+			public void handle(DragEvent arg0) {
+				System.out.println("entered");
+				Dragboard dragboard = arg0.getDragboard();
+				boolean success = false;
+				r[1].setFill(imagePattern);
+				System.out.println("got files :" + dragboard.getFiles());
+				if (dragboard.hasString()){
+					success = true;
+					r[1].setFill(imagePattern);
+				}
+				arg0.setDropCompleted(success);
+				
+				arg0.consume();
+			}
+			
+		});
+		
 		rackBox.getChildren().addAll(rackTile1, rackTile2, rackTile3, rackTile4, rackTile5);
 		rackBox.setAlignment(Pos.CENTER);
 		root.setBottom(rackBox);
@@ -132,9 +190,10 @@ public class LaticeApplicationWindow extends Application{
 		
 		
 		
+		
 		Scene scene = new Scene(root, 1280, 720);
 		
-		primaryStage.setResizable(false);
+		//primaryStage.setResizable(false);
 		primaryStage.setTitle("Latice");
 		primaryStage.setScene(scene);
 		primaryStage.show();
