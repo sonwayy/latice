@@ -43,13 +43,6 @@ public class Rack {
 	public void setListRackTile(ArrayList<Tile> listRackTile) {
 		this.listRackTile = listRackTile;
 	}
-	
-	
-	
-	
-	public ArrayList<Tile> getListRackTile() {
-		return listRackTile;
-	}
 
 
 
@@ -66,7 +59,7 @@ public class Rack {
 			
 			tile = (this.getListRackTile()).get(index);
 			
-			image = new Image(tile.getShape().getStringShape() + " " + tile.getColor().getStringColor()+ ".png");
+			image = new Image(tile.getShape().getStringShape() + "_" + tile.getColor().getStringColor()+ ".png");
 			imageView = new ImageView(image);
 			
 			rack.getChildren().add(imageView);
