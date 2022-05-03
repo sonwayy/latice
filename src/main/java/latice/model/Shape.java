@@ -4,7 +4,7 @@ public enum Shape {
 	BIRD("bird"), 
 	DOLPHIN("dolphin"), 
 	FLOWER("flower"), 
-	feather("feather"), 
+	FEATHER("feather"), 
 	GECKO("gecko"), 
 	TURTLE("turtle");
 	

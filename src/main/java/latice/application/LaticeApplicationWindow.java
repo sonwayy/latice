@@ -1,6 +1,6 @@
 package latice.application;
 
-import java.io.File;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -10,21 +10,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import latice.model.Color;
+import latice.model.Deck;
+import latice.model.Rack;
 import latice.model.Shape;
 import latice.model.Tile;
 
 public class LaticeApplicationWindow extends Application{
 	
-	Image image = new Image("C:/Users/cemal/saebut1/latice/src/main/resources/laticePlateau.png");
+	Image image = new Image("laticePlateau.png");
 	ImageView imageView = new ImageView(image);
 	
-	Tile blueBird = new Tile(Color.BLUE, Shape.BIRD);
-	Tile greenLeaf = new Tile(Color.GREEN, Shape.LEAF);
+	Tile blueBird = new Tile(Color.NAVYBLUE, Shape.BIRD);
+	Tile greenLeaf = new Tile(Color.GREEN, Shape.FEATHER);
 	Tile redFlower = new Tile(Color.RED, Shape.FLOWER);
 
 	public static void main(String[] args) {
@@ -44,7 +45,26 @@ public class LaticeApplicationWindow extends Application{
 		//Image
 		root.setCenter(imageView);
 		
+		//--------------------------------------------------------------------------------------
+		//Deck
+		ArrayList<Tile> listOfTile = new ArrayList<Tile>();
+		
+		for (Color color : Color.values()) {
+			for (Shape shape : Shape.values()) {
+				Tile tile = new Tile(color, shape);
+				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
+				
+				listOfTile.add(tile);
+				
+			}
+		}
+		
+		Deck deck = new Deck(listOfTile);
+		
+		
+		//--------------------------------------------------------------------------------------
 		//Rack
+			//Without Image
 		HBox rack = new HBox();
 		
 		rack.setSpacing(10);
@@ -61,6 +81,14 @@ public class LaticeApplicationWindow extends Application{
 		rack.setAlignment(Pos.CENTER);
 		root.setBottom(rack);
 		
+			//With Image
+		Rack rack2 = new Rack(deck);
+		HBox rackImage = rack2.createImageTileOfRack(); // TODO Create the deck
+		
+
+		root.setBottom(rackImage);
+		
+		//--------------------------------------------------------------------------------------
 		
 		Scene scene = new Scene(root, 1280, 720);
 		

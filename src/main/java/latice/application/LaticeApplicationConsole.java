@@ -19,6 +19,7 @@ public class LaticeApplicationConsole {
 		for (Color color : Color.values()) {
 			for (Shape shape : Shape.values()) {
 				Tile tile = new Tile(color, shape);
+				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
 				
 				listOfTile.add(tile);
 				
