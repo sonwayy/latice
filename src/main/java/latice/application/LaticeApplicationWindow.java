@@ -35,15 +35,11 @@ import latice.model.Tile;
 
 public class LaticeApplicationWindow extends Application{
 	
-	javafx.scene.paint.Color realColor = new javafx.scene.paint.Color(0, 0, 0, 0);
-	
-	Image image = new Image("C:/Users/cemal/saebut1/latice/src/main/resources/laticePlateau.png");
+	Image image = new Image("laticePlateau.png");
 	ImageView imageView = new ImageView(image);
 	
-	
-	
-	Tile blueBird = new Tile(Color.BLUE, Shape.BIRD);
-	Tile greenLeaf = new Tile(Color.GREEN, Shape.LEAF);
+	Tile blueBird = new Tile(Color.NAVYBLUE, Shape.BIRD);
+	Tile greenLeaf = new Tile(Color.GREEN, Shape.FEATHER);
 	Tile redFlower = new Tile(Color.RED, Shape.FLOWER);
 
 	public static void main(String[] args) {
@@ -85,6 +81,24 @@ public class LaticeApplicationWindow extends Application{
 		
 		root.setCenter(pane);
 		
+		//--------------------------------------------------------------------------------------
+		//Deck
+		ArrayList<Tile> listOfTile = new ArrayList<Tile>();
+		
+		for (Color color : Color.values()) {
+			for (Shape shape : Shape.values()) {
+				Tile tile = new Tile(color, shape);
+				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
+				
+				listOfTile.add(tile);
+				
+			}
+		}
+		
+		Deck deck = new Deck(listOfTile);
+		
+		
+		//--------------------------------------------------------------------------------------
 		//Rack
 		HBox rackBox = new HBox();
 		
@@ -190,6 +204,14 @@ public class LaticeApplicationWindow extends Application{
 		
 		
 		
+			//With Image
+		Rack rack2 = new Rack(deck);
+		HBox rackImage = rack2.createImageTileOfRack(); // TODO Create the deck
+		
+
+		root.setBottom(rackImage);
+		
+		//--------------------------------------------------------------------------------------
 		
 		Scene scene = new Scene(root, 1280, 720);
 		
