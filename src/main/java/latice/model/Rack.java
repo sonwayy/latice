@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 public class Rack {
-	private ArrayList<Tile> listRackTile = new ArrayList<Tile>();
+	private static ArrayList<Tile> listRackTile = new ArrayList<Tile>();
 	
 	public Rack(Deck deck) {
 		
@@ -35,6 +35,15 @@ public class Rack {
 		
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 	}
+
+	public static ArrayList<Tile> getListRackTile() {
+		return listRackTile;
+	}
+
+	public void setListRackTile(ArrayList<Tile> listRackTile) {
+		this.listRackTile = listRackTile;
+	}
+	
 	
 	
 	
