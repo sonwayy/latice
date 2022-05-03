@@ -2,24 +2,79 @@ package latice.model;
 
 import java.util.ArrayList;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+
 public class Rack {
 	private ArrayList<Tile> listRackTile = new ArrayList<Tile>();
 	
 	public Rack(Deck deck) {
+		
+		Image image = new Image("laticePlateau.png");
+		ImageView imageView = new ImageView(image);
+		Tile tile;
+		
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 		
 		for (int i = 0; i < 5; i++) {
 			int index = (int)(Math.random()*((deck.getListTile()).size()-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
-			listRackTile.add((deck.getListTile()).get(index));
-			System.out.println("l'indice de la tuile ajouté au rack est : " + index + 
-					" qui est la tuile : couleur = " + (deck.getListTile()).get(index).getColor() + 
-					"  forme = " + (deck.getListTile()).get(index).getShape());
+			
+			tile = (deck.getListTile()).get(index);
+			
+			listRackTile.add(tile);
+			
+			// root.setCenter(imageView);
+			
 			deck.getListTile().remove(index);
 			
 		}
 		
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 	}
+	
+	
+	
+	public ArrayList<Tile> getListRackTile() {
+		return listRackTile;
+	}
+
+
+
+	public HBox createImageTileOfRack() {
+		Image image;
+		ImageView imageView;
+		Tile tile;
+		int index;
+		
+		HBox rack = new HBox();
+		
+		for (int i = 0; i < 5; i++) {
+			index = i;
+			
+			tile = (this.getListRackTile()).get(index);
+			
+			image = new Image(tile.getShape().getStringShape() + " " + tile.getColor().getStringColor()+ ".png");
+			imageView = new ImageView(image);
+			
+			rack.getChildren().add(imageView);
+		}
+		
+		rack.setSpacing(10);
+        rack.setPadding(new Insets(15,20, 10,10));
+		
+		rack.setAlignment(Pos.CENTER);
+		
+		return rack;
+		
+	}
+	
+	
+	
+	
 	
 	
 	// TODO add method(s) javafx
