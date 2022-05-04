@@ -83,7 +83,7 @@ public class LaticeApplicationWindow extends Application{
 		Rectangle r[] = new Rectangle[81];
 		for (int i=1; i<10 ; i++) {
 			for (int j=1; j < 10 ; j++) {
-				r[i] = new Rectangle(i*52+336,j*52+15,50,50);
+				r[i] = new Rectangle(i*52+336,j*52-17,50,50);
 				r[i].setFill(realColor.TRANSPARENT);
 				r[i].setStroke(realColor.BLACK);
 

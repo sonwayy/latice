@@ -61,6 +61,8 @@ public class Rack {
 			
 			image = new Image(tile.getShape().getStringShape() + "_" + tile.getColor().getStringColor()+ ".png");
 			imageView = new ImageView(image);
+			imageView.setFitHeight(80);
+			imageView.setFitWidth(80);
 			
 			rack.getChildren().add(imageView);
 		}
