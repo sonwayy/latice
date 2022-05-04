@@ -43,6 +43,7 @@ public class LaticeApplicationWindow extends Application{
 	Tile blueBird = new Tile(Color.NAVYBLUE, Shape.BIRD);
 	Tile greenLeaf = new Tile(Color.GREEN, Shape.FEATHER);
 	Tile redFlower = new Tile(Color.RED, Shape.FLOWER);
+	ArrayList<Image> listTileImage = Rack.getRackTileImage();	
 	
 	
 	
@@ -81,18 +82,22 @@ public class LaticeApplicationWindow extends Application{
 
 		
 		Rectangle r[] = new Rectangle[81];
+		int counter = 0;
 		for (int i=1; i<10 ; i++) {
 			for (int j=1; j < 10 ; j++) {
-				r[i] = new Rectangle(i*52+336,j*52-17,50,50);
-				r[i].setFill(realColor.TRANSPARENT);
-				r[i].setStroke(realColor.BLACK);
+				
+				r[counter] = new Rectangle(i*52+358,j*52+3,50,50);
+				r[counter].setFill(realColor.TRANSPARENT);
+				r[counter].setStroke(realColor.BLACK);
 
-				pane.getChildren().add(r[i]);
-				System.out.println(r[i]);
+				pane.getChildren().add(r[counter]);
+				System.out.println(r[counter]);
+				counter++;
 			}
 		}
 		
 		root.setCenter(pane);
+		System.out.println(r);
 		
 		
 		
@@ -127,88 +132,87 @@ public class LaticeApplicationWindow extends Application{
 		System.out.println("-----------------");
 		//deck.displayListTile();
 		
-		ArrayList<Tile> listRackTile = Rack.getListRackTile();
 		
-		
-		Text rackTile1 = new Text();
-		rackTile1.setText(listRackTile.get(0).getShape().toString() + listRackTile.get(0).getColor().toString());
-		Text rackTile2 = new Text();
-		rackTile2.setText(listRackTile.get(1).getShape().toString() + listRackTile.get(1).getColor().toString());
-		Text rackTile3 = new Text();
-		rackTile3.setText(listRackTile.get(2).getShape().toString() + listRackTile.get(2).getColor().toString());
-		Text rackTile4 = new Text();
-		rackTile4.setText(listRackTile.get(3).getShape().toString() + listRackTile.get(3).getColor().toString());
-		Text rackTile5 = new Text();
-		rackTile5.setText(listRackTile.get(4).getShape().toString() + listRackTile.get(4).getColor().toString());
-        
-        
-		rackTile1.setOnDragDetected(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent arg0) {
-				Dragboard dragboard = rackTile1.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello !");
-				dragboard.setContent(content);
-				arg0.consume();
-			}
-			
-		});
-		
-		ImagePattern imagePattern = new ImagePattern(image);
-		r[1].setOnDragEntered(new EventHandler<DragEvent>() {
-
-			@Override
-			public void handle(DragEvent arg0) {
-				if (arg0.getDragboard().hasString()){
-					r[1].setFill(imagePattern);
-				}
-				arg0.consume();
-			}
-		});
-		
-		r[1].setOnDragExited(new EventHandler<DragEvent>() {
-
-			@Override
-			public void handle(DragEvent arg0) {
-				r[1].setFill(realColor.BLUE);
-				arg0.consume();
-			}
-			
-		});
-		
-		r[1].setOnDragDropped(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent arg0) {
-				System.out.println("entered");
-				Dragboard dragboard = arg0.getDragboard();
-				boolean success = false;
-				r[1].setFill(imagePattern);
-				System.out.println("got files :" + dragboard.getFiles());
-				if (dragboard.hasString()){
-					success = true;
-					r[1].setFill(imagePattern);
-				}
-				arg0.setDropCompleted(success);
-				
-				arg0.consume();
-			}
-			
-		});
-		
-		rackBox.getChildren().addAll(rackTile1, rackTile2, rackTile3, rackTile4, rackTile5);
-		rackBox.setAlignment(Pos.CENTER);
-		root.setBottom(rackBox);
-		root.setPadding(new Insets(20,20,20,20));
-		
-		
-		
-			//With Image
+		//With Image
 		Rack rack2 = new Rack(deck);
 		HBox rackImage = rack2.createImageTileOfRack(); // TODO Create the deck
-		
+	
 
 		root.setBottom(rackImage);
+		
+		ArrayList<Tile> listRackTile = Rack.getListRackTile();	
+		
+		for (int i=0; i<5; i++) {
+			int a = i;
+			rackImage.getChildren().get(a).setOnDragDetected(new EventHandler<MouseEvent>() {
+				
+				@Override
+				public void handle(MouseEvent arg0) {
+					Dragboard dragboard = rackImage.getChildren().get(a).startDragAndDrop(TransferMode.ANY);
+					ClipboardContent content = new ClipboardContent();
+					content.putString("Hello !");
+					dragboard.setContent(content);
+					arg0.consume();
+				}
+			});
+		}
+		ImagePattern imagePattern = new ImagePattern(listTileImage.get(0));
+		
+		for(int i=1; i<81; i++) {
+	        int a = i;
+	        System.out.println(a);
+			r[a].setOnDragEntered(new EventHandler<DragEvent>() {
+
+				@Override
+				public void handle(DragEvent arg0) {
+					if (arg0.getDragboard().hasString()){
+						Dragboard dragboard = arg0.getDragboard();
+						
+						System.out.println("got files :" + dragboard.getFiles());
+						r[a].setFill(imagePattern);
+					}
+					arg0.consume();
+				}
+			});
+			
+			r[a].setOnDragExited(new EventHandler<DragEvent>() {
+	
+				@Override
+				public void handle(DragEvent arg0) {
+					if (arg0.isDropCompleted() == false) {
+						r[a].setFill(realColor.TRANSPARENT);
+					}
+					arg0.consume();
+				}
+				
+			});
+			
+			r[a].setOnDragOver(new EventHandler <DragEvent>() {
+				@Override
+			    public void handle(DragEvent arg0) {
+			        arg0.acceptTransferModes(TransferMode.ANY);
+			        arg0.consume();
+			    }
+			});
+			
+			r[a].setOnDragDropped(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent arg0) {
+					System.out.println("entered");
+					Dragboard dragboard = arg0.getDragboard();
+					
+					System.out.println("got files :" + dragboard.getFiles());
+					r[a].setFill(imagePattern);
+					arg0.setDropCompleted(true);
+					
+					arg0.consume();
+				}
+				
+			});
+        }
+		
+		
+	
 		
 		//--------------------------------------------------------------------------------------
 		

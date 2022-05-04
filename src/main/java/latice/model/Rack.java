@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 
 public class Rack {
 	private static ArrayList<Tile> listRackTile = new ArrayList<Tile>();
+	private static ArrayList<Image> rackTileImage = new ArrayList<Image>();
 	
 	public Rack(Deck deck) {
 		
@@ -60,10 +61,10 @@ public class Rack {
 			tile = (this.getListRackTile()).get(index);
 			
 			image = new Image(tile.getShape().getStringShape() + "_" + tile.getColor().getStringColor()+ ".png");
+			rackTileImage.add(image);
 			imageView = new ImageView(image);
 			imageView.setFitHeight(80);
 			imageView.setFitWidth(80);
-			
 			rack.getChildren().add(imageView);
 		}
 		
@@ -74,6 +75,10 @@ public class Rack {
 		
 		return rack;
 		
+	}
+	
+	public static ArrayList<Image> getRackTileImage() {
+		return rackTileImage;
 	}
 	
 	
