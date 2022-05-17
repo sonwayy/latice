@@ -10,13 +10,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 public class Rack {
-	private static ArrayList<Tile> listRackTile = new ArrayList<Tile>();
-	private static ArrayList<Image> rackTileImage = new ArrayList<Image>();
+	private ArrayList<Tile> listRackTile = new ArrayList<Tile>();
+	private ArrayList<Image> rackTileImage = new ArrayList<Image>();
 	
 	public Rack(Deck deck) {
 		
-		Image image = new Image("laticePlateau.png");
-		ImageView imageView = new ImageView(image);
 		Tile tile;
 		
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
@@ -26,7 +24,7 @@ public class Rack {
 			
 			tile = (deck.getListTile()).get(index);
 			
-			listRackTile.add(tile);
+			this.listRackTile.add(tile);
 			
 			// root.setCenter(imageView);
 			
@@ -34,15 +32,29 @@ public class Rack {
 			
 		}
 		
-		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
+		System.out.println("Il y a dans le rack : " + this.listRackTile.size() + " valeurs");
 	}
 
-	public static ArrayList<Tile> getListRackTile() {
-		return listRackTile;
+	public ArrayList<Tile> getListRackTile() {
+		return this.listRackTile;
 	}
 
 	public void setListRackTile(ArrayList<Tile> listRackTile) {
 		this.listRackTile = listRackTile;
+	}
+	
+	public void displayRack() {
+		boolean success = false;
+		System.out.print("rack : ");
+		for (Tile tile : this.listRackTile) {
+			if (success) {
+				System.out.print(", " + tile.getShape().getStringShapeConsole() + tile.getColor().getStringColorConsole());
+			}else {
+				System.out.print(tile.getShape().getStringShapeConsole() + tile.getColor().getStringColorConsole());
+				success = true;
+			}
+		}
+		System.out.println();
 	}
 
 
@@ -77,7 +89,7 @@ public class Rack {
 		
 	}
 	
-	public static ArrayList<Image> getRackTileImage() {
+	public ArrayList<Image> getRackTileImage() {
 		return rackTileImage;
 	}
 	
