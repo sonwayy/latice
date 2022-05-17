@@ -1,14 +1,21 @@
 package latice.application;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -29,13 +36,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import latice.controller.MainScreenController;
 import latice.model.Color;
 import latice.model.Deck;
 import latice.model.Rack;
 import latice.model.Shape;
 import latice.model.Tile;
 
-public class LaticeApplicationWindow extends Application{
+public class LaticeApplicationWindow extends Application {
 	
 	javafx.scene.paint.Color realColor = new javafx.scene.paint.Color(0, 0, 0, 0);
 	
@@ -46,9 +54,11 @@ public class LaticeApplicationWindow extends Application{
 	Tile greenLeaf = new Tile(Color.GREEN, Shape.FEATHER);
 	Tile redFlower = new Tile(Color.RED, Shape.FLOWER);
 	
+	ArrayList<Tile> listRackTile = Rack.getListRackTile();	
 	ArrayList<Image> listTileImage = Rack.getRackTileImage();
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
+
 	
 	public static int indexTileClicked;	
 	
@@ -64,7 +74,10 @@ public class LaticeApplicationWindow extends Application{
 	
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) throws Exception{
+		Parent loader = FXMLLoader.load(getClass().getResource("../view/MainScreen.fxml"));
+		Scene menu = new Scene(loader, 1280, 720);
+		MainScreenController MSC = new MainScreenController();
 		//root layout
 		BorderPane root = new BorderPane();
 		
@@ -89,7 +102,7 @@ public class LaticeApplicationWindow extends Application{
 		for (int i=1; i<10 ; i++) {
 			for (int j=1; j < 10 ; j++) {
 				
-				r[counterI][counterJ] = new Rectangle(i*52+358,j*52+3,50,50);
+				r[counterI][counterJ] = new Rectangle(i*52+307,j*52+3,50,50);
 				r[counterI][counterJ].setFill(realColor.TRANSPARENT);
 				pane.getChildren().add(r[counterI][counterJ]);
 				System.out.println(r[counterI][counterJ]);
@@ -137,11 +150,27 @@ public class LaticeApplicationWindow extends Application{
 		//With Image
 		Rack rack2 = new Rack(deck);
 		HBox rackImage = rack2.createImageTileOfRack();
-	
 
 		root.setBottom(rackImage);
 		
-		ArrayList<Tile> listRackTile = Rack.getListRackTile();	
+		
+		//Confirm Button
+		Image checkMark = new Image("checkMark.png");
+		ImageView checkMarkView = new ImageView(checkMark);
+		Button confirmButton = new Button("Confirm", checkMarkView);
+		root.setAlignment(confirmButton, Pos.BOTTOM_LEFT);
+		confirmButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				// TODO on mouse clicked on confirm
+				
+			}
+			
+		});
+		
+		
+		root.setRight(confirmButton);
 		
 		
 		//------------------------------------------------------------------------
@@ -228,6 +257,7 @@ public class LaticeApplicationWindow extends Application{
 	        }
 		}
 		
+		
 	
 		
 		//--------------------------------------------------------------------------------------
@@ -236,7 +266,7 @@ public class LaticeApplicationWindow extends Application{
 		
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Latice");
-		primaryStage.setScene(scene);
+		primaryStage.setScene(menu);
 		primaryStage.show();
 		
 	}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="latice.controller.MainScreenController">
+   <center>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/mainScreen.png" />
+               </image>
+            </ImageView>
+            <Rectangle fx:id="playButton" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="151.0" layoutX="345.0" layoutY="175.0" onMouseClicked="#playButtonClicked" stroke="TRANSPARENT" strokeType="INSIDE" width="582.0" />
+            <Rectangle fx:id="rulesButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="152.0" layoutX="346.0" layoutY="355.0" onMouseClicked="#rulesButtonClicked" stroke="TRANSPARENT" strokeType="INSIDE" width="585.0" />
+            <Rectangle fx:id="exitButton" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="152.0" layoutX="348.0" layoutY="535.0" onMouseClicked="#exitButtonClicked" stroke="TRANSPARENT" strokeType="INSIDE" width="583.0" />
+         </children></Pane>
+   </center>
+</BorderPane>
