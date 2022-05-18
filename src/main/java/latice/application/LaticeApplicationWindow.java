@@ -58,6 +58,7 @@ public class LaticeApplicationWindow extends Application {
 	ArrayList<Image> listTileImage = Rack.getRackTileImage();
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
+	static BorderPane rootLayout;
 
 	
 	public static int indexTileClicked;	
@@ -261,8 +262,7 @@ public class LaticeApplicationWindow extends Application {
 	
 		
 		//--------------------------------------------------------------------------------------
-		
-		Scene scene = new Scene(root, 1280, 720);
+		setRootLayout(root);
 		
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Latice");
@@ -270,8 +270,12 @@ public class LaticeApplicationWindow extends Application {
 		primaryStage.show();
 		
 	}
-
-
+	public static void setRootLayout(BorderPane root) {
+		rootLayout = root;
+	}
+	public static BorderPane getRootLayout() {
+		return rootLayout;
+	}
 
 
 
@@ -288,5 +292,7 @@ public class LaticeApplicationWindow extends Application {
 	public static void setIndexTileClicked(int indexTileClicked) {
 		LaticeApplicationWindow.indexTileClicked = indexTileClicked;
 	}
+	
+	
 
 }
