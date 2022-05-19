@@ -47,7 +47,7 @@ public class Rack {
 
 
 
-	public HBox createImageTileOfRack() {
+	public HBox createTileImage() {
 		Image image;
 		ImageView imageView;
 		Tile tile;

@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import latice.application.LaticeApplicationWindow;
@@ -23,7 +23,7 @@ public class MainScreenController extends LaticeApplicationWindow{
 	public void playButtonClicked(MouseEvent event) {
 		System.out.println("playButtonClicked");
 		Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
-		BorderPane root = getRootLayout();
+		StackPane root = getRootLayout();
 		Scene scene = new Scene(root, 1280, 720);
 		stage.setScene(scene);
 	}
