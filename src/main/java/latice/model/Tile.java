@@ -18,8 +18,16 @@ public class Tile {
 		return this.color;
 	}
 	
+	public String getColorConsole() {
+		return this.color.getStringColorConsole();
+	}
+	
 	public Shape getShape() {
 		return this.shape;
+	}
+	
+	public String getShapeConsole() {
+		return this.shape.getStringShapeConsole();
 	}
 	
 	public Position getPosition() {

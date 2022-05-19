@@ -20,15 +20,16 @@ public class Rack {
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 		
 		for (int i = 0; i < 5; i++) {
-			int index = (int)(Math.random()*((deck.getListTile()).size()-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
+			int index = (int)(Math.random()*(((deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
 			
 			tile = (deck.getListTile()).get(index);
-			
 			this.listRackTile.add(tile);
-			
-			// root.setCenter(imageView);
-			
 			deck.getListTile().remove(index);
+			
+			
+			
+			
+			
 			
 		}
 		
@@ -43,14 +44,51 @@ public class Rack {
 		this.listRackTile = listRackTile;
 	}
 	
+	
+	public void updateRack(Deck deck) {
+		
+		Tile tile;
+		
+		for (int i = 0; i < 5-this.listRackTile.size() ; i++) {
+			int index = (int)(Math.random()*( ((deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
+			
+			tile = (deck.getListTile()).get(index);
+			this.listRackTile.add(tile);
+			deck.getListTile().remove(index);
+
+		}
+		
+	}
+	
+	public void removeTile(String stringTile) {
+		int count = 0;
+		int index = -1;
+		System.out.println("taille : " + this.listRackTile.size());
+		for (Tile tile : this.listRackTile) {
+			System.out.println(count++);
+			if (stringTile.equals(tile.getShapeConsole() + tile.getColorConsole())) {
+				index = this.listRackTile.indexOf(tile);
+				System.out.println(index);
+				System.out.println("tuile supprimé avec succès");
+			}
+			
+		}
+		
+		if (index != -1) {
+			this.listRackTile.remove(index);
+		}
+		System.out.println("taille : " + this.listRackTile.size());
+
+	}
+	
 	public void displayRack() {
 		boolean success = false;
 		System.out.print("rack : ");
 		for (Tile tile : this.listRackTile) {
 			if (success) {
-				System.out.print(", " + tile.getShape().getStringShapeConsole() + tile.getColor().getStringColorConsole());
+				System.out.print(", " + tile.getShapeConsole() + tile.getColorConsole());
 			}else {
-				System.out.print(tile.getShape().getStringShapeConsole() + tile.getColor().getStringColorConsole());
+				System.out.print(tile.getShapeConsole() + tile.getColorConsole());
 				success = true;
 			}
 		}
