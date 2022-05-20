@@ -30,6 +30,15 @@ public class Player {
 	
 	public void Play(Scanner play, GameBoard board) {
 		System.out.println("c'est à votre tour de jouer " + this.name +"!");
+		if (this.getScore() ==  0) {
+		
+			System.out.println("Vous avez " + this.getScore() + " point");
+
+		}else {
+			System.out.println("Vous avez " + this.getScore() + " points");
+
+		}
+		
 		System.out.print("Quel tuile voulez-vous jouez ? ");
 		this.rack.displayRack();
 		String tileToPlay = play.next();
@@ -42,7 +51,7 @@ public class Player {
 		
 		board.displayGameBoard();
 		
-		this.rack.updateRack(deck);
+		this.rack.updateRack();
 		
 		
 	}

@@ -2,8 +2,8 @@ package latice.model;
 
 public class GameBoard {
 	private Integer DIMENSION = 9;
-	private final String SUN = " SU ";
-	private final String MOON = " MO ";
+	public static final String SUN = " SU ";
+	public static final String MOON = " MO ";
 	private String[][] gridBoard;
 	
 	public GameBoard() {

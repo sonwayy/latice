@@ -12,19 +12,22 @@ import javafx.scene.text.Text;
 public class Rack {
 	private ArrayList<Tile> listRackTile = new ArrayList<Tile>();
 	private ArrayList<Image> rackTileImage = new ArrayList<Image>();
+	private Deck deck;
 	
 	public Rack(Deck deck) {
+		this.deck = deck;
 		
 		Tile tile;
 		
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 		
 		for (int i = 0; i < 5; i++) {
-			int index = (int)(Math.random()*(((deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
+			int index = (int)(Math.random()*(((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
 			
-			tile = (deck.getListTile()).get(index);
+			tile = (this.deck.getListTile()).get(index);
 			this.listRackTile.add(tile);
-			deck.getListTile().remove(index);
+			this.deck.getListTile().remove(index);
+			
 			
 			
 			
@@ -45,17 +48,17 @@ public class Rack {
 	}
 	
 	
-	public void updateRack(Deck deck) {
+	public void updateRack() {
 		
 		Tile tile;
 		
 		for (int i = 0; i < 5-this.listRackTile.size() ; i++) {
-			int index = (int)(Math.random()*( ((deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
+			int index = (int)(Math.random()*( ((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
 			
-			tile = (deck.getListTile()).get(index);
+			tile = (this.deck.getListTile()).get(index);
 			this.listRackTile.add(tile);
-			deck.getListTile().remove(index);
-
+			this.deck.getListTile().remove(index);
+			
 		}
 		
 	}
