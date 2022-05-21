@@ -1,13 +1,19 @@
 package latice.controller;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import latice.application.LaticeApplicationWindow;
 
 public class MainScreenController extends LaticeApplicationWindow{
@@ -17,6 +23,10 @@ public class MainScreenController extends LaticeApplicationWindow{
 	private Rectangle rulesButton;
 	@FXML
 	private Rectangle exitButton;
+	@FXML
+	private StackPane parentStackPane;
+	@FXML
+	private BorderPane menuBorderPane;
 
 	// Event Listener on Rectangle[#playButton].onMouseClicked
 	@FXML
@@ -24,8 +34,20 @@ public class MainScreenController extends LaticeApplicationWindow{
 		System.out.println("playButtonClicked");
 		Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
 		StackPane root = getRootLayout();
-		Scene scene = new Scene(root, 1280, 720);
-		stage.setScene(scene);
+		root.translateYProperty().set(stage.getHeight());
+		parentStackPane.getChildren().add(root);
+		
+		//parameters of the animation
+		Timeline timeline = new Timeline();
+		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+        timeline.getKeyFrames().add(kf);
+        
+        //when the animation is finished we're removing the main screen
+        timeline.setOnFinished(t -> {
+            parentStackPane.getChildren().remove(menuBorderPane);
+        });
+        timeline.play();
 	}
 	// Event Listener on Rectangle[#rulesButton].onMouseClicked
 	@FXML
