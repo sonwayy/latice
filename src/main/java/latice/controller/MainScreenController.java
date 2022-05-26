@@ -8,10 +8,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import latice.application.LaticeApplicationWindow;
@@ -32,9 +34,9 @@ public class MainScreenController extends LaticeApplicationWindow{
 	@FXML
 	public void playButtonClicked(MouseEvent event) {
 		System.out.println("playButtonClicked");
-		Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+		Stage primaryStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
 		StackPane root = getRootLayout();
-		root.translateYProperty().set(stage.getHeight());
+		root.translateYProperty().set(primaryStage.getHeight());
 		parentStackPane.getChildren().add(root);
 		
 		//parameters of the animation
@@ -53,6 +55,30 @@ public class MainScreenController extends LaticeApplicationWindow{
 	@FXML
 	public void rulesButtonClicked(MouseEvent event) {
 		System.out.println("rulesButtonClicked");
+		Stage primaryStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+		Label secondLabel = new Label("Règles");
+		//TODO règles à saisir
+		StackPane secondaryLayout = new StackPane();
+		secondaryLayout.getChildren().add(secondLabel);
+		
+		Scene secondScene = new Scene(secondaryLayout, 230, 100);
+		
+		// New window (Stage)
+		Stage newWindow = new Stage();
+		newWindow.setTitle("Règles du jeu Latice");
+		newWindow.setScene(secondScene);
+		
+		// Specifies the modality for new window
+		newWindow.initModality(Modality.WINDOW_MODAL);
+		
+		// Specifies the owner window
+		newWindow.initOwner(primaryStage);
+		
+		// Set position of window
+		newWindow.setX(primaryStage.getX() + 300);
+		newWindow.setY(primaryStage.getY() + 175);
+		
+		newWindow.show();
 	}
 	// Event Listener on Rectangle[#exitButton].onMouseClicked
 	@FXML
