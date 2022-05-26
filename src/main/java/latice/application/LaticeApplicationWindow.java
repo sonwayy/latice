@@ -67,8 +67,8 @@ public class LaticeApplicationWindow extends Application {
 	Tile greenLeaf = new Tile(Color.GREEN, Shape.FEATHER);
 	Tile redFlower = new Tile(Color.RED, Shape.FLOWER);
 	
-	ArrayList<Tile> listRackTile = Rack.getListRackTile();	
-	ArrayList<Image> listTileImage = Rack.getRackTileImage();
+	ArrayList<Tile> listRackTile;
+	ArrayList<Image> listTileImage;
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
 	static StackPane rootLayout;
@@ -164,6 +164,7 @@ public class LaticeApplicationWindow extends Application {
 		//deck.displayListTile();
 		
 		
+		
 		//Confirm Button
 				Image checkMark = new Image("checkMark.png");
 				ImageView checkMarkView = new ImageView(checkMark);
@@ -185,6 +186,12 @@ public class LaticeApplicationWindow extends Application {
 		rackImage.getChildren().add(confirmButton);
 		rackImage.setMargin(rackImage.getChildren().get(4), new Insets(0,150,0,0));
 		root.setBottom(rackImage);
+		
+		//Adding lists to Arraylists
+		listRackTile = rack2.getListRackTile();
+		System.out.println(listRackTile);
+		listTileImage = rack2.getRackTileImage();
+		System.out.println("listTileImge : " + listTileImage);
 		
 		
 		//------------------------------------------------------------------------

@@ -40,6 +40,7 @@ public class Rack {
 	}
 
 	public ArrayList<Tile> getListRackTile() {
+		System.out.println(this.listRackTile);
 		return this.listRackTile;
 	}
 
@@ -131,7 +132,7 @@ public class Rack {
 	}
 	
 	public ArrayList<Image> getRackTileImage() {
-		return rackTileImage;
+		return this.rackTileImage;
 	}
 	
 	
