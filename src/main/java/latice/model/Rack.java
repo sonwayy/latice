@@ -10,39 +10,92 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 public class Rack {
-	private static ArrayList<Tile> listRackTile = new ArrayList<Tile>();
-	private static ArrayList<Image> rackTileImage = new ArrayList<Image>();
+	private ArrayList<Tile> listRackTile = new ArrayList<Tile>();
+	private ArrayList<Image> rackTileImage = new ArrayList<Image>();
+	private Deck deck;
 	
 	public Rack(Deck deck) {
+		this.deck = deck;
 		
-		Image image = new Image("laticePlateau.png");
-		ImageView imageView = new ImageView(image);
 		Tile tile;
 		
 		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 		
 		for (int i = 0; i < 5; i++) {
-			int index = (int)(Math.random()*((deck.getListTile()).size()-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
+			int index = (int)(Math.random()*(((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
 			
-			tile = (deck.getListTile()).get(index);
+			tile = (this.deck.getListTile()).get(index);
+			this.listRackTile.add(tile);
+			this.deck.getListTile().remove(index);
 			
-			listRackTile.add(tile);
 			
-			// root.setCenter(imageView);
 			
-			deck.getListTile().remove(index);
+			
+			
+			
 			
 		}
 		
-		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
+		System.out.println("Il y a dans le rack : " + this.listRackTile.size() + " valeurs");
 	}
 
-	public static ArrayList<Tile> getListRackTile() {
-		return listRackTile;
+	public ArrayList<Tile> getListRackTile() {
+		return this.listRackTile;
 	}
 
 	public void setListRackTile(ArrayList<Tile> listRackTile) {
 		this.listRackTile = listRackTile;
+	}
+	
+	
+	public void updateRack() {
+		
+		Tile tile;
+		
+		for (int i = 0; i < 5-this.listRackTile.size() ; i++) {
+			int index = (int)(Math.random()*( ((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
+			
+			tile = (this.deck.getListTile()).get(index);
+			this.listRackTile.add(tile);
+			this.deck.getListTile().remove(index);
+			
+		}
+		
+	}
+	
+	public void removeTile(String stringTile) {
+		int count = 0;
+		int index = -1;
+		System.out.println("taille : " + this.listRackTile.size());
+		for (Tile tile : this.listRackTile) {
+			System.out.println(count++);
+			if (stringTile.equals(tile.getShapeConsole() + tile.getColorConsole())) {
+				index = this.listRackTile.indexOf(tile);
+				System.out.println(index);
+				System.out.println("tuile supprimé avec succès");
+			}
+			
+		}
+		
+		if (index != -1) {
+			this.listRackTile.remove(index);
+		}
+		System.out.println("taille : " + this.listRackTile.size());
+
+	}
+	
+	public void displayRack() {
+		boolean success = false;
+		System.out.print("rack : ");
+		for (Tile tile : this.listRackTile) {
+			if (success) {
+				System.out.print(", " + tile.getShapeConsole() + tile.getColorConsole());
+			}else {
+				System.out.print(tile.getShapeConsole() + tile.getColorConsole());
+				success = true;
+			}
+		}
+		System.out.println();
 	}
 
 
@@ -77,7 +130,7 @@ public class Rack {
 		
 	}
 	
-	public static ArrayList<Image> getRackTileImage() {
+	public ArrayList<Image> getRackTileImage() {
 		return rackTileImage;
 	}
 	
