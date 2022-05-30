@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -38,6 +39,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import latice.controller.MainScreenController;
+import latice.controller.PlayerNameInputController;
 import latice.model.Color;
 import latice.model.Deck;
 import latice.model.Rack;
@@ -72,9 +74,17 @@ public class LaticeApplicationWindow extends Application {
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
 	static StackPane rootLayout;
+	private Label namePlayer1 = new Label();
+	private Label namePlayer2 = new Label();
 
-	
 	public static int indexTileClicked;	
+	
+	//root layout
+	BorderPane root = new BorderPane();
+	
+	//StackPane for background image + BorderPane root onto it
+	StackPane stackPane = new StackPane();
+	static Stage primaryStageCopy;
 	
 	
 	
@@ -92,11 +102,8 @@ public class LaticeApplicationWindow extends Application {
 		Parent loader = FXMLLoader.load(getClass().getResource("../view/MainScreen.fxml"));
 		Scene menu = new Scene(loader, 1280, 720);
 		MainScreenController MSC = new MainScreenController();
+
 		
-		//StackPane for background image + BorderPane root onto it
-		StackPane stackPane = new StackPane();
-		//root layout
-		BorderPane root = new BorderPane();
 		
 		//Title
 		Text title = new Text("Latice");
@@ -276,10 +283,10 @@ public class LaticeApplicationWindow extends Application {
 	        }
 		}
 		
-		
-	
+		root.setLeft(namePlayer1);
 		
 		//--------------------------------------------------------------------------------------
+		setPrimaryStage(primaryStage);
 		setRootLayout(stackPane);
 		stackPane.getChildren().add(root);
 		
@@ -302,9 +309,9 @@ public class LaticeApplicationWindow extends Application {
 	public static int getIndexTileClicked() {
 		return indexTileClicked;
 	}
-
-
-
+	public void setPrimaryStage(Stage primaryStage) {
+		this.primaryStageCopy = primaryStage;
+	}
 
 
 	//Setter to set the mouse clicked tile
@@ -312,6 +319,23 @@ public class LaticeApplicationWindow extends Application {
 		LaticeApplicationWindow.indexTileClicked = indexTileClicked;
 	}
 	
+	//player names setters
+	public void setNamePlayer1(String namePlayer1) {
+		this.namePlayer1.setText(namePlayer1);
+	}
+
+	public void setNamePlayer2(String namePlayer2) {
+		this.namePlayer2.setText(namePlayer2);
+	}
 	
+	public void playerNamesEntered() {
+		System.out.println("entered playNamesEntered()" + namePlayer1 + " VS " + namePlayer2);
+		HBox scoreHbox = new HBox();
+		scoreHbox.getChildren().add(namePlayer1);
+		scoreHbox.getChildren().add(namePlayer2);
+		Text working = new Text("Working");
+		root.setLeft(working);
+		primaryStageCopy.show();
+	}
 
 }

@@ -1,12 +1,16 @@
 package latice.controller;
 
+import java.io.IOException;
+
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -29,28 +33,22 @@ public class MainScreenController extends LaticeApplicationWindow{
 	private StackPane parentStackPane;
 	@FXML
 	private BorderPane menuBorderPane;
+	public static Stage mainStage;
+	private static StackPane parentStackPaneStock;
 
 	// Event Listener on Rectangle[#playButton].onMouseClicked
 	@FXML
-	public void playButtonClicked(MouseEvent event) {
+	public void playButtonClicked(MouseEvent event) throws IOException {
+		System.out.println(parentStackPane);
+		parentStackPaneStock = parentStackPane;
 		System.out.println("playButtonClicked");
-		Stage primaryStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
-		StackPane root = getRootLayout();
-		root.translateYProperty().set(primaryStage.getHeight());
-		parentStackPane.getChildren().add(root);
-		
-		//parameters of the animation
-		Timeline timeline = new Timeline();
-		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
-        timeline.getKeyFrames().add(kf);
-        
-        //when the animation is finished we're removing the main screen
-        timeline.setOnFinished(t -> {
-            parentStackPane.getChildren().remove(menuBorderPane);
-        });
-        timeline.play();
+		mainStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+		System.out.println(mainStage);
+		if (!PlayerNameInputController.btnClicked) {
+			playerNamesInput(event);
+		}
 	}
+	
 	// Event Listener on Rectangle[#rulesButton].onMouseClicked
 	@FXML
 	public void rulesButtonClicked(MouseEvent event) {
@@ -85,5 +83,53 @@ public class MainScreenController extends LaticeApplicationWindow{
 	public void exitButtonClicked(MouseEvent event) {
 		System.out.println("exitButtonClicked");
 		Platform.exit();
+	}
+	
+	public void playerNamesInput(MouseEvent event) throws IOException {
+		Parent loader = FXMLLoader.load(getClass().getResource("../view/PlayerNameInput.fxml"));
+		Scene nameInputScene = new Scene(loader, 600, 300);
+		Stage primaryStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+		
+		// New window (Stage)
+		Stage nameInputStage = new Stage();
+		nameInputStage.setTitle("Names");
+		nameInputStage.setScene(nameInputScene);
+		
+		// Specifies the modality for new window
+		nameInputStage.initModality(Modality.WINDOW_MODAL);
+		
+		// Specifies the owner window
+		nameInputStage.initOwner(primaryStage);
+		
+		// Set position of window
+		nameInputStage.setX(primaryStage.getX() + 300);
+		nameInputStage.setY(primaryStage.getY() + 175);
+		
+		nameInputStage.show();
+	}
+	
+	public void startGameInstruction() {
+		startGame(mainStage);
+	}
+	
+	public void startGame(Stage stage) {
+		parentStackPane = parentStackPaneStock;
+		StackPane root = getRootLayout();
+		root.translateYProperty().set(stage.getHeight());
+		System.out.println(parentStackPane);
+		System.out.println(parentStackPaneStock);
+		parentStackPane.getChildren().add(root);
+		
+		//parameters of the animation
+		Timeline timeline = new Timeline();
+		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+        timeline.getKeyFrames().add(kf);
+        
+        //when the animation is finished we're removing the main screen
+        timeline.setOnFinished(t -> {
+            parentStackPane.getChildren().remove(menuBorderPane);
+        });
+        timeline.play();
 	}
 }
