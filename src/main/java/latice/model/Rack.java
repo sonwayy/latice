@@ -40,7 +40,6 @@ public class Rack {
 	}
 
 	public ArrayList<Tile> getListRackTile() {
-		System.out.println(this.listRackTile);
 		return this.listRackTile;
 	}
 
@@ -64,13 +63,14 @@ public class Rack {
 		
 	}
 	
-	public void removeTile(String stringTile) {
+	public void removeTile(Tile tileToDelete) {
 		int count = 0;
 		int index = -1;
 		System.out.println("taille : " + this.listRackTile.size());
+		String strTileToDelete = tileToDelete.getShapeConsole()+tileToDelete.getColorConsole();
 		for (Tile tile : this.listRackTile) {
 			System.out.println(count++);
-			if (stringTile.equals(tile.getShapeConsole() + tile.getColorConsole())) {
+			if (strTileToDelete.equals(tile.getShapeConsole()+tile.getColorConsole())) {
 				index = this.listRackTile.indexOf(tile);
 				System.out.println(index);
 				System.out.println("tuile supprimé avec succès");
@@ -85,16 +85,41 @@ public class Rack {
 
 	}
 	
+	public void changeRack() {
+		
+		Tile tile;
+		int listRackTileSize = this.listRackTile.size();
+		
+		for (int i = 0; i < listRackTileSize ; i++) {
+			
+			tile = this.listRackTile.get(0);
+			this.deck.getListTile().add(tile);
+			this.listRackTile.remove(0);
+		}
+		
+		for (int i = 0; i < listRackTileSize ; i++) {
+			int index = (int)(Math.random()*( ((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
+			
+			tile = (this.deck.getListTile()).get(index);
+			this.listRackTile.add(tile);
+			this.deck.getListTile().remove(index);
+			
+		}
+		
+	}
+	
 	public void displayRack() {
 		boolean success = false;
+		Integer tile_id = 1;
 		System.out.print("rack : ");
 		for (Tile tile : this.listRackTile) {
 			if (success) {
-				System.out.print(", " + tile.getShapeConsole() + tile.getColorConsole());
+				System.out.print(", " + tile_id + "." + tile.getShapeConsole() + tile.getColorConsole());
 			}else {
-				System.out.print(tile.getShapeConsole() + tile.getColorConsole());
+				System.out.print(tile_id + "." + tile.getShapeConsole() + tile.getColorConsole());
 				success = true;
 			}
+			tile_id = tile_id + 1;
 		}
 		System.out.println();
 	}

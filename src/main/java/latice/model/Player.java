@@ -24,12 +24,28 @@ public class Player {
 		return this.name;
 	}
 	
+	public Rack getRack() {
+		return this.rack;
+	}
+	
 	public Integer getScore() {
 		return this.score.getScore();
 	}
 	
-	public void Play(Scanner play, GameBoard board) {
-		System.out.println("c'est à votre tour de jouer " + this.name +"!");
+	public Integer addScore(Integer value) {
+		int newScore = this.score.getScore()+value;
+		this.score.setScore(newScore);
+		return this.score.getScore();
+	}
+	
+	public Integer diffScore(Integer value) {
+		int newScore = this.score.getScore()-value;
+		this.score.setScore(newScore);
+		return this.score.getScore();
+	}
+	
+	public Tile Play(Scanner play, GameBoard board, Integer start) {
+		
 		if (this.getScore() ==  0) {
 		
 			System.out.println("Vous avez " + this.getScore() + " point");
@@ -41,17 +57,23 @@ public class Player {
 		
 		System.out.print("Quel tuile voulez-vous jouez ? ");
 		this.rack.displayRack();
-		String tileToPlay = play.next();
+		System.out.println(1);
+		Integer idTileToPlay = Integer.parseInt(play.next())-1;
+		Tile tileToPlay = this.rack.getListRackTile().get(idTileToPlay);
 		System.out.print("Sur quelle ligne, voulez-vous placer la tuile ?");
 		int row = Integer.parseInt(play.next());
 		System.out.print("Sur quelle colonne, voulez-vous placer la tuile ?");
 		int column = Integer.parseInt(play.next());
-		board.setGridBoard(" "+tileToPlay+" ", row, column);
-		this.rack.removeTile(tileToPlay);
 		
-		board.displayGameBoard();
+		tileToPlay.setPosition(new Position(row, column));
+		return tileToPlay;
 		
-		this.rack.updateRack();
+		//.setGridBoard(" "+tileToPlay.getShapeConsole()+tileToPlay.getColorConsole()+" ", row, column);
+		//this.rack.removeTile(tileToPlay);
+		
+		//board.displayGameBoard();
+		
+		//this.rack.updateRack();
 		
 		
 	}

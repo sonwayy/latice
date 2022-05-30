@@ -3,7 +3,7 @@ package latice.model;
 public enum Shape {
 	BIRD("bird", "B"), 
 	DOLPHIN("dolphin", "D"), 
-	FLOWER("flower", "Fl"), 
+	FLOWER("flower", "f"), 
 	FEATHER("feather", "F"), 
 	GECKO("gecko", "G"), 
 	TURTLE("turtle", "T");

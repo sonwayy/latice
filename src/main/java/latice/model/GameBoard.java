@@ -4,6 +4,8 @@ public class GameBoard {
 	private Integer DIMENSION = 9;
 	public static final String SUN = " SU ";
 	public static final String MOON = " MO ";
+	public static final String BLUE = "    ";
+	
 	private String[][] gridBoard;
 	
 	public GameBoard() {
@@ -30,7 +32,7 @@ public class GameBoard {
 					this.gridBoard[i][j] = SUN;
 					
 				}else {
-					this.gridBoard[i][j] = "    ";
+					this.gridBoard[i][j] = BLUE;
 				}
 				
 				if (j == 8) {
@@ -67,6 +69,7 @@ public class GameBoard {
 				
 				if (j == 8) {
 					System.out.println("|");
+					
 				}
 			} 
 		}

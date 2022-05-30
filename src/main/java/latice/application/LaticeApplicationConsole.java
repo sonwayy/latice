@@ -1,13 +1,16 @@
 package latice.application;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import latice.model.Color;
 import latice.model.Deck;
 import latice.model.GameBoard;
 import latice.model.Player;
 import latice.model.Rack;
+import latice.model.Rules;
 import latice.model.Score;
 import latice.model.Shape;
 import latice.model.Tile;
@@ -91,7 +94,7 @@ public class LaticeApplicationConsole {
 		//System.out.println(player1.getName() + " a " + scorePlayer1.getScore() +" points");
 		//System.out.println(player2.getName() + " a " + scorePlayer2.getScore() +" points");
 		//rack1.displayRack();
-		
+
 		
 		System.out.println("Hello Latice !");
 		System.out.println("-----------------");
@@ -110,14 +113,109 @@ public class LaticeApplicationConsole {
 		GameBoard board = new GameBoard(); 
 		board.displayGameBoard();
 		
-		
+		System.out.println(Objects.equals(board.getGridBoard()[1][0], Tile.class));
 		Scanner play = new Scanner(System.in);
+		Player player;
+		Boolean round;
+		Tile tile = null;
+		Boolean start = true;
+		Boolean freeTile;
+		Rules arbitre = new Rules();
 		
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 20; i++) {
+			round = true;
+			freeTile = true;
 			
-			player1.Play(play,board);
-			player2.Play(play,board);
+			if (i%2 == 0) {
+				player = player1;
+			}else {
+				player = player2;
+			}
 			
+			while (round) {
+				System.out.println("c'est à votre tour de jouer " + player.getName() +"!");
+				System.out.println("Vous avez " + player.getScore() +", donc que voulez-vous faire ?\n"
+						+ "    1. Jouer une Tuile (à partir de la deuxième tuile jouée, cela coûtera 2 points)\n"
+						+ "    2. Acheter une action supplémentaire\n"
+						+ "    3. Changer le Rack et passer(coûte 3 points)\n"
+						+ "    4. Passer\n");
+				
+				int choiceMenu = Integer.parseInt(play.next());
+				switch(choiceMenu) {
+					case 1:		//if (arbitre.checkScore(freeTile)){
+									//System.out.println("Vous n'avez pas assez de points pour jouer un nouvelle tuile");
+								//}else {
+									Boolean rulesCheck = false;
+									
+									while (rulesCheck == false) {
+										
+										tile = player.Play(play,board,i);
+										rulesCheck = arbitre.arbitration(player, board, tile, start);
+										
+									};
+									
+									if (i == 0) {
+										start = false;
+									}
+									
+									board.setGridBoard(" "+tile.getShapeConsole()+tile.getColorConsole()+" ", tile.getPositionRow(), tile.getPositionColumn());
+									
+									player.getRack().removeTile(tile);
+									board.displayGameBoard();
+								//}
+								break;
+							
+							
+					case 2:
+						
+					case 3: player.getRack().changeRack();
+							System.out.println("Votre rack à été changé avec succès !");
+					
+					case 4: System.out.println("Votre tour est terminé " + player.getName() + " !");
+							round = false;
+							break;
+					
+					default: throw new IllegalArgumentException("Veuillez choisir un nombre entre 1 et 4!");
+				}
+			}
+			
+			
+			/*
+			if (PlayOrPass == 2) {
+				round = false;
+				System.out.println("Votre tour est terminé " + player.getName() + " !");
+			}
+			
+			while (round) {
+				Boolean rulesCheck = false;
+				
+				System.out.println("c'est à votre tour de jouer " + player.getName() +"!");
+				
+				while (rulesCheck == false) {
+					tile = player.Play(play,board,i);
+					rulesCheck = arbitre.arbitration(player, board, tile, START);
+					
+				};
+				
+				if (i == 0) {
+					START = false;
+				}
+				
+				board.setGridBoard(" "+tile.getShapeConsole()+tile.getColorConsole()+" ", tile.getPositionRow(), tile.getPositionColumn());
+				
+				player.getRack().removeTile(tile);
+				board.displayGameBoard();
+				
+			
+				System.out.println(player.getName() + " ! Voulez-vous passer votre tour ou continuer à jouer ? 1.continuer ou 2.passer");
+				int ContinueOrPass = Integer.parseInt(play.next());
+				if (ContinueOrPass == 2) {
+					round = false;
+					System.out.println("Votre tour est terminé " + player.getName() + " !");
+				}
+			}
+			
+			player.getRack().updateRack();*/
 			
 			
 		}
