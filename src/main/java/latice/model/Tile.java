@@ -30,7 +30,11 @@ public class Tile {
 		return this.shape.getStringShapeConsole();
 	}
 	
-	public Position getPosition() {
-		return this.position;
+	public Integer getPositionRow() {
+		return this.position.getRow();
+	}
+	
+	public Integer getPositionColumn() {
+		return this.position.getColumn();
 	}
 }
