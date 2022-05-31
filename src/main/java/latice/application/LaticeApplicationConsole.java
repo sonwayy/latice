@@ -134,7 +134,7 @@ public class LaticeApplicationConsole {
 			
 			while (round) {
 				System.out.println("c'est à votre tour de jouer " + player.getName() +"!");
-				System.out.println("Vous avez " + player.getScore() +", donc que voulez-vous faire ?\n"
+				System.out.println("Vous avez " + player.getScore() +" points, que voulez-vous faire ?\n"
 						+ "    1. Jouer une Tuile (à partir de la deuxième tuile jouée, cela coûtera 2 points)\n"
 						+ "    2. Acheter une action supplémentaire\n"
 						+ "    3. Changer le Rack et passer(coûte 3 points)\n"

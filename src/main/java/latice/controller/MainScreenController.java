@@ -132,4 +132,13 @@ public class MainScreenController extends LaticeApplicationWindow{
         });
         timeline.play();
 	}
+
+	public StackPane getParentStackPane() {
+		return parentStackPane;
+	}
+
+	public void setParentStackPane(StackPane parentStackPane) {
+		this.parentStackPane = parentStackPane;
+	}
+	
 }

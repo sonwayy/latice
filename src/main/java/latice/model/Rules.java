@@ -20,6 +20,7 @@ public class Rules {
 		}
 	}
 	
+	
 	public Integer neighborRule(GameBoard board, Tile tile) {
 
 		Integer nbrNeighbor = 0;

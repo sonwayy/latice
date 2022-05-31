@@ -74,8 +74,8 @@ public class LaticeApplicationWindow extends Application {
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
 	static StackPane rootLayout;
-	private Label namePlayer1 = new Label();
-	private Label namePlayer2 = new Label();
+	private Label namePlayer1 = new Label("Anonym");
+	private Label namePlayer2 = new Label("Anonym");
 
 	public static int indexTileClicked;	
 	
@@ -85,8 +85,9 @@ public class LaticeApplicationWindow extends Application {
 	//StackPane for background image + BorderPane root onto it
 	StackPane stackPane = new StackPane();
 	static Stage primaryStageCopy;
+	StackPane parentStackPane = new StackPane();
 	
-	
+	int validateBtnClickedCount;
 	
 	
 
@@ -102,7 +103,6 @@ public class LaticeApplicationWindow extends Application {
 		Parent loader = FXMLLoader.load(getClass().getResource("../view/MainScreen.fxml"));
 		Scene menu = new Scene(loader, 1280, 720);
 		MainScreenController MSC = new MainScreenController();
-
 		
 		
 		//Title
@@ -181,7 +181,9 @@ public class LaticeApplicationWindow extends Application {
 
 					@Override
 					public void handle(MouseEvent arg0) {
-						// TODO on mouse clicked on confirm
+						
+						validateBtnClickedCount++;
+						System.out.println("confirmed placement");
 						
 					}
 					
@@ -218,6 +220,15 @@ public class LaticeApplicationWindow extends Application {
 					setIndexTileClicked(a);
 					dragboard.setContent(content);
 					arg0.consume();
+				}
+				
+			});
+			
+			rackImage.getChildren().get(a).setOnDragDone(new EventHandler<DragEvent>() {
+
+				@Override
+				public void handle(DragEvent arg0) {
+					
 				}
 				
 			});
@@ -275,15 +286,29 @@ public class LaticeApplicationWindow extends Application {
 						arg0.setDropCompleted(true);
 						assocRectangleTile.put(r[a][b], listRackTile.get(getIndexTileClicked()));
 						System.out.println(assocRectangleTile.toString());
+						if (validateBtnClickedCount == 0){
+							if (r[a][b] == r[4][4]) {
+								System.out.println("MOON valid placement");
+							}else {
+								System.out.println("Please place first Tile on MOON");
+							}
+				        }
+						
 						
 						arg0.consume();
 					}
 					
 				});
+				
+			
 	        }
 		}
 		
+		//rules / referee implementaion
+		
+		
 		root.setLeft(namePlayer1);
+		parentStackPane = MSC.getParentStackPane();
 		
 		//--------------------------------------------------------------------------------------
 		setPrimaryStage(primaryStage);
@@ -329,13 +354,15 @@ public class LaticeApplicationWindow extends Application {
 	}
 	
 	public void playerNamesEntered() {
-		System.out.println("entered playNamesEntered()" + namePlayer1 + " VS " + namePlayer2);
+		System.out.println("entered playNamesEntered()" + namePlayer1.getText() + " VS " + namePlayer2.getText());
 		HBox scoreHbox = new HBox();
 		scoreHbox.getChildren().add(namePlayer1);
 		scoreHbox.getChildren().add(namePlayer2);
 		Text working = new Text("Working");
 		root.setLeft(working);
-		primaryStageCopy.show();
+		MainScreenController MSC = new MainScreenController();
+		MSC.setParentStackPane(parentStackPane);
+		primaryStageCopy.setTitle("working");
 	}
 
 }
