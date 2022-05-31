@@ -75,6 +75,14 @@ public class Rules {
 		return sun;
 	}
 	
+	public Boolean checkScoreToPlay(Player player, Boolean free) {
+		if (player.getScore() < 2 && free == false) {
+			return false;	
+		}else {
+			return true;
+		}
+	}
+	
 	public Boolean arbitration(Player player, GameBoard board, Tile tile, Boolean start) {
 		
 		if (start == true){

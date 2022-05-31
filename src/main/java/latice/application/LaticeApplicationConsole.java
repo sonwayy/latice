@@ -142,9 +142,9 @@ public class LaticeApplicationConsole {
 				
 				int choiceMenu = Integer.parseInt(play.next());
 				switch(choiceMenu) {
-					case 1:		//if (arbitre.checkScore(freeTile)){
-									//System.out.println("Vous n'avez pas assez de points pour jouer un nouvelle tuile");
-								//}else {
+					case 1:		if (arbitre.checkScoreToPlay(player, freeTile) == false){
+									System.out.println("Il vous faut 2 points pour jouer un nouvelle tuile !!!");
+								}else {
 									Boolean rulesCheck = false;
 									
 									while (rulesCheck == false) {
@@ -162,7 +162,7 @@ public class LaticeApplicationConsole {
 									
 									player.getRack().removeTile(tile);
 									board.displayGameBoard();
-								//}
+								}
 								break;
 							
 							
