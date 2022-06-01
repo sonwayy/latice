@@ -66,9 +66,6 @@ public class LaticeApplicationWindow extends Application {
 	Image image = new Image("backgroundLatice.png");
 	ImageView imageView = new ImageView(image);
 	
-	Tile blueBird = new Tile(Color.NAVYBLUE, Shape.BIRD);
-	Tile greenLeaf = new Tile(Color.GREEN, Shape.FEATHER);
-	Tile redFlower = new Tile(Color.RED, Shape.FLOWER);
 	
 	ArrayList<Tile> listRackTile;
 	ArrayList<Image> listTileImage;
@@ -93,9 +90,9 @@ public class LaticeApplicationWindow extends Application {
 	
 	static Stage primaryStageCopy;
 	StackPane parentStackPane = new StackPane();
+	Label moonErrorLabel = new Label();
 	
 	int validateBtnClickedCount;
-	
 	
 
 	public static void main(String[] args) {
@@ -113,11 +110,16 @@ public class LaticeApplicationWindow extends Application {
 		
 		//--------------------------------------------------------------------------------------
 		//Title
+		VBox topVbox = new VBox();
 		Text title = new Text("Latice");
 		title.setFont(new Font(30));
-		root.setTop(title);
-		root.setAlignment(title, Pos.CENTER);
-		//--------------------------------------------------------------------------------------
+		topVbox.getChildren().add(title);
+		topVbox.setAlignment(Pos.CENTER);
+		moonErrorLabel.setFont(new Font(20));
+		moonErrorLabel.setTextFill(realColor.RED);
+		topVbox.getChildren().add(moonErrorLabel);
+		root.setTop(topVbox);
+		
 		//Image
 		Pane pane = new Pane();
 		BackgroundImage myBG= new BackgroundImage(image,
@@ -200,7 +202,8 @@ public class LaticeApplicationWindow extends Application {
 		System.out.println("-----------------");
 		//deck.displayListTile();
 		
-		
+
+			
 		
 		//Confirm Button
 				Image checkMark = new Image("checkMark.png");
@@ -212,18 +215,46 @@ public class LaticeApplicationWindow extends Application {
 					@Override
 					public void handle(MouseEvent arg0) {
 						
-						validateBtnClickedCount++;
+						
 						System.out.println("confirmed placement");
+						
+						validateBtnClickedCount++;
 						
 					}
 					
 				});
 		
+		
 		//With Image
 		Rack rack2 = new Rack(deck);
 		HBox rackImage = rack2.createTileImage();
-		rackImage.getChildren().add(confirmButton);
-		rackImage.setMargin(rackImage.getChildren().get(4), new Insets(0,150,0,0));
+		
+		
+		//RackChange Button
+		Image changeIconImage = new Image("changeIcon.png");
+		ImageView changeIconView = new ImageView(changeIconImage);
+		Button changeButton = new Button("Change Rack", changeIconView);
+		
+		
+		changeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				
+				
+				System.out.println("Changing Rack");
+				rack2.changeRack();
+
+				rackImage.getChildren().clear();
+				
+				rackImage.getChildren().addAll(rack2.createTileImage(), confirmButton, changeButton);
+				
+				//Setting drag n drop on tiles
+				setDragnDropOnRack(rackImage);
+			}
+			
+		});
+		rackImage.getChildren().addAll(confirmButton, changeButton);
 		root.setBottom(rackImage);
 		
 		//Adding lists to Arraylists
@@ -235,8 +266,7 @@ public class LaticeApplicationWindow extends Application {
 		
 		//------------------------------------------------------------------------
 		
-		
-		//Setting OnDragDetected on tiles
+		//Setting drag n drop on tiles
 		setDragnDropOnRack(rackImage);
 
 		System.out.println((indexTileClicked));
@@ -250,20 +280,57 @@ public class LaticeApplicationWindow extends Application {
 		rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, validateBtnClickedCount);
 		//------------------------------------------------------------------------
 		
-		//rules / referee implementaion
-		
-		this.transition(namePlayer1, namePlayer2);
-		//root.setLeft(namePlayer1);
-		
-		//###################### display name, score and deck of each player ######################//
-		HBox players = new HBox();
-		
-		ArrayList<Player> allPlayers = new ArrayList<>();
-		allPlayers.add(player1);
-		allPlayers.add(player2);
-		
-		for (Player nameplayer : allPlayers ) {
-			VBox player = new VBox();
+					@Override
+					public void handle(DragEvent arg0) {
+						if (arg0.isDropCompleted() == false) {
+							r[a][b].setFill(realColor.TRANSPARENT);
+						}
+						arg0.consume();
+					}
+					
+				});
+				
+				r[a][b].setOnDragOver(new EventHandler <DragEvent>() {
+					@Override
+				    public void handle(DragEvent arg0) {
+				        arg0.acceptTransferModes(TransferMode.ANY);
+				        arg0.consume();
+				    }
+				});
+				
+				r[a][b].setOnDragDropped(new EventHandler<DragEvent>() {
+					@Override
+					public void handle(DragEvent arg0) {
+						System.out.println("entered");
+						Dragboard dragboard = arg0.getDragboard();
+						
+						r[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
+						arg0.setDropCompleted(true);
+						assocRectangleTile.put(r[a][b], listRackTile.get(getIndexTileClicked()));
+						System.out.println(assocRectangleTile.toString());
+						moonErrorLabel.setText("");
+						if (validateBtnClickedCount == 0){
+							if (r[a][b] == r[4][4]) {
+								System.out.println("MOON valid placement");	
+							}else {
+								moonErrorLabel.setText("Error ! Please place the first tile on the moon");
+								//removing all tiles from gameboard
+								for(int i=0; i<NUMBER_OF_BOX_ON_ONE_LINE; i++) {
+									for(int j=0; j<NUMBER_OF_BOX_ON_ONE_LINE; j++) {
+										r[i][j].setFill(realColor.TRANSPARENT);
+									}
+								}
+								System.out.println("Please place first Tile on MOON");
+								
+							}
+				        }
+						
+						
+						arg0.consume();
+					}
+					
+				});
+				
 			
 			Text name = new Text();
 			name.setFont(Font.font(nameplayer.getName(), FontWeight.BOLD, 20));
@@ -307,26 +374,25 @@ public class LaticeApplicationWindow extends Application {
 
 
 	private void setDragnDropOnRack(HBox rackImage) {
+		//Setting drag n drop on tiles
 		for (int i=0; i<5; i++) {
-			int index = i;
-			rackImage.getChildren().get(index).setOnDragDetected(new EventHandler<MouseEvent>() {
+			int a = i;
+			rackImage.getChildren().get(a).setOnDragDetected(new EventHandler<MouseEvent>() {
 				
 				@Override
 				public void handle(MouseEvent arg0) {
-					Dragboard dragboard = rackImage.getChildren().get(index).startDragAndDrop(TransferMode.ANY);
+					Dragboard dragboard = rackImage.getChildren().get(a).startDragAndDrop(TransferMode.ANY);
 					ClipboardContent content = new ClipboardContent();
-					dragboard.setDragView(listTileImage.get(index));
+					dragboard.setDragView(listTileImage.get(a));
 					content.putString("Hello !");
-					indexTileClicked = index;
-					//setIndexTileClicked(index);
+					setIndexTileClicked(a);
 					dragboard.setContent(content);
 					arg0.consume();
-					
 				}
 				
 			});
 			
-			rackImage.getChildren().get(index).setOnDragDone(new EventHandler<DragEvent>() {
+			rackImage.getChildren().get(a).setOnDragDone(new EventHandler<DragEvent>() {
 
 				@Override
 				public void handle(DragEvent arg0) {
