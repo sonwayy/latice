@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+
+<BorderPane prefHeight="241.0" prefWidth="386.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17">
+   <center>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="replayBtn" layoutX="42.0" layoutY="163.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="127.0" textFill="TRANSPARENT" />
+            <Button fx:id="quitBtn" layoutX="221.0" layoutY="163.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="129.0" textFill="TRANSPARENT" />
+            <ImageView fitHeight="241.0" fitWidth="386.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../resources/GameFinishedImage.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER_RIGHT" layoutX="4.0" layoutY="73.0" prefHeight="22.0" prefWidth="154.0" textAlignment="CENTER" />
+         </children>
+      </Pane>
+   </center>
 </BorderPane>
-
