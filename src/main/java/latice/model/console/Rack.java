@@ -1,4 +1,4 @@
-package latice.model;
+package latice.model.console;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import latice.model.Tile;
 
 public class Rack {
 	private ArrayList<Tile> listRackTile = new ArrayList<Tile>();

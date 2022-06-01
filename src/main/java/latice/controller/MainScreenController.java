@@ -1,6 +1,7 @@
 package latice.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -21,6 +22,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import latice.application.LaticeApplicationWindow;
+import latice.model.Color;
+import latice.model.Player;
+import latice.model.Shape;
+import latice.model.Tile;
+import latice.model.console.Deck;
+import latice.model.console.Rack;
+import latice.model.console.Score;
 
 public class MainScreenController extends LaticeApplicationWindow{
 	@FXML
@@ -35,6 +43,11 @@ public class MainScreenController extends LaticeApplicationWindow{
 	private BorderPane menuBorderPane;
 	public static Stage mainStage;
 	private static StackPane parentStackPaneStock;
+	
+	
+	
+	public Player player1;
+	public Player player2;
 
 	// Event Listener on Rectangle[#playButton].onMouseClicked
 	@FXML
@@ -141,4 +154,24 @@ public class MainScreenController extends LaticeApplicationWindow{
 		this.parentStackPane = parentStackPane;
 	}
 	
+	public Player instanciatePlayer(String namePlayer) {
+		//###################### Instantiating of players ######################///
+		//create the list of all tiles
+		ArrayList<Tile> listOfTile = new ArrayList<Tile>();
+		for (Color color : Color.values()) {
+			for (Shape shape : Shape.values()) {
+				Tile tile = new Tile(color, shape);
+				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
+				
+				listOfTile.add(tile);
+				
+			}
+		}
+		//setting decks for the 2 players
+		Deck deck = new Deck(listOfTile);
+		Deck deck2 = new Deck(listOfTile);
+		
+		Player player = new Player(namePlayer, new Score(), deck, new Rack(deck));
+		return player;
+	}
 }

@@ -1,4 +1,4 @@
-package latice.model;
+package latice.model.console;
 
 public class Score {
 	private Integer score;
