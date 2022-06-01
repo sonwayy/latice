@@ -3,6 +3,8 @@ package latice.model;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import latice.model.console.GameBoard;
+
 public class Rules {
 	//private static boolean START = true;
 	

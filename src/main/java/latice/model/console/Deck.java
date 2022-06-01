@@ -1,6 +1,8 @@
-package latice.model;
+package latice.model.console;
 
 import java.util.ArrayList;
+
+import latice.model.Tile;
 
 public class Deck {
 	private ArrayList<Tile> deckTile = new ArrayList<Tile>();

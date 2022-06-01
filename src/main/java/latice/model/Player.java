@@ -2,6 +2,11 @@ package latice.model;
 
 import java.util.Scanner;
 
+import latice.model.console.Deck;
+import latice.model.console.GameBoard;
+import latice.model.console.Rack;
+import latice.model.console.Score;
+
 public class Player {
 	private final String name;
 	private Score score;
@@ -9,16 +14,24 @@ public class Player {
 	private Deck deck;
 	
 	public Player(String name, Score score, Deck deck, Rack rack) {
-		//Demande le nom du joueur
-		Scanner enterPlayerName = new Scanner(System.in);
-		System.out.println("Veuilez entrer votre nom " + name + " :");
-		String namePlayer = enterPlayerName.next();
-		
-		this.name = namePlayer;
+		this.name = name;
 		this.score = score;
 		this.deck = deck;
 		this.rack = rack;
 	}
+	
+	/*public Player(Score score, Deck deck, Rack rack) {
+		this(namePlayer,score,deck,rack);
+		//Demande le nom du joueur
+		Scanner enterPlayerName = new Scanner(System.in);
+		System.out.println("Veuilez entrer votre nom :");
+		String namePlayer = enterPlayerName.next();
+		
+		
+	}*/
+	
+	
+	
 
 	public String getName() {
 		return this.name;
@@ -30,6 +43,10 @@ public class Player {
 	
 	public Integer getScore() {
 		return this.score.getScore();
+	}
+	
+	public Integer getNumberOfTilesRemaining() {
+		return this.deck.getListTile().size() + this.rack.getListRackTile().size();
 	}
 	
 	public Integer addScore(Integer value) {

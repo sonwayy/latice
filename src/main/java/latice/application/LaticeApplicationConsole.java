@@ -6,14 +6,14 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import latice.model.Color;
-import latice.model.Deck;
-import latice.model.GameBoard;
 import latice.model.Player;
-import latice.model.Rack;
 import latice.model.Rules;
-import latice.model.Score;
 import latice.model.Shape;
 import latice.model.Tile;
+import latice.model.console.Deck;
+import latice.model.console.GameBoard;
+import latice.model.console.Rack;
+import latice.model.console.Score;
 
 public class LaticeApplicationConsole {
 	public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package latice.model;
+package latice.model.console;
 
 public class GameBoard {
 	private Integer DIMENSION = 9;

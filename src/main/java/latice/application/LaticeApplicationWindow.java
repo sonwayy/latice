@@ -1,16 +1,12 @@
 package latice.application;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -37,15 +33,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import latice.controller.MainScreenController;
 import latice.controller.PlayerNameInputController;
 import latice.model.Color;
-import latice.model.Deck;
-import latice.model.Rack;
+import latice.model.Player;
 import latice.model.Shape;
 import latice.model.Tile;
+import latice.model.console.Deck;
+import latice.model.console.Rack;
+import latice.model.console.Score;
+import latice.model.window.RectangleFX;
 
 public class LaticeApplicationWindow extends Application {
 	
@@ -72,16 +72,22 @@ public class LaticeApplicationWindow extends Application {
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
 	static StackPane rootLayout;
-	private Label namePlayer1 = new Label("Anonym");
-	private Label namePlayer2 = new Label("Anonym");
+	private Label namePlayer1 = new Label("Anonyme");
+	private Label namePlayer2 = new Label("Anonyme"); 
 
 	public static int indexTileClicked;	
+	
+	
+	//settings players
+	public Player player1;
+	public Player player2;
 	
 	//root layout
 	BorderPane root = new BorderPane();
 	
 	//StackPane for background image + BorderPane root onto it
 	StackPane stackPane = new StackPane();
+	
 	static Stage primaryStageCopy;
 	StackPane parentStackPane = new StackPane();
 	Label moonErrorLabel = new Label();
@@ -102,7 +108,7 @@ public class LaticeApplicationWindow extends Application {
 		Scene menu = new Scene(loader, 1280, 720);
 		MainScreenController MSC = new MainScreenController();
 		
-		
+		//--------------------------------------------------------------------------------------
 		//Title
 		VBox topVbox = new VBox();
 		Text title = new Text("Latice");
@@ -121,7 +127,7 @@ public class LaticeApplicationWindow extends Application {
 		          BackgroundSize.DEFAULT);
 		stackPane.setBackground(new Background(myBG));
 		
-		
+		//--------------------------------------------------------------------------------------
 		//Creating rectangle for tiles placement
 		Rectangle[][] r = new Rectangle[9][9];
 		int counterI = 0;
@@ -143,9 +149,32 @@ public class LaticeApplicationWindow extends Application {
 		
 		root.setCenter(pane);
 		System.out.println(r);
+		//--------------------------------------------------------------------------------------
+		
+		//###################### Instantiating of players ######################///
+		//create the list of all tiles
+		ArrayList<Tile> listOfTile = new ArrayList<Tile>();
+		for (Color color : Color.values()) {
+			for (Shape shape : Shape.values()) {
+				Tile tile = new Tile(color, shape);
+				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
+				
+				listOfTile.add(tile);
+				
+			}
+		}
+		
+		//setting decks for the 2 players
+		Deck deck1 = new Deck(listOfTile);
+		Deck deck2 = new Deck(listOfTile);
+		
+		//setting player names
+		//String name1 = PlayerNameInputController.getNomJoueur1().getText();
+		//String name2 = PlayerNameInputController.getNomJoueur2().getText();
 		
 		
-		
+		Player player1 = new Player(namePlayer1.getText(), new Score(), deck1, new Rack(deck1));
+		Player player2 = new Player(namePlayer2.getText(), new Score(), deck2, new Rack(deck2));
 		
 		//--------------------------------------------------------------------------------------
 		//Rack
@@ -243,26 +272,13 @@ public class LaticeApplicationWindow extends Application {
 		System.out.println((indexTileClicked));
 		ImagePattern imagePattern = new ImagePattern(listTileImage.get(getIndexTileClicked()));
 		
-		//Setting drag & drop on rectangles
-		for(int i=0; i<NUMBER_OF_BOX_ON_ONE_LINE; i++) {
-			for(int j=0; j<NUMBER_OF_BOX_ON_ONE_LINE; j++) {
-		        int a = i;
-		        int b = j;
-		        
-				r[a][b].setOnDragEntered(new EventHandler<DragEvent>() {
-	
-					@Override
-					public void handle(DragEvent arg0) {
-						if (arg0.getDragboard().hasString()){
-							Dragboard dragboard = arg0.getDragboard();
-							
-							r[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
-						}
-						arg0.consume();
-					}
-				});
-				
-				r[a][b].setOnDragExited(new EventHandler<DragEvent>() {
+		//------------------------------------------------------------------------
+		//###################### creating all rectangles and DragnDrop ######################//
+		RectangleFX rectFX = new RectangleFX();
+		rectFX.createRectangle(root, pane);
+		rectFX.dragnDropOnAllRectangles(player1, indexTileClicked, validateBtnClickedCount);
+		rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, validateBtnClickedCount);
+		//------------------------------------------------------------------------
 		
 					@Override
 					public void handle(DragEvent arg0) {
@@ -316,19 +332,37 @@ public class LaticeApplicationWindow extends Application {
 				});
 				
 			
-	        }
+			Text name = new Text();
+			name.setFont(Font.font(nameplayer.getName(), FontWeight.BOLD, 20));
+			name.setText(nameplayer.getName());
+			
+			Text score = new Text();
+			score.setText("Score : ");
+			
+			Text nbrOfTiles = new Text();
+			nbrOfTiles.setText("Tuiles restantes : ");
+			
+			player.getChildren().addAll(name, score, nbrOfTiles);
+			player.setSpacing(5);
+			
+			players.getChildren().add(player);
+			players.setMargin(player, new Insets(50,0,0,55));
 		}
+		System.out.println("largeur : " + root.getMaxWidth());
+		players.setSpacing(850);
 		
-		//rules / referee implementaion
 		
 		
-		root.setLeft(namePlayer1);
+		
+
 		parentStackPane = MSC.getParentStackPane();
+		
+		
 		
 		//--------------------------------------------------------------------------------------
 		setPrimaryStage(primaryStage);
 		setRootLayout(stackPane);
-		stackPane.getChildren().add(root);
+		stackPane.getChildren().addAll(players, root);
 		
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Latice");
@@ -391,30 +425,28 @@ public class LaticeApplicationWindow extends Application {
 		LaticeApplicationWindow.indexTileClicked = indexTileClicked;
 	}
 	
-	//player names setters
+	/*//player names setters
 	public void setNamePlayer1(String namePlayer1) {
 		this.namePlayer1.setText(namePlayer1);
 	}
 
 	public void setNamePlayer2(String namePlayer2) {
 		this.namePlayer2.setText(namePlayer2);
-	}
+	}*/
 	
 	public void playerNamesEntered() {
 		System.out.println("entered playNamesEntered()" + namePlayer1.getText() + " VS " + namePlayer2.getText());
-		HBox scoreHbox = new HBox();
-		scoreHbox.getChildren().add(namePlayer1);
-		scoreHbox.getChildren().add(namePlayer2);
-		Text working = new Text("Working");
-		root.setLeft(working);
+		
 		MainScreenController MSC = new MainScreenController();
 		MSC.setParentStackPane(parentStackPane);
+		
 		primaryStageCopy.setTitle("working");
 	}
 	
-	public void displayMoonError() {
+	public void transition(Label player1, Label player2) {
+		
+		root.setLeft(player1);
+		root.setRight(player2);
 	}
-	
-
 
 }
