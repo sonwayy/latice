@@ -274,11 +274,32 @@ public class LaticeApplicationWindow extends Application {
 		
 		//------------------------------------------------------------------------
 		//###################### creating all rectangles and DragnDrop ######################//
-		RectangleFX rectFX = new RectangleFX();
-		rectFX.createRectangle(root, pane);
-		rectFX.dragnDropOnAllRectangles(player1, indexTileClicked, validateBtnClickedCount);
-		rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, validateBtnClickedCount);
+		//ectangleFX rectFX = new RectangleFX();
+		//rectFX.createRectangle(root, pane);
+		//rectFX.dragnDropOnAllRectangles(player1, indexTileClicked, validateBtnClickedCount);
+		//rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, validateBtnClickedCount);
 		//------------------------------------------------------------------------
+		
+		//Setting drag & drop on rectangles
+		for(int i=0; i<NUMBER_OF_BOX_ON_ONE_LINE; i++) {
+			for(int j=0; j<NUMBER_OF_BOX_ON_ONE_LINE; j++) {
+		        int a = i;
+		        int b = j;
+		        
+				r[a][b].setOnDragEntered(new EventHandler<DragEvent>() {
+	
+					@Override
+					public void handle(DragEvent arg0) {
+						if (arg0.getDragboard().hasString()){
+							Dragboard dragboard = arg0.getDragboard();
+							
+							r[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
+						}
+						arg0.consume();
+					}
+				});
+				
+				r[a][b].setOnDragExited(new EventHandler<DragEvent>() {
 		
 					@Override
 					public void handle(DragEvent arg0) {
@@ -332,6 +353,25 @@ public class LaticeApplicationWindow extends Application {
 				});
 				
 			
+	        }
+		}
+		
+	
+		//rules / referee implementaion
+		
+		this.transition(namePlayer1, namePlayer2);
+		//root.setLeft(namePlayer1);
+		
+		//###################### display name, score and deck of each player ######################//
+		HBox players = new HBox();
+		
+		ArrayList<Player> allPlayers = new ArrayList<>();
+		allPlayers.add(player1);
+		allPlayers.add(player2);
+		
+		for (Player nameplayer : allPlayers ) {
+			VBox player = new VBox();
+			
 			Text name = new Text();
 			name.setFont(Font.font(nameplayer.getName(), FontWeight.BOLD, 20));
 			name.setText(nameplayer.getName());
@@ -349,7 +389,7 @@ public class LaticeApplicationWindow extends Application {
 			players.setMargin(player, new Insets(50,0,0,55));
 		}
 		System.out.println("largeur : " + root.getMaxWidth());
-		players.setSpacing(850);
+		players.setSpacing(850);	
 		
 		
 		
