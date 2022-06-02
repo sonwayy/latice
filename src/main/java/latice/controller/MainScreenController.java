@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
@@ -29,6 +30,7 @@ import latice.model.Tile;
 import latice.model.console.Deck;
 import latice.model.console.Rack;
 import latice.model.console.Score;
+import latice.model.window.PlayerFX;
 
 public class MainScreenController extends LaticeApplicationWindow{
 	@FXML
@@ -45,9 +47,9 @@ public class MainScreenController extends LaticeApplicationWindow{
 	private static StackPane parentStackPaneStock;
 	
 	
-	
 	public Player player1;
 	public Player player2;
+	public HBox players;
 
 	// Event Listener on Rectangle[#playButton].onMouseClicked
 	@FXML
@@ -59,6 +61,7 @@ public class MainScreenController extends LaticeApplicationWindow{
 		System.out.println(mainStage);
 		if (!PlayerNameInputController.btnClicked) {
 			playerNamesInput(event);
+			
 		}
 	}
 	
@@ -133,6 +136,9 @@ public class MainScreenController extends LaticeApplicationWindow{
 		System.out.println(parentStackPaneStock);
 		parentStackPane.getChildren().add(root);
 		
+		players = PlayerFX.displayPlayers(parentStackPane,player1, player2);
+		root.getChildren().addAll(players,LaticeApplicationWindow.borderPane);
+		
 		//parameters of the animation
 		Timeline timeline = new Timeline();
 		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
@@ -154,6 +160,7 @@ public class MainScreenController extends LaticeApplicationWindow{
 		this.parentStackPane = parentStackPane;
 	}
 	
+	
 	public Player instanciatePlayer(String namePlayer) {
 		//###################### Instantiating of players ######################///
 		//create the list of all tiles
@@ -161,7 +168,7 @@ public class MainScreenController extends LaticeApplicationWindow{
 		for (Color color : Color.values()) {
 			for (Shape shape : Shape.values()) {
 				Tile tile = new Tile(color, shape);
-				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
+				//System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
 				
 				listOfTile.add(tile);
 				
@@ -174,4 +181,6 @@ public class MainScreenController extends LaticeApplicationWindow{
 		Player player = new Player(namePlayer, new Score(), deck, new Rack(deck));
 		return player;
 	}
+	
+	
 }

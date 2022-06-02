@@ -1,5 +1,9 @@
 package latice.controller;
 
+import java.util.ArrayList;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -8,17 +12,28 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import latice.application.LaticeApplicationWindow;
+import latice.model.Color;
+import latice.model.Player;
+import latice.model.Shape;
+import latice.model.Tile;
+import latice.model.console.Deck;
+import latice.model.console.Rack;
+import latice.model.console.Score;
+import latice.model.window.PlayerFX;
 
 public class PlayerNameInputController {
 	@FXML
-	private TextField nomJoueur1;
+	public TextField nomJoueur1;
 	@FXML
-	private TextField nomJoueur2;
+	public TextField nomJoueur2;
 	@FXML
 	public Button btnValid;
 	public static boolean btnClicked = false;
 	MainScreenController mainScreenController = new MainScreenController();
 	LaticeApplicationWindow laticeApplicationWindow = new LaticeApplicationWindow();
+	
+	public static String namePlayer1;
+	public static String namePlayer2;
 	
 	@FXML
 	public void validBtnClicked(MouseEvent event) {
@@ -27,26 +42,32 @@ public class PlayerNameInputController {
 		//setting player names
 		String name1 = nomJoueur1.getText();
 		String name2 = nomJoueur2.getText();
-		
+		System.out.println(nomJoueur1.getText());
+		System.out.println("nom des joueurs");
+		System.out.println(nomJoueur2.getText());
+		namePlayer1 = name1;
+		namePlayer2 = name2;
 		
 		btnClicked = true;
 		nameInputStage.close();
 		playerNamesEntered();
-		laticeApplicationWindow.player1 = mainScreenController.instanciatePlayer(name1);
-		laticeApplicationWindow.player2 = mainScreenController.instanciatePlayer(name2);
+		mainScreenController.player1 = mainScreenController.instanciatePlayer(name1);
+		mainScreenController.player2 = mainScreenController.instanciatePlayer(name2);
+		
+		//PlayerFX.displayPlayers(root ,laticeApplicationWindow.player1, laticeApplicationWindow.player2);
 		mainScreenController.startGameInstruction();
 	}
 
-	public TextField getNomJoueur1() {
-		return nomJoueur1;
+	public String getNomJoueur1() {
+		return nomJoueur1.getText();
 	}
 
 	public void setNomJoueur1(TextField nomJoueur1) {
 		this.nomJoueur1 = nomJoueur1;
 	}
 
-	public TextField getNomJoueur2() {
-		return nomJoueur2;
+	public String getNomJoueur2() {
+		return nomJoueur2.getText();
 	}
 
 	public void setNomJoueur2(TextField nomJoueur2) {
@@ -61,5 +82,6 @@ public class PlayerNameInputController {
 		MSC.setParentStackPane(parentStackPane);
 
 	}
+	
 	
 }

@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -46,6 +49,7 @@ import latice.model.Tile;
 import latice.model.console.Deck;
 import latice.model.console.Rack;
 import latice.model.console.Score;
+import latice.model.window.PlayerFX;
 import latice.model.window.RectangleFX;
 
 public class LaticeApplicationWindow extends Application {
@@ -68,14 +72,14 @@ public class LaticeApplicationWindow extends Application {
 	
 	
 	//settings players
-	public Player player1;
-	public Player player2;
+	//public Player player1;
+	//public Player player2;
 	
-	//root layout
-	BorderPane root = new BorderPane();
+	//borderPane layout
+	public static BorderPane borderPane = new BorderPane();
 	
-	//StackPane for background image + BorderPane root onto it
-	StackPane stackPane = new StackPane();
+	//StackPane for background image + BorderPane onto it
+	StackPane root = new StackPane();
 	
 	static Stage primaryStageCopy;
 	StackPane parentStackPane = new StackPane();
@@ -107,14 +111,14 @@ public class LaticeApplicationWindow extends Application {
 		moonErrorLabel.setFont(new Font(20));
 		moonErrorLabel.setTextFill(realColor.RED);
 		topVbox.getChildren().add(moonErrorLabel);
-		root.setTop(topVbox);
+		borderPane.setTop(topVbox);
 		
 		//Image
 		Pane pane = new Pane();
 		BackgroundImage myBG= new BackgroundImage(image,
 		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
 		          BackgroundSize.DEFAULT);
-		stackPane.setBackground(new Background(myBG));
+		root.setBackground(new Background(myBG));
 		
 		//--------------------------------------------------------------------------------------
 		//Creating rectangle for tiles placement
@@ -136,7 +140,7 @@ public class LaticeApplicationWindow extends Application {
 			counterI++;
 		}
 		
-		root.setCenter(pane);
+		borderPane.setCenter(pane);
 		System.out.println(r);
 		//--------------------------------------------------------------------------------------
 		
@@ -146,7 +150,7 @@ public class LaticeApplicationWindow extends Application {
 		for (Color color : Color.values()) {
 			for (Shape shape : Shape.values()) {
 				Tile tile = new Tile(color, shape);
-				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
+				//System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
 				
 				listOfTile.add(tile);
 				
@@ -158,12 +162,15 @@ public class LaticeApplicationWindow extends Application {
 		Deck deck2 = new Deck(listOfTile);
 		
 		//setting player names
-		//String name1 = PlayerNameInputController.getNomJoueur1().getText();
-		//String name2 = PlayerNameInputController.getNomJoueur2().getText();
-		
-		
-		Player player1 = new Player(namePlayer1.getText(), new Score(), deck1, new Rack(deck1));
-		Player player2 = new Player(namePlayer2.getText(), new Score(), deck2, new Rack(deck2));
+		StringProperty name1 = new SimpleStringProperty();
+		StringProperty name2 = new SimpleStringProperty();
+		//name1.bind(PlayerNameInputController.namePlayer1);
+		//name2.bind(PlayerNameInputController.namePlayer2);
+
+		//Player player1 = new Player(namePlayer1.getText(), new Score(), deck1, new Rack(deck1));
+		//Player player2 = new Player(namePlayer2.getText(), new Score(), deck2, new Rack(deck2));
+		//Player player1 = MSC.instanciatePlayer(PlayerNameInputController.getNomJoueur1());
+		//Player player2 = MSC.instanciatePlayer(PlayerNameInputController.getNomJoueur2());
 		
 		//--------------------------------------------------------------------------------------
 		//Rack
@@ -416,8 +423,9 @@ public class LaticeApplicationWindow extends Application {
 		
 		//--------------------------------------------------------------------------------------
 		setPrimaryStage(primaryStage);
-		setRootLayout(stackPane);
-		stackPane.getChildren().addAll(players, root);
+		
+		setRootLayout(root);
+		//root.getChildren().add(borderPane);
 		
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Latice");
@@ -425,6 +433,10 @@ public class LaticeApplicationWindow extends Application {
 		primaryStage.show();
 		
 	}
+
+
+
+	
 
 
 
@@ -501,8 +513,8 @@ public class LaticeApplicationWindow extends Application {
 	
 	public void transition(Label player1, Label player2) {
 		
-		root.setLeft(player1);
-		root.setRight(player2);
+		borderPane.setLeft(player1);
+		borderPane.setRight(player2);
 	}
 
 }
