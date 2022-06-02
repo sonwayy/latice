@@ -1,20 +1,20 @@
 package latice;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.*;
 
 import latice.model.Color;
-import latice.model.Deck;
 import latice.model.Player;
 import latice.model.Position;
-import latice.model.Rack;
-import latice.model.Score;
 import latice.model.Shape;
 import latice.model.Tile;
+import latice.model.console.Deck;
+import latice.model.console.Rack;
+import latice.model.console.Score;
 
 class LaticeTest {
 

@@ -167,6 +167,15 @@ public class LaticeApplicationConsole {
 							
 							
 					case 2:
+							if (player.getScore()>=3) {
+								//Donner une action supplémentaire et enlever 3 points au joueur
+								player.Play(play, board, 0);
+								player.diffScore(3);
+							}else {
+								System.out.println("Il vous faut 3 points pour acheter une nouvelle action !");
+							}
+								
+							
 						
 					case 3: player.getRack().changeRack();
 							System.out.println("Votre rack à été changé avec succès !");
