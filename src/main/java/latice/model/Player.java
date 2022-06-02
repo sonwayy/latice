@@ -63,7 +63,7 @@ public class Player {
 	
 	public Tile Play(Scanner play, GameBoard board, Integer start) {
 		
-		if (this.getScore() ==  0) {
+		if (this.getScore() <=  1) {
 		
 			System.out.println("Vous avez " + this.getScore() + " point");
 
@@ -74,13 +74,12 @@ public class Player {
 		
 		System.out.print("Quel tuile voulez-vous jouez ? ");
 		this.rack.displayRack();
-		System.out.println(1);
 		Integer idTileToPlay = Integer.parseInt(play.next())-1;
 		Tile tileToPlay = this.rack.getListRackTile().get(idTileToPlay);
 		System.out.print("Sur quelle ligne, voulez-vous placer la tuile ?");
-		int row = Integer.parseInt(play.next());
+		int row = Integer.parseInt(play.next())-1;
 		System.out.print("Sur quelle colonne, voulez-vous placer la tuile ?");
-		int column = Integer.parseInt(play.next());
+		int column = Integer.parseInt(play.next())-1;
 		
 		tileToPlay.setPosition(new Position(row, column));
 		return tileToPlay;

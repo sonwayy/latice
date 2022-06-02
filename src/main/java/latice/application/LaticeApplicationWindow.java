@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -36,25 +37,24 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import latice.controller.MainScreenController;
-import latice.controller.PlayerNameInputController;
 import latice.model.Color;
 import latice.model.Constant;
 import latice.model.Player;
+import latice.model.Position;
+import latice.model.Rules;
 import latice.model.Shape;
 import latice.model.Tile;
 import latice.model.console.Deck;
+import latice.model.console.GameBoard;
 import latice.model.console.Rack;
-import latice.model.console.Score;
 import latice.model.window.PlayerFX;
-import latice.model.window.RectangleFX;
 
 public class LaticeApplicationWindow extends Application {
 	
-	javafx.scene.paint.Color realColor = new javafx.scene.paint.Color(0, 0, 0, 0);
 	
 	Image image = new Image("backgroundLatice.png");
 	ImageView imageView = new ImageView(image);
@@ -81,6 +81,7 @@ public class LaticeApplicationWindow extends Application {
 	//StackPane for background image + BorderPane onto it
 	StackPane root = new StackPane();
 	
+	
 	static Stage primaryStageCopy;
 	StackPane parentStackPane = new StackPane();
 	Label moonErrorLabel = new Label();
@@ -99,7 +100,45 @@ public class LaticeApplicationWindow extends Application {
 	public void start(Stage primaryStage) throws Exception{
 		Parent loader = FXMLLoader.load(getClass().getResource("../view/MainScreen.fxml"));
 		Scene menu = new Scene(loader, 1280, 720);
+		
 		MainScreenController MSC = new MainScreenController();
+		
+		parentStackPane = MSC.getParentStackPane();
+		
+		setPrimaryStage(primaryStageCopy);
+		
+		setRootLayout(root);
+		
+		primaryStage.setResizable(false);
+		primaryStage.setTitle("Latice");
+		primaryStage.setScene(menu);
+		primaryStage.show();
+		
+	}
+	
+	public void startGame(Stage stage, StackPane parentStackPaneStock, Player player1, Player player2, Object menuBorderPane) {
+		parentStackPane = parentStackPaneStock;
+		//StackPane root = getRootLayout();
+		//root.translateYProperty().set(stage.getHeight());
+		System.out.println(parentStackPane);
+		System.out.println(parentStackPaneStock);
+		parentStackPane.getChildren().add(root);
+		
+		
+		//parameters of the animation
+		Timeline timeline = new Timeline();
+		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+        timeline.getKeyFrames().add(kf);
+        
+        //when the animation is finished we're removing the main screen
+        timeline.setOnFinished(t -> {
+            parentStackPane.getChildren().remove(menuBorderPane);
+        });
+        timeline.play();
+        
+        
+        
 		
 		//--------------------------------------------------------------------------------------
 		//Title
@@ -109,7 +148,7 @@ public class LaticeApplicationWindow extends Application {
 		topVbox.getChildren().add(title);
 		topVbox.setAlignment(Pos.CENTER);
 		moonErrorLabel.setFont(new Font(20));
-		moonErrorLabel.setTextFill(realColor.RED);
+		moonErrorLabel.setTextFill(Constant.realColor.RED);
 		topVbox.getChildren().add(moonErrorLabel);
 		borderPane.setTop(topVbox);
 		
@@ -122,16 +161,16 @@ public class LaticeApplicationWindow extends Application {
 		
 		//--------------------------------------------------------------------------------------
 		//Creating rectangle for tiles placement
-		Rectangle[][] r = new Rectangle[9][9];
+		Rectangle[][] rect = new Rectangle[9][9];
 		int counterI = 0;
 		int counterJ = 0;
 		for (int i=1; i<=Constant.NUMBER_OF_BOX_ON_ONE_LINE ; i++) {
 			for (int j=1; j <= Constant.NUMBER_OF_BOX_ON_ONE_LINE ; j++) {
 				
-				r[counterI][counterJ] = new Rectangle(i*Constant.BOX_WIDTH+Constant.X_CENTER,j*Constant.BOX_WIDTH+Constant.Y_CENTER,Constant.RECTANGLE_WIDTH,Constant.RECTANGLE_HEIGHT);
-				r[counterI][counterJ].setFill(realColor.TRANSPARENT);
-				pane.getChildren().add(r[counterI][counterJ]);
-				System.out.println(r[counterI][counterJ]);
+				rect[counterI][counterJ] = new Rectangle(i*Constant.BOX_WIDTH+Constant.X_CENTER,j*Constant.BOX_WIDTH+Constant.Y_CENTER,Constant.RECTANGLE_WIDTH,Constant.RECTANGLE_HEIGHT);
+				rect[counterI][counterJ].setFill(Constant.realColor.TRANSPARENT);
+				pane.getChildren().add(rect[counterI][counterJ]);
+				System.out.println(rect[counterI][counterJ]);
 				System.out.println(counterJ);
 				counterJ++;
 			}
@@ -141,36 +180,14 @@ public class LaticeApplicationWindow extends Application {
 		}
 		
 		borderPane.setCenter(pane);
-		System.out.println(r);
+		System.out.println(rect);
 		//--------------------------------------------------------------------------------------
 		
-		//###################### Instantiating of players ######################///
-		//create the list of all tiles
-		ArrayList<Tile> listOfTile = new ArrayList<Tile>();
-		for (Color color : Color.values()) {
-			for (Shape shape : Shape.values()) {
-				Tile tile = new Tile(color, shape);
-				//System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
-				
-				listOfTile.add(tile);
-				
-			}
-		}
+		//GameBoard
+		GameBoard board = new GameBoard();
 		
-		//setting decks for the 2 players
-		Deck deck1 = new Deck(listOfTile);
-		Deck deck2 = new Deck(listOfTile);
-		
-		//setting player names
-		StringProperty name1 = new SimpleStringProperty();
-		StringProperty name2 = new SimpleStringProperty();
-		//name1.bind(PlayerNameInputController.namePlayer1);
-		//name2.bind(PlayerNameInputController.namePlayer2);
-
-		//Player player1 = new Player(namePlayer1.getText(), new Score(), deck1, new Rack(deck1));
-		//Player player2 = new Player(namePlayer2.getText(), new Score(), deck2, new Rack(deck2));
-		//Player player1 = MSC.instanciatePlayer(PlayerNameInputController.getNomJoueur1());
-		//Player player2 = MSC.instanciatePlayer(PlayerNameInputController.getNomJoueur2());
+		//Referee
+		Rules referee = new Rules();
 		
 		//--------------------------------------------------------------------------------------
 		//Rack
@@ -198,7 +215,9 @@ public class LaticeApplicationWindow extends Application {
 		System.out.println("-----------------");
 		//deck.displayListTile();
 		
-
+		
+		//Player
+		Player player = player1;
 			
 		
 		//Confirm Button
@@ -277,7 +296,8 @@ public class LaticeApplicationWindow extends Application {
 			
 		});
 		rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
-		root.setBottom(rackImage);
+		borderPane.setBottom(rackImage);
+		
 		
 		//Adding lists to Arraylists
 		listRackTile = rack2.getListRackTile();
@@ -308,32 +328,32 @@ public class LaticeApplicationWindow extends Application {
 		        int a = i;
 		        int b = j;
 		        
-				r[a][b].setOnDragEntered(new EventHandler<DragEvent>() {
+				rect[a][b].setOnDragEntered(new EventHandler<DragEvent>() {
 	
 					@Override
 					public void handle(DragEvent arg0) {
 						if (arg0.getDragboard().hasString()){
 							Dragboard dragboard = arg0.getDragboard();
 							
-							r[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
+							rect[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
 						}
 						arg0.consume();
 					}
 				});
 				
-				r[a][b].setOnDragExited(new EventHandler<DragEvent>() {
+				rect[a][b].setOnDragExited(new EventHandler<DragEvent>() {
 		
 					@Override
 					public void handle(DragEvent arg0) {
 						if (arg0.isDropCompleted() == false) {
-							r[a][b].setFill(realColor.TRANSPARENT);
+							rect[a][b].setFill(Constant.realColor.TRANSPARENT);
 						}
 						arg0.consume();
 					}
 					
 				});
 				
-				r[a][b].setOnDragOver(new EventHandler <DragEvent>() {
+				rect[a][b].setOnDragOver(new EventHandler <DragEvent>() {
 					@Override
 				    public void handle(DragEvent arg0) {
 				        arg0.acceptTransferModes(TransferMode.ANY);
@@ -341,31 +361,70 @@ public class LaticeApplicationWindow extends Application {
 				    }
 				});
 				
-				r[a][b].setOnDragDropped(new EventHandler<DragEvent>() {
+				rect[a][b].setOnDragDropped(new EventHandler<DragEvent>() {
 					@Override
 					public void handle(DragEvent arg0) {
 						System.out.println("entered");
 						Dragboard dragboard = arg0.getDragboard();
+						System.out.println("OK2");
+						rect[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
 						
-						r[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
+						
 						arg0.setDropCompleted(true);
-						assocRectangleTile.put(r[a][b], listRackTile.get(getIndexTileClicked()));
-						System.out.println(assocRectangleTile.toString());
+						System.out.println("OK");
+						//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
+						//System.out.println(assocRectangleTile.toString());
 						moonErrorLabel.setText("");
 						if (validateBtnClickedCount == 0){
-							if (r[a][b] == r[4][4]) {
-								System.out.println("MOON valid placement");	
-							}else {
-								moonErrorLabel.setText("Error ! Please place the first tile on the moon");
-								//removing all tiles from gameboard
-								for(int i=0; i<Constant.NUMBER_OF_BOX_ON_ONE_LINE; i++) {
-									for(int j=0; j<Constant.NUMBER_OF_BOX_ON_ONE_LINE; j++) {
-										r[i][j].setFill(realColor.TRANSPARENT);
-									}
+							if (Constant.START) {
+								if (rect[a][b] == rect[4][4]) {
+									System.out.println("MOON valid placement");
+									//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
+									
+									board.setGridBoardTile(listRackTile.get(getIndexTileClicked()), a, b);
+									
+									Constant.START = false;
+								}else {
+									moonErrorLabel.setText("Error ! Please place the first tile on the moon");
+									//removing all tiles from gameboard
+									rect[a][b].setFill(Constant.realColor.TRANSPARENT);
+									
+									System.out.println("Please place first Tile on MOON");
+									
 								}
-								System.out.println("Please place first Tile on MOON");
+								
+							}else {
+								System.out.println("OK3");
+								System.out.println("Règle effectué");
+								listRackTile.get(getIndexTileClicked()).setPosition(new Position(a,b));
+								int nbr = referee.neighborRule(board , listRackTile.get(getIndexTileClicked()));
+								
+								if (nbr == 0) {
+									System.out.println("l'emplacement où est posé la tuile n'a pas de voisin ou il n'y a pas de correspondance avec les voisins !");
+									rect[a][b].setFill(Constant.realColor.TRANSPARENT);
+									
+								}else {
+									if (nbr == 2) {
+										System.out.println("Vous avez gagné 1 point");
+									}else if (nbr == 3) {
+										System.out.println("Vous avez gagné 2 points");
+									}else if (nbr == 4) {
+										System.out.println("Vous avez gagné 4 points");
+									}
+									//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
+									board.setGridBoardTile(listRackTile.get(getIndexTileClicked()), a, b);
+									System.out.println("tuile posé!");
+									
+									
+								}
+								
 								
 							}
+							
+							
+							
+							
+							
 				        }
 						
 						
@@ -381,59 +440,26 @@ public class LaticeApplicationWindow extends Application {
 	
 		//rules / referee implementaion
 		
-		this.transition(namePlayer1, namePlayer2);
+		//this.transition(namePlayer1, namePlayer2);
 		//root.setLeft(namePlayer1);
 		
-		//###################### display name, score and deck of each player ######################//
-		HBox players = new HBox();
 		
-		ArrayList<Player> allPlayers = new ArrayList<>();
-		allPlayers.add(player1);
-		allPlayers.add(player2);
-		
-		for (Player nameplayer : allPlayers ) {
-			VBox player = new VBox();
-			
-			Text name = new Text();
-			name.setFont(Font.font(nameplayer.getName(), FontWeight.BOLD, 20));
-			name.setText(nameplayer.getName());
-			
-			Text score = new Text();
-			score.setText("Score : ");
-			
-			Text nbrOfTiles = new Text();
-			nbrOfTiles.setText("Tuiles restantes : ");
-			
-			player.getChildren().addAll(name, score, nbrOfTiles);
-			player.setSpacing(5);
-			
-			players.getChildren().add(player);
-			players.setMargin(player, new Insets(50,0,0,55));
-		}
-		System.out.println("largeur : " + root.getMaxWidth());
-		players.setSpacing(850);	
 		
 		
 		
 		
 
-		parentStackPane = MSC.getParentStackPane();
 		
 		
+		HBox players = PlayerFX.displayPlayers(parentStackPane,player1, player2);
 		
 		//--------------------------------------------------------------------------------------
-		setPrimaryStage(primaryStage);
 		
-		setRootLayout(root);
-		//root.getChildren().add(borderPane);
+		root.getChildren().addAll(players, borderPane);
 		
-		primaryStage.setResizable(false);
-		primaryStage.setTitle("Latice");
-		primaryStage.setScene(menu);
-		primaryStage.show();
-		
+        
+        //Règles
 	}
-
 
 
 	
@@ -491,30 +517,6 @@ public class LaticeApplicationWindow extends Application {
 	//Setter to set the mouse clicked tile
 	public static void setIndexTileClicked(int indexTileClicked) {
 		LaticeApplicationWindow.indexTileClicked = indexTileClicked;
-	}
-	
-	/*//player names setters
-	public void setNamePlayer1(String namePlayer1) {
-		this.namePlayer1.setText(namePlayer1);
-	}
-
-	public void setNamePlayer2(String namePlayer2) {
-		this.namePlayer2.setText(namePlayer2);
-	}*/
-	
-	public void playerNamesEntered() {
-		System.out.println("entered playNamesEntered()" + namePlayer1.getText() + " VS " + namePlayer2.getText());
-		
-		MainScreenController MSC = new MainScreenController();
-		MSC.setParentStackPane(parentStackPane);
-		
-		primaryStageCopy.setTitle("working");
-	}
-	
-	public void transition(Label player1, Label player2) {
-		
-		borderPane.setLeft(player1);
-		borderPane.setRight(player2);
 	}
 
 }

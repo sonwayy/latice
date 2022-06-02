@@ -22,18 +22,18 @@ public class PlayerFX {
 		allPlayers.add(player1);
 		allPlayers.add(player2);
 		
-		for (Player nameplayer : allPlayers ) {
+		for (Player namePlayer : allPlayers ) {
 			VBox player = new VBox();
 			
 			Text name = new Text();
-			name.setFont(Font.font(nameplayer.getName(), FontWeight.BOLD, 20));
-			name.setText(nameplayer.getName());
+			name.setFont(Font.font(namePlayer.getName(), FontWeight.BOLD, 20));
+			name.setText(namePlayer.getName());
 			
 			Text score = new Text();
-			score.setText("Score : ");
+			score.setText("Score : " + namePlayer.getScore());
 			
 			Text nbrOfTiles = new Text();
-			nbrOfTiles.setText("Tuiles restantes : ");
+			nbrOfTiles.setText("Tuiles restantes : " + namePlayer.getNumberOfTilesRemaining());
 			
 			player.getChildren().addAll(name, score, nbrOfTiles);
 			player.setSpacing(5);
@@ -41,7 +41,7 @@ public class PlayerFX {
 			players.getChildren().add(player);
 			players.setMargin(player, new Insets(50,0,0,55));
 		}
-		System.out.println("largeur : " + root.getMaxWidth());
+		
 		players.setSpacing(850);
 		return players;
 	}

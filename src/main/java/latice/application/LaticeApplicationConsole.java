@@ -110,7 +110,7 @@ public class LaticeApplicationConsole {
 		Player player2 = new Player("player2", scorePlayer2, deck2, rack2);
 		
 		System.out.println("-----------------");
-		GameBoard board = new GameBoard(); 
+		GameBoard board = new GameBoard();
 		board.displayGameBoard();
 		
 		System.out.println(Objects.equals(board.getGridBoard()[1][0], Tile.class));
@@ -132,48 +132,52 @@ public class LaticeApplicationConsole {
 				player = player2;
 			}
 			
+			System.out.println("c'est à votre tour de jouer " + player.getName() +"!");
+			
 			while (round) {
-				System.out.println("c'est à votre tour de jouer " + player.getName() +"!");
+				player.getRack().displayRack();
 				System.out.println("Vous avez " + player.getScore() +" points, que voulez-vous faire ?\n"
 						+ "    1. Jouer une Tuile (à partir de la deuxième tuile jouée, cela coûtera 2 points)\n"
 						+ "    2. Acheter une action supplémentaire\n"
 						+ "    3. Changer le Rack et passer(coûte 3 points)\n"
 						+ "    4. Passer\n");
 				
+				System.out.print("Choix : ");
 				int choiceMenu = Integer.parseInt(play.next());
 				switch(choiceMenu) {
-					case 1:		if (arbitre.checkScoreToPlay(player, freeTile) == false){
-									System.out.println("Il vous faut 2 points pour jouer un nouvelle tuile !!!");
-								}else {
-									Boolean rulesCheck = false;
+					case 1:	if (freeTile) {	
+								Boolean rulesCheck = false;
+								
+								while (rulesCheck == false) {
 									
-									while (rulesCheck == false) {
-										
-										tile = player.Play(play,board,i);
-										rulesCheck = arbitre.arbitration(player, board, tile, start);
-										
-									};
+									tile = player.Play(play,board,i);
+									rulesCheck = arbitre.arbitration(player, board, tile, start);
 									
-									if (i == 0) {
-										start = false;
-									}
-									
-									board.setGridBoard(" "+tile.getShapeConsole()+tile.getColorConsole()+" ", tile.getPositionRow(), tile.getPositionColumn());
-									
-									player.getRack().removeTile(tile);
-									board.displayGameBoard();
+								};
+								
+								if (i == 0) {
+									start = false;
 								}
-								break;
+								
+								board.setGridBoardTile(tile, tile.getPositionRow(), tile.getPositionColumn());
+								
+								
+								player.getRack().removeTile(tile);
+								board.displayGameBoard();
+								
+							}
+							break;
 							
 							
 					case 2:
 							if (player.getScore()>=3) {
 								//Donner une action supplémentaire et enlever 3 points au joueur
 								player.Play(play, board, 0);
-								player.diffScore(3);
+								player.diffScore(2);
 							}else {
-								System.out.println("Il vous faut 3 points pour acheter une nouvelle action !");
+								System.out.println("Il vous faut 2 points pour acheter une nouvelle action !");
 							}
+							break;
 								
 							
 						
@@ -181,6 +185,7 @@ public class LaticeApplicationConsole {
 							System.out.println("Votre rack à été changé avec succès !");
 					
 					case 4: System.out.println("Votre tour est terminé " + player.getName() + " !");
+							player.getRack().updateRack();
 							round = false;
 							break;
 					
@@ -189,42 +194,22 @@ public class LaticeApplicationConsole {
 			}
 			
 			
-			/*
-			if (PlayOrPass == 2) {
-				round = false;
-				System.out.println("Votre tour est terminé " + player.getName() + " !");
+			System.out.println("-------------------------------------------------------------------------------------------");
+			
+			if (player1.getNumberOfTilesRemaining() < player2.getNumberOfTilesRemaining()) {
+				System.out.println("-------------- Félicitations" + player1.getName() + " pour votre victoire !! --------------");
+				System.out.println("-------------- Nos condoléances " + player2.getName() + " pour votre victoire !! --------------");
+				System.out.println("Le gagnant de la partie est " + player1.getName() + " car il a posé le plus de tuiles sur le plateau Latice !!");
+				System.out.println(player2.getName() + ", vous êtes tombés sur un joueur plus fort que vous. Réentrainez-vous pour pouvoir prendre votre vengeance hehe");
+			
+			}else if (player2.getNumberOfTilesRemaining() < player1.getNumberOfTilesRemaining()){
+				System.out.println("-------------- Félicitations" + player2.getName() + " pour votre victoire !! --------------");
+				System.out.println("-------------- Nos condoléances " + player1.getName() + " pour votre victoire !! --------------");
+				System.out.println("Le gagnant de la partie est " + player2.getName() + " car il a posé le plus de tuiles sur le plateau Latice !!");
+				System.out.println(player1.getName() + ", vous êtes tombés sur un joueur plus fort que vous. Réentrainez-vous pour pouvoir prendre votre vengeance hehe");
+			}else {
+				System.out.println("Match nul !! Recommencez une partie si vous voulez vous départagez !!");
 			}
-			
-			while (round) {
-				Boolean rulesCheck = false;
-				
-				System.out.println("c'est à votre tour de jouer " + player.getName() +"!");
-				
-				while (rulesCheck == false) {
-					tile = player.Play(play,board,i);
-					rulesCheck = arbitre.arbitration(player, board, tile, START);
-					
-				};
-				
-				if (i == 0) {
-					START = false;
-				}
-				
-				board.setGridBoard(" "+tile.getShapeConsole()+tile.getColorConsole()+" ", tile.getPositionRow(), tile.getPositionColumn());
-				
-				player.getRack().removeTile(tile);
-				board.displayGameBoard();
-				
-			
-				System.out.println(player.getName() + " ! Voulez-vous passer votre tour ou continuer à jouer ? 1.continuer ou 2.passer");
-				int ContinueOrPass = Integer.parseInt(play.next());
-				if (ContinueOrPass == 2) {
-					round = false;
-					System.out.println("Votre tour est terminé " + player.getName() + " !");
-				}
-			}
-			
-			player.getRack().updateRack();*/
 			
 			
 		}

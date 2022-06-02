@@ -125,10 +125,11 @@ public class MainScreenController extends LaticeApplicationWindow{
 	}
 	
 	public void startGameInstruction() {
-		startGame(mainStage);
+		
+        startGame(mainStage, parentStackPaneStock, player1, player2, menuBorderPane);
 	}
 	
-	public void startGame(Stage stage) {
+	/*public void startGame(Stage stage) {
 		parentStackPane = parentStackPaneStock;
 		StackPane root = getRootLayout();
 		root.translateYProperty().set(stage.getHeight());
@@ -150,9 +151,14 @@ public class MainScreenController extends LaticeApplicationWindow{
             parentStackPane.getChildren().remove(menuBorderPane);
         });
         timeline.play();
-	}
+        
+        
+        
+        //Règles
+	}*/
 
 	public StackPane getParentStackPane() {
+		System.out.println(parentStackPane);
 		return parentStackPane;
 	}
 
