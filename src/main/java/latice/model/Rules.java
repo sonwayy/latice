@@ -26,32 +26,35 @@ public class Rules {
 	public Integer neighborRule(GameBoard board, Tile tile) {
 
 		Integer nbrNeighbor = 0;
-		String checkNeighbor = null;
+		Tile checkNeighbor = null;
 		Boolean checkCase = false;
+		Boolean badNeighbor = false;
 		
 		for(int i = 0; i < 2 ; i++) {
 			for(int j = -1; j < 2 ; j=j+2) {
 				if (i == 0) {
-					if (tile.getPositionColumn()+j >= 0 && tile.getPositionColumn()+j <= 9) {
-						checkNeighbor = board.getGridBoard()[tile.getPositionRow()][tile.getPositionColumn()+j];
+					if (tile.getPositionRow() >= 0 && tile.getPositionColumn()+j <= 9) {
+						checkNeighbor = board.getGridBoardTile()[tile.getPositionRow()][tile.getPositionColumn()+j];
+						
 						checkCase = true;
 					}
 				}else {
-					if (tile.getPositionRow()+j >= 0 && tile.getPositionRow()+j <= 9) {
-						checkNeighbor = board.getGridBoard()[tile.getPositionRow()+j][tile.getPositionColumn()];
+					if (tile.getPositionRow()+j >= 0 && tile.getPositionColumn() <= 9) {
+						checkNeighbor = board.getGridBoardTile()[tile.getPositionRow()+j][tile.getPositionColumn()];
 						checkCase = true;
 					}
 				}
 				
 				if (checkCase) {
-					if (!(GameBoard.SUN.equals(checkNeighbor)) || !(GameBoard.BLUE.equals(checkNeighbor))) {
+					if ( checkNeighbor != null) {
 						
 						System.out.println("Il y a une tuile");
 						
-						if ( tile.getShapeConsole().equals(checkNeighbor.substring(1, 2)) || tile.getColorConsole().equals(checkNeighbor.substring(2, 3)) ) {
+						if ( tile.getShape() == checkNeighbor.getShape() || tile.getColor() == checkNeighbor.getColor() ) {
 							System.out.println("Il y a correspondance avec la tuile !");
 							nbrNeighbor = nbrNeighbor + 1;
 						}else {
+							badNeighbor = true;
 							System.out.println("Il n'y a pas correspondance avec la tuile !");
 							
 						}
@@ -60,8 +63,11 @@ public class Rules {
 			}
 		}
 	
-		
-		return nbrNeighbor;
+		if (badNeighbor) {
+			return 0;
+		}else {
+			return nbrNeighbor;
+		}
 	}
 	
 	public Boolean sunRule(GameBoard board, Tile tile) {

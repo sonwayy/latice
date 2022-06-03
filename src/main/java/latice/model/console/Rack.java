@@ -134,13 +134,15 @@ public class Rack {
 		int index;
 		
 		HBox rack = new HBox();
+		rackTileImage.clear();
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < this.getListRackTile().size(); i++) {
 			index = i;
 			
 			tile = (this.getListRackTile()).get(index);
 			
 			image = new Image(tile.getShape().getStringShape() + "_" + tile.getColor().getStringColor()+ ".png");
+			
 			rackTileImage.add(image);
 			imageView = new ImageView(image);
 			imageView.setFitHeight(80);

@@ -1,7 +1,7 @@
 package latice.model;
 
 public class Constant {
-	//
+	//for the start of the game
 	public static Boolean START = true;
 	
 	//for creating rectangles
@@ -11,7 +11,7 @@ public class Constant {
 
 	public static final int RECTANGLE_WIDTH = 50;
 
-	public static final int Y_CENTER = 37;
+	public static final int Y_CENTER = 6;
 
 	public static final int X_CENTER = 355;
 
@@ -23,5 +23,8 @@ public class Constant {
 	
 	//Color
 	public static javafx.scene.paint.Color realColor = new javafx.scene.paint.Color(0, 0, 0, 0);
+	
+	//Dimension width and height of the Latice plateau
+	public static final int DIMENSION = 9;
 
 }

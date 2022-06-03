@@ -6,44 +6,54 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import latice.model.Player;
 
 public class PlayerFX {
-
+	private Text name;
+	private Text score;
+	private Text nbrOfTiles;
+	private VBox infoPlayer;
 	
-	public static HBox displayPlayers(StackPane root, Player player1, Player player2) {
+	public VBox displayPlayers(StackPane root, Player player) {
 		//###################### display name, score and deck of each player ######################//
-		HBox players = new HBox();
+		//HBox players = new HBox();
 		
-		ArrayList<Player> allPlayers = new ArrayList<>();
-		allPlayers.add(player1);
-		allPlayers.add(player2);
+		//ArrayList<Player> allPlayers = new ArrayList<>();
+		//allPlayers.add(player1);
+		//allPlayers.add(player2);
 		
-		for (Player namePlayer : allPlayers ) {
-			VBox player = new VBox();
+		//for (Player namePlayer : allPlayers ) {
+			infoPlayer = new VBox();
 			
-			Text name = new Text();
-			name.setFont(Font.font(namePlayer.getName(), FontWeight.BOLD, 20));
-			name.setText(namePlayer.getName());
+			name = new Text();
+			name.setFont(Font.font(player.getName(), FontWeight.BOLD, 20));
+			name.setText(player.getName());
 			
-			Text score = new Text();
-			score.setText("Score : " + namePlayer.getScore());
+			score = new Text();
+			score.setText("Score : " + player.getScore());
 			
-			Text nbrOfTiles = new Text();
-			nbrOfTiles.setText("Tuiles restantes : " + namePlayer.getNumberOfTilesRemaining());
+			nbrOfTiles = new Text();
+			nbrOfTiles.setText("Tuiles restantes : " + player.getNumberOfTilesRemaining());
 			
-			player.getChildren().addAll(name, score, nbrOfTiles);
-			player.setSpacing(5);
+			infoPlayer.getChildren().addAll(name, score, nbrOfTiles);
+			infoPlayer.setSpacing(5);
 			
-			players.getChildren().add(player);
-			players.setMargin(player, new Insets(50,0,0,55));
-		}
+			//players.getChildren().add(infoPlayer);
+			//players.setMargin(infoPlayer, new Insets(50,0,0,55));
+		//}
 		
-		players.setSpacing(850);
-		return players;
+		//players.setSpacing(850);
+		return infoPlayer;
 	}
+	
+	public void setFillName(javafx.scene.paint.Color color) {
+		name.setFill(color);
+	}
+	
+	
 	
 }
