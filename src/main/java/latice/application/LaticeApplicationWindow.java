@@ -559,11 +559,13 @@ public class LaticeApplicationWindow extends Application {
 								}else {
 									if (nbr == 2) {
 										System.out.println("Vous avez gagné 1 point");
-										
+										playerFX.setAddScore(player, 1);
 									}else if (nbr == 3) {
 										System.out.println("Vous avez gagné 2 points");
+										playerFX.setAddScore(player, 2);
 									}else if (nbr == 4) {
 										System.out.println("Vous avez gagné 4 points");
+										playerFX.setAddScore(player, 4);
 									}
 									//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
 									board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);

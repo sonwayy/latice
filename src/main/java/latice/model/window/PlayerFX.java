@@ -27,31 +27,41 @@ public class PlayerFX {
 		//allPlayers.add(player2);
 		
 		//for (Player namePlayer : allPlayers ) {
-			infoPlayer = new VBox();
+			this.infoPlayer = new VBox();
 			
-			name = new Text();
-			name.setFont(Font.font(player.getName(), FontWeight.BOLD, 20));
-			name.setText(player.getName());
+			this.name = new Text();
+			this.name.setFont(Font.font(player.getName(), FontWeight.BOLD, 20));
+			this.name.setText(player.getName());
 			
-			score = new Text();
-			score.setText("Score : " + player.getScore());
+			this.score = new Text();
+			this.score.setText("Score : " + player.getScore());
 			
-			nbrOfTiles = new Text();
-			nbrOfTiles.setText("Tuiles restantes : " + player.getNumberOfTilesRemaining());
+			this.nbrOfTiles = new Text();
+			this.nbrOfTiles.setText("Tuiles restantes : " + player.getNumberOfTilesRemaining());
 			
-			infoPlayer.getChildren().addAll(name, score, nbrOfTiles);
-			infoPlayer.setSpacing(5);
+			this.infoPlayer.getChildren().addAll(name, score, nbrOfTiles);
+			this.infoPlayer.setSpacing(5);
 			
 			//players.getChildren().add(infoPlayer);
 			//players.setMargin(infoPlayer, new Insets(50,0,0,55));
 		//}
 		
 		//players.setSpacing(850);
-		return infoPlayer;
+		return this.infoPlayer;
 	}
 	
 	public void setFillName(javafx.scene.paint.Color color) {
 		name.setFill(color);
+	}
+	
+	public void setAddScore(Player player, Integer score) {
+		player.addScore(score);
+		this.score.setText("Score : " + player.getScore());
+	}
+	
+	public void setDiffScore(Player player, Integer score) {
+		player.diffScore(score);
+		this.score.setText("Score : " + player.getScore());
 	}
 	
 	
