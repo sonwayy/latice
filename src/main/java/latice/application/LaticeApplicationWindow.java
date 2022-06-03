@@ -35,6 +35,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -95,6 +96,7 @@ public class LaticeApplicationWindow extends Application {
 	//To start, it's false
 	Boolean tileDropped = false;
 	
+	Paint tileOnRect;
 	
 	//borderPane layout
 	public static BorderPane borderPane = new BorderPane();
@@ -440,7 +442,7 @@ public class LaticeApplicationWindow extends Application {
 		
 		//------------------------------------------------------------------------
 		//###################### creating all rectangles and DragnDrop ######################//
-		//ectangleFX rectFX = new RectangleFX();
+		//RectangleFX rectFX = new RectangleFX();
 		//rectFX.createRectangle(root, pane);
 		//rectFX.dragnDropOnAllRectangles(player1, indexTileClicked, validateBtnClickedCount);
 		//rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, validateBtnClickedCount);
@@ -450,19 +452,6 @@ public class LaticeApplicationWindow extends Application {
 		setDragnDropOnRectangles(rect, board, referee, player);
 		
 	
-		//rules / referee implementaion
-		
-		//this.transition(namePlayer1, namePlayer2);
-		//root.setLeft(namePlayer1);
-		
-		
-		
-		
-		
-		
-
-		
-		
 		
 		
 		//--------------------------------------------------------------------------------------
@@ -470,7 +459,6 @@ public class LaticeApplicationWindow extends Application {
 		root.getChildren().addAll(infoPlayers, borderPane);
 		
         
-        //Règles
 	}
 
 
@@ -481,14 +469,23 @@ public class LaticeApplicationWindow extends Application {
 		        int a = i;
 		        int b = j;
 		        
+		        
+		        
 				rect[a][b].setOnDragEntered(new EventHandler<DragEvent>() {
 	
 					@Override
 					public void handle(DragEvent arg0) {
+						
+						
+						tileOnRect = rect[a][b].getFill();
 						if (arg0.getDragboard().hasString()){
 							Dragboard dragboard = arg0.getDragboard();
 							
-							rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(getIndexTileClicked())));
+							//not put the virtual image drag on the case because an image is already into it
+							player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
+							if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == true ) {
+							rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(indexTileClicked)));
+							}
 						}
 						arg0.consume();
 					}
@@ -499,7 +496,8 @@ public class LaticeApplicationWindow extends Application {
 					@Override
 					public void handle(DragEvent arg0) {
 						if (arg0.isDropCompleted() == false) {
-							rect[a][b].setFill(Constant.realColor.TRANSPARENT);
+							
+							rect[a][b].setFill(tileOnRect);
 						}
 						arg0.consume();
 					}
@@ -509,6 +507,7 @@ public class LaticeApplicationWindow extends Application {
 				rect[a][b].setOnDragOver(new EventHandler <DragEvent>() {
 					@Override
 				    public void handle(DragEvent arg0) {
+						
 				        arg0.acceptTransferModes(TransferMode.ANY);
 				        arg0.consume();
 				    }
@@ -520,23 +519,23 @@ public class LaticeApplicationWindow extends Application {
 						System.out.println("entered");
 						Dragboard dragboard = arg0.getDragboard();
 						System.out.println("OK2");
+						
+						
 						rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(getIndexTileClicked())));
 						
 						
 						arg0.setDropCompleted(true);
 						System.out.println("OK");
-						//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
-						//System.out.println(assocRectangleTile.toString());
 						ErrorLabel.setText("");
 						
 							if (Constant.START) {
 								if (rect[a][b] == rect[4][4]) {
 									System.out.println("MOON valid placement");
-									//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
 									
-									board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);
+									board.setGridBoardTile(player.getRack().getListRackTile().get(indexTileClicked), a, b);
 									tileDropped = true;
 									Constant.START = false;
+									
 								}else {
 									ErrorLabel.setText("Error ! Please place the first tile on the moon");
 									//removing all tiles from gameboard
@@ -549,30 +548,37 @@ public class LaticeApplicationWindow extends Application {
 							}else {
 								System.out.println("OK3");
 								System.out.println("Règle effectué");
-								player.getRack().getListRackTile().get(getIndexTileClicked()).setPosition(new Position(a,b));
-								int nbr = referee.neighborRule(board , player.getRack().getListRackTile().get(getIndexTileClicked()));
+								player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
 								
-								if (nbr == 0) {
-									ErrorLabel.setText("Error! the tile isn't place next to another tile or there is no correspondance with the neighbor tiles !!");
-									rect[a][b].setFill(Constant.realColor.TRANSPARENT);
+								if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == false ) {
+									ErrorLabel.setText("Error ! The tile can't be placed here because there is already a tile placed");
+									rect[a][b].setFill(tileOnRect);
 									
 								}else {
-									if (nbr == 2) {
-										System.out.println("Vous avez gagné 1 point");
-										playerFX.setAddScore(player, 1);
-									}else if (nbr == 3) {
-										System.out.println("Vous avez gagné 2 points");
-										playerFX.setAddScore(player, 2);
-									}else if (nbr == 4) {
-										System.out.println("Vous avez gagné 4 points");
-										playerFX.setAddScore(player, 4);
+									int nbr = referee.neighborRule(board , player.getRack().getListRackTile().get(indexTileClicked));
+									
+									if (nbr == 0) {
+										ErrorLabel.setText("Error ! The tile isn't place next to another tile or there is no correspondance with the neighbor tiles !!");
+										rect[a][b].setFill(Constant.realColor.TRANSPARENT);
+										
+									}else {
+										if (nbr == 2) {
+											System.out.println("Vous avez gagné 1 point");
+											playerFX.setAddScore(player, 1);
+											
+										}else if (nbr == 3) {
+											System.out.println("Vous avez gagné 2 points");
+											playerFX.setAddScore(player, 2);
+											
+										}else if (nbr == 4) {
+											System.out.println("Vous avez gagné 4 points");
+											playerFX.setAddScore(player, 4);
+										}
+										
+										board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);
+										tileDropped = true;
+										System.out.println("tuile posé!");
 									}
-									//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
-									board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);
-									tileDropped = true;
-									System.out.println("tuile posé!");
-									
-									
 								}
 								
 								

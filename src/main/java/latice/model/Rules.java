@@ -22,6 +22,14 @@ public class Rules {
 		}
 	}
 	
+	public Boolean checkPositionRule(GameBoard board, Tile tile) {
+		if (board.getGridBoardTile()[tile.getPositionRow()][tile.getPositionColumn()] == null) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
 	
 	public Integer neighborRule(GameBoard board, Tile tile) {
 
