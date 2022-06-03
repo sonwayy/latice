@@ -61,7 +61,7 @@ public class LaticeApplicationWindow extends Application {
 	
 	
 	ArrayList<Tile> listRackTile;
-	ArrayList<Image> listTileImage;
+	ArrayList<Image> listRackImage;
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
 	static StackPane rootLayout;
@@ -74,6 +74,27 @@ public class LaticeApplicationWindow extends Application {
 	//settings players
 	//public Player player1;
 	//public Player player2;
+	public Player player;
+	
+	// informations of the player
+	public PlayerFX playerFX;
+	
+	//settings Button
+	Button confirmButton;
+	Button changeButton;
+	Button buyActionButton;
+	
+	//setting the referee to check rules, the GameBoard where the tile are placed and the Rectangle to put the image tile in the plateau
+	Rectangle[][] rect;
+	GameBoard board;
+	Rules referee;
+	
+	
+	
+	//setting to know if the tile is well dropped with the check of rules or not
+	//To start, it's false
+	Boolean tileDropped = false;
+	
 	
 	//borderPane layout
 	public static BorderPane borderPane = new BorderPane();
@@ -84,7 +105,9 @@ public class LaticeApplicationWindow extends Application {
 	
 	static Stage primaryStageCopy;
 	StackPane parentStackPane = new StackPane();
-	Label moonErrorLabel = new Label();
+	Label ErrorLabel = new Label();
+	
+	HBox rackImage;
 	
 	int validateBtnClickedCount;
 	
@@ -147,9 +170,9 @@ public class LaticeApplicationWindow extends Application {
 		title.setFont(new Font(30));
 		topVbox.getChildren().add(title);
 		topVbox.setAlignment(Pos.CENTER);
-		moonErrorLabel.setFont(new Font(20));
-		moonErrorLabel.setTextFill(Constant.realColor.RED);
-		topVbox.getChildren().add(moonErrorLabel);
+		ErrorLabel.setFont(new Font(20));
+		ErrorLabel.setTextFill(Constant.realColor.RED);
+		topVbox.getChildren().add(ErrorLabel);
 		borderPane.setTop(topVbox);
 		
 		//Image
@@ -161,7 +184,7 @@ public class LaticeApplicationWindow extends Application {
 		
 		//--------------------------------------------------------------------------------------
 		//Creating rectangle for tiles placement
-		Rectangle[][] rect = new Rectangle[9][9];
+		rect = new Rectangle[Constant.DIMENSION][Constant.DIMENSION];
 		int counterI = 0;
 		int counterJ = 0;
 		for (int i=1; i<=Constant.NUMBER_OF_BOX_ON_ONE_LINE ; i++) {
@@ -184,12 +207,31 @@ public class LaticeApplicationWindow extends Application {
 		//--------------------------------------------------------------------------------------
 		
 		//GameBoard
-		GameBoard board = new GameBoard();
+		board = new GameBoard();
 		
 		//Referee
-		Rules referee = new Rules();
+		referee = new Rules();
 		
 		//--------------------------------------------------------------------------------------
+		
+		//display name, score and deck of each player
+		//----------- settings the attributes of the players -----------//
+		PlayerFX player1FX = new PlayerFX();
+		PlayerFX player2FX = new PlayerFX(); 
+		
+		//----------- display attribute of the player in a VBox -----------//
+		VBox infoPlayer1 = player1FX.displayPlayers(parentStackPane,player1);
+		VBox infoPlayer2 = player2FX.displayPlayers(parentStackPane,player2);
+		
+		//----------- group all players in a HBox to display -----------//
+		HBox infoPlayers = new HBox();
+		infoPlayers.getChildren().addAll(infoPlayer1, infoPlayer2);
+		HBox.setMargin(infoPlayer1, new Insets(50,0,0,55));
+		HBox.setMargin(infoPlayer2, new Insets(50,0,0,55));
+		infoPlayers.setSpacing(850);
+		
+		//--------------------------------------------------------------------------------------
+		
 		//Rack
 		HBox rackBox = new HBox();
 		
@@ -217,15 +259,32 @@ public class LaticeApplicationWindow extends Application {
 		
 		
 		//Player
-		Player player = player1;
-			
+		player = player1;
+		playerFX = player1FX;
+		playerFX.setFillName(Constant.realColor.RED);
+		
 		
 		//Confirm Button
 		Image checkMark = new Image("checkMark.png");
 		ImageView checkMarkView = new ImageView(checkMark);
-		Button confirmButton = new Button("Confirm", checkMarkView);
+		confirmButton = new Button("Confirm", checkMarkView);
 		confirmButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
 		confirmButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
+		
+
+		//RackChange Button
+		Image changeIconImage = new Image("changeIcon.png");
+		ImageView changeIconView = new ImageView(changeIconImage);
+		changeButton = new Button("Change Rack", changeIconView);
+		changeButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
+		changeButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
+		
+		//Buy another action Button
+		Image buyActionImage = new Image("buyAction.png");
+		ImageView buyActionView = new ImageView(buyActionImage);
+		buyActionButton = new Button("Buy Action", buyActionView);
+		buyActionButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
+		buyActionButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
 		confirmButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -236,30 +295,63 @@ public class LaticeApplicationWindow extends Application {
 				System.out.println("confirmed placement");
 				
 				validateBtnClickedCount++;
+				player.getRack().displayRack();
+				player.getRack().updateRack();
+				
+				//HBox newRackImage = rack2.createTileImage();
+				//rackImage.getChildren().clear();
+				//listRackTile = rack2.getListRackTile();
+				//System.out.println(listRackTile);
+				player.getRack().displayRack();
+				
+
+				
+				//Setting drag n drop on tiles
+				
+				
+				
+				//setDragnDropOnRectangles(rect, board, referee, player);
+				
+				
+				
+				if (validateBtnClickedCount%2 == 0) {
+					playerFX.setFillName(Constant.realColor.BLACK);
+					player = player1;
+					playerFX = player1FX;
+					playerFX.setFillName(Constant.realColor.RED);
+				}else {
+					playerFX.setFillName(Constant.realColor.BLACK);
+					player = player2;
+					playerFX = player2FX;
+					playerFX.setFillName(Constant.realColor.RED);
+				}
+				
+				rackImage = player.getRack().createTileImage();
+				setDragnDropOnRack(rackImage, player);
+				setDragnDropOnRectangles(rect, board, referee, player);
+				rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+				borderPane.setBottom(rackImage);
+				
 				
 			}
+
+			
 			
 		});
 		
 		
 		//With Image
-		Rack rack2 = new Rack(deck);
-		HBox rackImage = rack2.createTileImage();
+		//Rack player.getRack() = new Rack(deck);
+		rackImage = player.getRack().createTileImage();
+		
+		//Adding lists to Arraylists
+		listRackTile = player.getRack().getListRackTile();
+		System.out.println(listRackTile);
+		listRackImage = player.getRack().getRackTileImage();
+		System.out.println("listTileImge : " + listRackImage);
+		//HBox rackTile = rack2.createTileImage();
 		
 		
-		//RackChange Button
-		Image changeIconImage = new Image("changeIcon.png");
-		ImageView changeIconView = new ImageView(changeIconImage);
-		Button changeButton = new Button("Change Rack", changeIconView);
-		changeButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
-		changeButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
-		
-		//Buy another action Button
-		Image buyActionImage = new Image("buyAction.png");
-		ImageView buyActionView = new ImageView(buyActionImage);
-		Button buyActionButton = new Button("Buy Action", buyActionView);
-		buyActionButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
-		buyActionButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
 		changeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -268,14 +360,44 @@ public class LaticeApplicationWindow extends Application {
 				
 				
 				System.out.println("Changing Rack");
-				rack2.changeRack();
-
-				rackImage.getChildren().clear();
+				//player.getRack().changeRack();
 				
-				rackImage.getChildren().addAll(rack2.createTileImage(), confirmButton, changeButton, buyActionButton);
+				//HBox newRackImage = rack2.createTileImage();
+				//rackImage.getChildren().clear();
+				//listRackTile = rack2.getListRackTile();
+				//System.out.println(listRackTile);
+				
+				
+				////// for the actual player //////
+				player.getRack().changeRack();
+				player.getRack().updateRack();
+				
+				////// changing player //////
+				validateBtnClickedCount++;
+				if (validateBtnClickedCount%2 == 0) {
+					playerFX.setFillName(Constant.realColor.BLACK);
+					player = player1;
+					playerFX = player1FX;
+					playerFX.setFillName(Constant.realColor.RED);
+				}else {
+					playerFX.setFillName(Constant.realColor.BLACK);
+					player = player2;
+					playerFX = player2FX;
+					playerFX.setFillName(Constant.realColor.RED);
+				}
+				
+				////// for the next player //////
+				
+				rackImage = player.getRack().createTileImage();
 				
 				//Setting drag n drop on tiles
-				setDragnDropOnRack(rackImage);
+				setDragnDropOnRack(rackImage, player);
+
+				rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+				setDragnDropOnRectangles(rect, board, referee, player);
+				borderPane.setBottom(rackImage);
+				
+				
 			}
 			
 		});
@@ -295,24 +417,26 @@ public class LaticeApplicationWindow extends Application {
 			}
 			
 		});
+		
+		//HBox rackTile = rack2.createTileImage();
+		
 		rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+		setDragnDropOnRack(rackImage, player);
+		System.out.println();
 		borderPane.setBottom(rackImage);
 		
 		
-		//Adding lists to Arraylists
-		listRackTile = rack2.getListRackTile();
-		System.out.println(listRackTile);
-		listTileImage = rack2.getRackTileImage();
-		System.out.println("listTileImge : " + listTileImage);
+		
+		
 		
 		
 		//------------------------------------------------------------------------
 		
 		//Setting drag n drop on tiles
-		setDragnDropOnRack(rackImage);
+		
 
 		System.out.println((indexTileClicked));
-		ImagePattern imagePattern = new ImagePattern(listTileImage.get(getIndexTileClicked()));
+		ImagePattern imagePattern = new ImagePattern(listRackImage.get(getIndexTileClicked()));
 		
 		//------------------------------------------------------------------------
 		//###################### creating all rectangles and DragnDrop ######################//
@@ -323,6 +447,35 @@ public class LaticeApplicationWindow extends Application {
 		//------------------------------------------------------------------------
 		
 		//Setting drag & drop on rectangles
+		setDragnDropOnRectangles(rect, board, referee, player);
+		
+	
+		//rules / referee implementaion
+		
+		//this.transition(namePlayer1, namePlayer2);
+		//root.setLeft(namePlayer1);
+		
+		
+		
+		
+		
+		
+
+		
+		
+		
+		
+		//--------------------------------------------------------------------------------------
+		
+		root.getChildren().addAll(infoPlayers, borderPane);
+		
+        
+        //Règles
+	}
+
+
+
+	public void setDragnDropOnRectangles(Rectangle[][] rect, GameBoard board, Rules referee, Player player) {
 		for(int i=0; i<Constant.NUMBER_OF_BOX_ON_ONE_LINE; i++) {
 			for(int j=0; j<Constant.NUMBER_OF_BOX_ON_ONE_LINE; j++) {
 		        int a = i;
@@ -335,7 +488,7 @@ public class LaticeApplicationWindow extends Application {
 						if (arg0.getDragboard().hasString()){
 							Dragboard dragboard = arg0.getDragboard();
 							
-							rect[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
+							rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(getIndexTileClicked())));
 						}
 						arg0.consume();
 					}
@@ -367,25 +520,25 @@ public class LaticeApplicationWindow extends Application {
 						System.out.println("entered");
 						Dragboard dragboard = arg0.getDragboard();
 						System.out.println("OK2");
-						rect[a][b].setFill(new ImagePattern(listTileImage.get(getIndexTileClicked())));
+						rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(getIndexTileClicked())));
 						
 						
 						arg0.setDropCompleted(true);
 						System.out.println("OK");
 						//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
 						//System.out.println(assocRectangleTile.toString());
-						moonErrorLabel.setText("");
-						if (validateBtnClickedCount == 0){
+						ErrorLabel.setText("");
+						
 							if (Constant.START) {
 								if (rect[a][b] == rect[4][4]) {
 									System.out.println("MOON valid placement");
 									//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
 									
-									board.setGridBoardTile(listRackTile.get(getIndexTileClicked()), a, b);
-									
+									board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);
+									tileDropped = true;
 									Constant.START = false;
 								}else {
-									moonErrorLabel.setText("Error ! Please place the first tile on the moon");
+									ErrorLabel.setText("Error ! Please place the first tile on the moon");
 									//removing all tiles from gameboard
 									rect[a][b].setFill(Constant.realColor.TRANSPARENT);
 									
@@ -396,23 +549,25 @@ public class LaticeApplicationWindow extends Application {
 							}else {
 								System.out.println("OK3");
 								System.out.println("Règle effectué");
-								listRackTile.get(getIndexTileClicked()).setPosition(new Position(a,b));
-								int nbr = referee.neighborRule(board , listRackTile.get(getIndexTileClicked()));
+								player.getRack().getListRackTile().get(getIndexTileClicked()).setPosition(new Position(a,b));
+								int nbr = referee.neighborRule(board , player.getRack().getListRackTile().get(getIndexTileClicked()));
 								
 								if (nbr == 0) {
-									System.out.println("l'emplacement où est posé la tuile n'a pas de voisin ou il n'y a pas de correspondance avec les voisins !");
+									ErrorLabel.setText("Error! the tile isn't place next to another tile or there is no correspondance with the neighbor tiles !!");
 									rect[a][b].setFill(Constant.realColor.TRANSPARENT);
 									
 								}else {
 									if (nbr == 2) {
 										System.out.println("Vous avez gagné 1 point");
+										
 									}else if (nbr == 3) {
 										System.out.println("Vous avez gagné 2 points");
 									}else if (nbr == 4) {
 										System.out.println("Vous avez gagné 4 points");
 									}
 									//assocRectangleTile.put(rect[a][b], listRackTile.get(getIndexTileClicked()));
-									board.setGridBoardTile(listRackTile.get(getIndexTileClicked()), a, b);
+									board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);
+									tileDropped = true;
 									System.out.println("tuile posé!");
 									
 									
@@ -425,7 +580,7 @@ public class LaticeApplicationWindow extends Application {
 							
 							
 							
-				        }
+				        
 						
 						
 						arg0.consume();
@@ -436,29 +591,6 @@ public class LaticeApplicationWindow extends Application {
 			
 	        }
 		}
-		
-	
-		//rules / referee implementaion
-		
-		//this.transition(namePlayer1, namePlayer2);
-		//root.setLeft(namePlayer1);
-		
-		
-		
-		
-		
-		
-
-		
-		
-		HBox players = PlayerFX.displayPlayers(parentStackPane,player1, player2);
-		
-		//--------------------------------------------------------------------------------------
-		
-		root.getChildren().addAll(players, borderPane);
-		
-        
-        //Règles
 	}
 
 
@@ -466,18 +598,19 @@ public class LaticeApplicationWindow extends Application {
 
 
 
-	private void setDragnDropOnRack(HBox rackImage) {
+	private void setDragnDropOnRack(HBox rackBox, Player player) {
 		//Setting drag n drop on tiles
-		for (int i=0; i<5; i++) {
+		for (int i=0; i< player.getRack().getRackTileImage().size(); i++) {
 			int a = i;
 			System.out.println(a);
-			rackImage.getChildren().get(a).setOnDragDetected(new EventHandler<MouseEvent>() {
+			//HBox t = rackBox.getChildren().indexOf(rack);
+			rackBox.getChildren().get(a).setOnDragDetected(new EventHandler<MouseEvent>() {
 				
 				@Override
 				public void handle(MouseEvent arg0) {
-					Dragboard dragboard = rackImage.getChildren().get(a).startDragAndDrop(TransferMode.ANY);
+					Dragboard dragboard = rackBox.getChildren().get(a).startDragAndDrop(TransferMode.ANY);
 					ClipboardContent content = new ClipboardContent();
-					dragboard.setDragView(listTileImage.get(a));
+					dragboard.setDragView(player.getRack().getRackTileImage().get(a));
 					content.putString("Hello !");
 					setIndexTileClicked(a);
 					dragboard.setContent(content);
@@ -486,11 +619,22 @@ public class LaticeApplicationWindow extends Application {
 				
 			});
 			
-			rackImage.getChildren().get(a).setOnDragDone(new EventHandler<DragEvent>() {
+			rackBox.getChildren().get(a).setOnDragDone(new EventHandler<DragEvent>() {
 
 				@Override
 				public void handle(DragEvent arg0) {
-					
+					if (tileDropped) {
+						player.getRack().getListRackTile().remove(a);
+						rackImage = player.getRack().createTileImage();
+						
+						//Setting drag n drop on tiles
+						setDragnDropOnRack(rackImage, player);
+	
+						rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+						//setDragnDropOnRectangles(rect, board, referee, player);
+						borderPane.setBottom(rackImage);
+						tileDropped = false;
+					}
 				}
 				
 			});
