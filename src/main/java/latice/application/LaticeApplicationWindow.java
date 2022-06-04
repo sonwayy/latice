@@ -69,7 +69,7 @@ public class LaticeApplicationWindow extends Application {
 	private Label namePlayer1 = new Label("Anonyme");
 	private Label namePlayer2 = new Label("Anonyme"); 
 
-	public static int indexTileClicked;	
+	public static int indexTileClicked;
 	
 	
 	//settings players
