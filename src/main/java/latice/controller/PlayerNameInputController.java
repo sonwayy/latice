@@ -7,12 +7,14 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import latice.application.LaticeApplicationWindow;
 import latice.model.Color;
+import latice.model.Constant;
 import latice.model.Player;
 import latice.model.Shape;
 import latice.model.Tile;
@@ -28,6 +30,11 @@ public class PlayerNameInputController {
 	public TextField nomJoueur2;
 	@FXML
 	public Button btnValid;
+	@FXML
+	public Label label1;
+	@FXML
+	public Label label2;
+	
 	public static boolean btnClicked = false;
 	MainScreenController mainScreenController = new MainScreenController();
 	LaticeApplicationWindow laticeApplicationWindow = new LaticeApplicationWindow();
@@ -35,27 +42,38 @@ public class PlayerNameInputController {
 	public static String namePlayer1;
 	public static String namePlayer2;
 	
+	
 	@FXML
 	public void validBtnClicked(MouseEvent event) {
 		System.out.println("valid Button Clicked");
-		Stage nameInputStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
-		//setting player names
-		String name1 = nomJoueur1.getText();
-		String name2 = nomJoueur2.getText();
-		System.out.println(nomJoueur1.getText());
-		System.out.println("nom des joueurs");
-		System.out.println(nomJoueur2.getText());
-		namePlayer1 = name1;
-		namePlayer2 = name2;
 		
-		btnClicked = true;
-		nameInputStage.close();
-		playerNamesEntered();
-		mainScreenController.player1 = mainScreenController.instanciatePlayer(name1);
-		mainScreenController.player2 = mainScreenController.instanciatePlayer(name2);
-		
-		//PlayerFX.displayPlayers(root ,laticeApplicationWindow.player1, laticeApplicationWindow.player2);
-		mainScreenController.startGameInstruction();
+		if(nomJoueur1.getText().length() < 3 || nomJoueur1.getText().length() > 16) {
+			label1.setVisible(true);
+		}
+		if(nomJoueur2.getText().length() < 3 || nomJoueur2.getText().length() > 16) {
+			label2.setVisible(true);
+		}
+		else {
+			
+			Stage nameInputStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+			//setting player names
+			String name1 = nomJoueur1.getText();
+			String name2 = nomJoueur2.getText();
+			System.out.println(nomJoueur1.getText());
+			System.out.println("nom des joueurs");
+			System.out.println(nomJoueur2.getText());
+			namePlayer1 = name1;
+			namePlayer2 = name2;
+			
+			btnClicked = true;
+			nameInputStage.close();
+			playerNamesEntered();
+			mainScreenController.player1 = mainScreenController.instanciatePlayer(name1);
+			mainScreenController.player2 = mainScreenController.instanciatePlayer(name2);
+			
+			//PlayerFX.displayPlayers(root ,laticeApplicationWindow.player1, laticeApplicationWindow.player2);
+			mainScreenController.startGameInstruction();
+		}
 	}
 
 	public String getNomJoueur1() {

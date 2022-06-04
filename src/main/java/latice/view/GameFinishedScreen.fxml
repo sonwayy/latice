@@ -7,19 +7,18 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-
-<BorderPane prefHeight="241.0" prefWidth="386.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="latice.controller.GameFinishedScreenController">
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="replayBtn" layoutX="42.0" layoutY="163.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="127.0" textFill="TRANSPARENT" />
-            <Button fx:id="quitBtn" layoutX="221.0" layoutY="163.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="129.0" textFill="TRANSPARENT" />
-            <ImageView fitHeight="241.0" fitWidth="386.0" pickOnBounds="true" preserveRatio="true">
+         	<Button fx:id="quitBtn" layoutX="750.0" layoutY="555.0" mnemonicParsing="false" onMouseClicked="#quitBtnClicked" prefHeight="140.0" prefWidth="380.0" textFill="TRANSPARENT" />
+            <Button fx:id="replayBtn" layoutX="175.0" layoutY="555.0" mnemonicParsing="false" onMouseClicked="#replayBtnClicked" prefHeight="140.0" prefWidth="380.0" textFill="TRANSPARENT" />
+            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../resources/GameFinishedImage.png" />
+                  <Image url="@/gameFinishedImage.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER_RIGHT" layoutX="4.0" layoutY="73.0" prefHeight="22.0" prefWidth="154.0" textAlignment="CENTER" />
+            <Label fx:id="nameWinner" alignment="CENTER_RIGHT" layoutX="450.0" layoutY="250.0" prefHeight="22.0" prefWidth="300.0" textAlignment="CENTER" />
          </children>
       </Pane>
    </center>

@@ -1,5 +1,6 @@
 package latice.application;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import latice.controller.GameFinishedScreenController;
 import latice.controller.MainScreenController;
 import latice.model.Color;
 import latice.model.Constant;
@@ -64,10 +66,7 @@ public class LaticeApplicationWindow extends Application {
 	ArrayList<Tile> listRackTile;
 	ArrayList<Image> listRackImage;
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
-	Map<Rectangle, Tile> assocRectangleTile = new HashMap<Rectangle, Tile>();
 	static StackPane rootLayout;
-	private Label namePlayer1 = new Label("Anonyme");
-	private Label namePlayer2 = new Label("Anonyme"); 
 
 	public static int indexTileClicked;
 	
@@ -108,13 +107,13 @@ public class LaticeApplicationWindow extends Application {
 	StackPane root = new StackPane();
 	
 	
-	static Stage primaryStageCopy;
+	Stage primaryStageCopy;
 	StackPane parentStackPane = new StackPane();
 	Label ErrorLabel = new Label();
 	
 	HBox rackImage;
 	
-	int validateBtnClickedCount;
+	int confirmBtnClickedCount;
 	
 
 	public static void main(String[] args) {
@@ -132,8 +131,7 @@ public class LaticeApplicationWindow extends Application {
 		MainScreenController MSC = new MainScreenController();
 		
 		parentStackPane = MSC.getParentStackPane();
-		
-		setPrimaryStage(primaryStageCopy);
+		primaryStageCopy = primaryStage;
 		
 		setRootLayout(root);
 		
@@ -146,14 +144,14 @@ public class LaticeApplicationWindow extends Application {
 	
 	public void startGame(Stage stage, StackPane parentStackPaneStock, Player player1, Player player2, Object menuBorderPane) {
 		parentStackPane = parentStackPaneStock;
-		//StackPane root = getRootLayout();
-		//root.translateYProperty().set(stage.getHeight());
+		StackPane root = getRootLayout();
+		root.translateYProperty().set(stage.getHeight());
 		System.out.println(parentStackPane);
 		System.out.println(parentStackPaneStock);
 		parentStackPane.getChildren().add(root);
 		
 		
-		//parameters of the animation
+		//settings for the animation
 		Timeline timeline = new Timeline();
 		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
         KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
@@ -301,7 +299,14 @@ public class LaticeApplicationWindow extends Application {
 				
 				System.out.println("confirmed placement");
 				
-				validateBtnClickedCount++;
+				try {
+					switchToGameFinishedScreen();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				confirmBtnClickedCount++;
 				player.getRack().displayRack();
 				player.getRack().updateRack();
 				
@@ -321,7 +326,7 @@ public class LaticeApplicationWindow extends Application {
 				
 				
 				
-				if (validateBtnClickedCount%2 == 0) {
+				if (confirmBtnClickedCount%2 == 0) {
 					playerFX.setFillName(Constant.realColor.BLACK);
 					player = player1;
 					playerFX = player1FX;
@@ -342,6 +347,21 @@ public class LaticeApplicationWindow extends Application {
 				borderPane.setBottom(rackImage);
 				
 				
+			}
+
+			private void switchToGameFinishedScreen() throws IOException {
+				System.out.println("confirmBtnClickedCount : " + confirmBtnClickedCount);
+				if (confirmBtnClickedCount>=2) {
+					Parent loader = FXMLLoader.load(getClass().getResource("../view/GameFinishedScreen.fxml"));
+					Scene gameFinishedScreenScene = new Scene(loader, 1280, 720);
+					System.out.println("lancement :::::" + stage);
+					//TODO saisir le nom du gagnant : GameFinishedScreenController.nameWinner.setText();
+					stage.setScene(gameFinishedScreenScene);
+					
+					//----------------------------------------
+					
+				
+				}
 			}
 
 			
@@ -382,8 +402,8 @@ public class LaticeApplicationWindow extends Application {
 				player.getRack().updateRack();
 				
 				////// changing player //////
-				validateBtnClickedCount++;
-				if (validateBtnClickedCount%2 == 0) {
+				confirmBtnClickedCount++;
+				if (confirmBtnClickedCount%2 == 0) {
 					playerFX.setFillName(Constant.realColor.BLACK);
 					player = player1;
 					playerFX = player1FX;
@@ -684,7 +704,7 @@ public class LaticeApplicationWindow extends Application {
 	public static int getIndexTileClicked() {
 		return indexTileClicked;
 	}
-	public void setPrimaryStage(Stage primaryStage) {
+	public void setPrimaryStage(Stage primaryStage) {	
 		this.primaryStageCopy = primaryStage;
 	}
 

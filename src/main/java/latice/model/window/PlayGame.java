@@ -71,7 +71,8 @@ public class PlayGame {
 	
 	static Stage primaryStageCopy;
 	
-	int validateBtnClickedCount;
+	
+	int confirmBtnClickedCount;
 	
 	public Stage playGame(Stage StageToGame) {
 		//--------------------------------------------------------------------------------------
@@ -93,8 +94,8 @@ public class PlayGame {
 		//###################### creating all rectangles and DragnDrop ######################//
 		RectangleFX rectFX = new RectangleFX();
 		rectFX.createRectangle(borderPane, pane);
-		rectFX.dragnDropOnAllRectangles(player1, indexTileClicked, validateBtnClickedCount);
-		rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, validateBtnClickedCount);
+		rectFX.dragnDropOnAllRectangles(player1, indexTileClicked, confirmBtnClickedCount);
+		rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, confirmBtnClickedCount);
 		//--------------------------------------------------------------------------------------
 		
 		borderPane.setCenter(pane);
@@ -139,7 +140,7 @@ public class PlayGame {
 			@Override
 			public void handle(MouseEvent arg0) {
 				
-				validateBtnClickedCount++;
+				confirmBtnClickedCount++;
 				System.out.println("confirmed placement");
 				
 			}
