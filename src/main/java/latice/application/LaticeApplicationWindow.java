@@ -98,6 +98,9 @@ public class LaticeApplicationWindow extends Application {
 	
 	Paint tileOnRect;
 	
+	//tile is free when it the first tile put but tile is payable after
+	Boolean freeOrPayableTile = true;
+	
 	//borderPane layout
 	public static BorderPane borderPane = new BorderPane();
 	
@@ -214,6 +217,8 @@ public class LaticeApplicationWindow extends Application {
 		//Referee
 		referee = new Rules();
 		
+		
+		
 		//--------------------------------------------------------------------------------------
 		
 		//display name, score and deck of each player
@@ -328,6 +333,8 @@ public class LaticeApplicationWindow extends Application {
 					playerFX.setFillName(Constant.realColor.RED);
 				}
 				
+				freeOrPayableTile = true;
+				
 				rackImage = player.getRack().createTileImage();
 				setDragnDropOnRack(rackImage, player);
 				setDragnDropOnRectangles(rect, board, referee, player);
@@ -389,7 +396,7 @@ public class LaticeApplicationWindow extends Application {
 				}
 				
 				////// for the next player //////
-				
+				freeOrPayableTile = true;
 				rackImage = player.getRack().createTileImage();
 				
 				//Setting drag n drop on tiles
@@ -521,19 +528,26 @@ public class LaticeApplicationWindow extends Application {
 						System.out.println("OK2");
 						
 						
-						rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(getIndexTileClicked())));
+						rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(indexTileClicked)));
 						
 						
 						arg0.setDropCompleted(true);
 						System.out.println("OK");
 						ErrorLabel.setText("");
 						
+						if (referee.checkScoreToPlay(player, freeOrPayableTile) == false) {
+							ErrorLabel.setText("Error ! You haven't enough points to play another tile");
+							rect[a][b].setFill(tileOnRect);
+							
+						}else {
+							
 							if (Constant.START) {
 								if (rect[a][b] == rect[4][4]) {
 									System.out.println("MOON valid placement");
 									
 									board.setGridBoardTile(player.getRack().getListRackTile().get(indexTileClicked), a, b);
 									tileDropped = true;
+									freeOrPayableTile = false;
 									Constant.START = false;
 									
 								}else {
@@ -550,6 +564,9 @@ public class LaticeApplicationWindow extends Application {
 								System.out.println("Règle effectué");
 								player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
 								
+								
+								
+								
 								if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == false ) {
 									ErrorLabel.setText("Error ! The tile can't be placed here because there is already a tile placed");
 									rect[a][b].setFill(tileOnRect);
@@ -562,6 +579,11 @@ public class LaticeApplicationWindow extends Application {
 										rect[a][b].setFill(Constant.realColor.TRANSPARENT);
 										
 									}else {
+										
+										if (freeOrPayableTile == false) {
+											playerFX.setDiffScore(player, 2);
+										}
+										
 										if (nbr == 2) {
 											System.out.println("Vous avez gagné 1 point");
 											playerFX.setAddScore(player, 1);
@@ -577,12 +599,13 @@ public class LaticeApplicationWindow extends Application {
 										
 										board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);
 										tileDropped = true;
+										freeOrPayableTile = false;
 										System.out.println("tuile posé!");
 									}
 								}
-								
-								
 							}
+								
+						}
 							
 							
 							
