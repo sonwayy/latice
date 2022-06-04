@@ -351,11 +351,14 @@ public class LaticeApplicationWindow extends Application {
 
 			private void switchToGameFinishedScreen() throws IOException {
 				System.out.println("confirmBtnClickedCount : " + confirmBtnClickedCount);
-				if (confirmBtnClickedCount>=2) {
+				if (confirmBtnClickedCount>=20) {
 					Parent loader = FXMLLoader.load(getClass().getResource("../view/GameFinishedScreen.fxml"));
 					Scene gameFinishedScreenScene = new Scene(loader, 1280, 720);
-					System.out.println("lancement :::::" + stage);
-					//TODO saisir le nom du gagnant : GameFinishedScreenController.nameWinner.setText();
+					if (confirmBtnClickedCount%2 == 0) {
+						GameFinishedScreenController.nameWinner.setText(player1.getName());
+					}else {
+						GameFinishedScreenController.nameWinner.setText(player2.getName());
+					}
 					stage.setScene(gameFinishedScreenScene);
 					
 					//----------------------------------------

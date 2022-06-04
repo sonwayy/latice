@@ -12,7 +12,7 @@ public class GameFinishedScreenController {
 	@FXML
 	private Button quitBtn;
 	@FXML
-	public static Label nameWinner;
+	public static Label nameWinner = new Label();
 
 	// Event Listener on Button[#replayBtn].onMouseClicked
 	@FXML
