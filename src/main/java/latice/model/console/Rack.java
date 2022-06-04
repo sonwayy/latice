@@ -52,8 +52,8 @@ public class Rack {
 	public void updateRack() {
 		
 		Tile tile;
-		
-		for (int i = 0; i < 5-(this.listRackTile.size()-1) ; i++) {
+		System.out.println("nomdre de tuile dans le rack : " + this.listRackTile.size());
+		for (int i = this.listRackTile.size(); i < 5 ; i++) {
 			int index = (int)(Math.random()*( ((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
 			
 			tile = (this.deck.getListTile()).get(index);
