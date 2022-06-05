@@ -37,22 +37,26 @@ public class Rules {
 		Tile checkNeighbor = null;
 		Boolean checkCase = false;
 		Boolean badNeighbor = false;
-		
+		// the first loop is to choose the line to check either '-'(horizontal, i = 0 ) or '|'(vertical,  = 1)
 		for(int i = 0; i < 2 ; i++) {
+			//the second loop is to check the neighbors of the tile that we want to place
 			for(int j = -1; j < 2 ; j=j+2) {
+				
+				//verify if the neighbors exist when the tile placed is close to the edge of the board for the two conditions
 				if (i == 0) {
-					if (tile.getPositionRow() >= 0 && tile.getPositionColumn()+j <= 9) {
+					if (tile.getPositionColumn()+j >= 0 && tile.getPositionColumn()+j <= 8) {
 						checkNeighbor = board.getGridBoardTile()[tile.getPositionRow()][tile.getPositionColumn()+j];
 						
 						checkCase = true;
 					}
 				}else {
-					if (tile.getPositionRow()+j >= 0 && tile.getPositionColumn() <= 9) {
+					if (tile.getPositionRow()+j >= 0 && tile.getPositionRow()+j <= 8) {
 						checkNeighbor = board.getGridBoardTile()[tile.getPositionRow()+j][tile.getPositionColumn()];
 						checkCase = true;
 					}
 				}
 				
+				//if the neighbor exist, check the correspondence between the neighbor and the tile
 				if (checkCase) {
 					if ( checkNeighbor != null) {
 						
@@ -61,6 +65,8 @@ public class Rules {
 						if ( tile.getShape() == checkNeighbor.getShape() || tile.getColor() == checkNeighbor.getColor() ) {
 							System.out.println("Il y a correspondance avec la tuile !");
 							nbrNeighbor = nbrNeighbor + 1;
+						
+						//if there is no correspondence, then the tile can't be placed
 						}else {
 							badNeighbor = true;
 							System.out.println("Il n'y a pas correspondance avec la tuile !");
@@ -72,9 +78,9 @@ public class Rules {
 		}
 	
 		if (badNeighbor) {
-			return 0;
+			return 0; //tile can't be placed
 		}else {
-			return nbrNeighbor;
+			return nbrNeighbor; //tile can be placed and the number returned can possibly increase the player's score
 		}
 	}
 	
