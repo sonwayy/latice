@@ -124,9 +124,10 @@ public class MainScreenController extends LaticeApplicationWindow{
 		nameInputStage.show();
 	}
 	
-	public void startGameInstruction() {
+	public void startGameInstruction(Boolean isRestart) {
 		
-        startGame(mainStage, parentStackPaneStock, player1, player2, menuBorderPane);
+		startGame(mainStage, parentStackPaneStock, player1, player2, menuBorderPane, isRestart);
+        
 	}
 	
 	/*public void startGame(Stage stage) {
