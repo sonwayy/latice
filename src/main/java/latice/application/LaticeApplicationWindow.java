@@ -637,6 +637,13 @@ public class LaticeApplicationWindow extends Application {
 										tileDropped = true;
 										freeOrPayableTile = false;
 										System.out.println("tuile posé!");
+										
+										
+										if (referee.sunRule(board, player.getRack().getListRackTile().get(indexTileClicked))) {
+											System.out.println("Vous avez gagné 2 points en mettant votre tuile sur un soleil");
+											playerFX.setAddScore(player, 2);
+											
+										}
 									}
 								}
 							}
@@ -701,6 +708,7 @@ public class LaticeApplicationWindow extends Application {
 						//setDragnDropOnRectangles(rect, board, referee, player);
 						borderPane.setBottom(rackImage);
 						tileDropped = false;
+						playerFX.setTilesRemaining(player);
 					}
 				}
 				

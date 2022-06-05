@@ -64,6 +64,10 @@ public class PlayerFX {
 		this.score.setText("Score : " + player.getScore());
 	}
 	
+	public void setTilesRemaining(Player player) {
+		this.nbrOfTiles.setText("Tuiles restantes : " + player.getNumberOfTilesRemaining());
+	}
+	
 	
 	
 }
