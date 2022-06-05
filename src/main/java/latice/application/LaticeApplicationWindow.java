@@ -112,6 +112,7 @@ public class LaticeApplicationWindow extends Application {
 	Label ErrorLabel = new Label();
 	
 	HBox rackImage;
+	static Label nameWinner = new Label();
 	
 	int confirmBtnClickedCount;
 	
@@ -148,6 +149,9 @@ public class LaticeApplicationWindow extends Application {
 		root.translateYProperty().set(stage.getHeight());
 		System.out.println(parentStackPane);
 		System.out.println(parentStackPaneStock);
+		if (parentStackPane.getChildren().contains(root)) {
+			parentStackPane.getChildren().remove(root);
+		}
 		parentStackPane.getChildren().add(root);
 		
 		
@@ -354,10 +358,12 @@ public class LaticeApplicationWindow extends Application {
 				if (confirmBtnClickedCount>=20) {
 					Parent loader = FXMLLoader.load(getClass().getResource("../view/GameFinishedScreen.fxml"));
 					Scene gameFinishedScreenScene = new Scene(loader, 1280, 720);
-					if (confirmBtnClickedCount%2 == 0) {
-						GameFinishedScreenController.nameWinner.setText(player1.getName());
+					if (player1.getNumberOfTilesRemaining() < player2.getNumberOfTilesRemaining()) {
+						// if player 1 has less tiles then he wins
+						GameFinishedScreenController.staticNameWinner.setText(player1.getName());
 					}else {
-						GameFinishedScreenController.nameWinner.setText(player2.getName());
+						//if player 2 has less tiles then he wins
+						GameFinishedScreenController.staticNameWinner.setText(player2.getName());
 					}
 					stage.setScene(gameFinishedScreenScene);
 					
@@ -391,7 +397,7 @@ public class LaticeApplicationWindow extends Application {
 			public void handle(MouseEvent arg0) {
 				
 				
-				System.out.println("Changing Rack");
+				
 				//player.getRack().changeRack();
 				
 				//HBox newRackImage = rack2.createTileImage();
@@ -401,35 +407,42 @@ public class LaticeApplicationWindow extends Application {
 				
 				
 				////// for the actual player //////
-				player.getRack().changeRack();
-				player.getRack().updateRack();
-				
-				////// changing player //////
-				confirmBtnClickedCount++;
-				if (confirmBtnClickedCount%2 == 0) {
-					playerFX.setFillName(Constant.realColor.BLACK);
-					player = player1;
-					playerFX = player1FX;
-					playerFX.setFillName(Constant.realColor.RED);
-				}else {
-					playerFX.setFillName(Constant.realColor.BLACK);
-					player = player2;
-					playerFX = player2FX;
-					playerFX.setFillName(Constant.realColor.RED);
-				}
-				
-				////// for the next player //////
-				freeOrPayableTile = true;
-				rackImage = player.getRack().createTileImage();
-				
-				//Setting drag n drop on tiles
-				setDragnDropOnRack(rackImage, player);
+				if (player.getScore() > 1) {
+					System.out.println("Changing Rack");
+					confirmBtnClickedCount++;
+					player.getRack().changeRack();
+					player.getRack().updateRack();
+					
+					////// changing player //////
+					if (confirmBtnClickedCount%2 == 0) {
+						playerFX.setFillName(Constant.realColor.BLACK);
+						player = player1;
+						playerFX = player1FX;
+						playerFX.setFillName(Constant.realColor.RED);
+						
+					}else {
+						playerFX.setFillName(Constant.realColor.BLACK);
+						player = player2;
+						playerFX = player2FX;
+						playerFX.setFillName(Constant.realColor.RED);
+					}
+						
+						
+					////// for the next player //////
+					freeOrPayableTile = true;
+					rackImage = player.getRack().createTileImage();
+					
+					//Setting drag n drop on tiles
+					setDragnDropOnRack(rackImage, player);
 
-				rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
-				setDragnDropOnRectangles(rect, board, referee, player);
-				borderPane.setBottom(rackImage);
-				
-				
+					rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+					setDragnDropOnRectangles(rect, board, referee, player);
+					borderPane.setBottom(rackImage);
+						
+				}else {
+					System.out.println("Not enough points to change the rack");
+				}
+			
 			}
 			
 		});
@@ -701,7 +714,9 @@ public class LaticeApplicationWindow extends Application {
 		return rootLayout;
 	}
 
-
+	public static String getNameWinner() {
+		return nameWinner.getText();
+	}
 
 	//getter to get the index of the mouse clicked tile
 	public static int getIndexTileClicked() {
