@@ -69,7 +69,6 @@ public class LaticeApplicationWindow extends Application {
 
 	public static int indexTileClicked;
 	
-	
 	//settings players
 	public Player player;
 	
