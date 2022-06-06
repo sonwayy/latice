@@ -286,7 +286,7 @@ public class LaticeApplicationWindow extends Application {
 		//Confirm Button
 		Image checkMark = new Image("checkMark.png");
 		ImageView checkMarkView = new ImageView(checkMark);
-		confirmButton = new Button("Confirm", checkMarkView);
+		confirmButton = new Button("End Turn", checkMarkView);
 		confirmButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
 		confirmButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
@@ -294,7 +294,7 @@ public class LaticeApplicationWindow extends Application {
 		//RackChange Button
 		Image changeIconImage = new Image("changeIcon.png");
 		ImageView changeIconView = new ImageView(changeIconImage);
-		changeButton = new Button("Change Rack (2 points)", changeIconView);
+		changeButton = new Button("Change Rack (3 points)", changeIconView);
 		changeButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
 		changeButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
