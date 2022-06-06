@@ -70,6 +70,7 @@ public class MainScreenController extends LaticeApplicationWindow{
 	// Event Listener on Rectangle[#rulesButton].onMouseClicked
 	@FXML
 	public void rulesButtonClicked(MouseEvent event) {
+		//Adding the Web View of the official Latice Rules
 		System.out.println("rulesButtonClicked");
 		
 		// New window (Stage)
@@ -86,11 +87,13 @@ public class MainScreenController extends LaticeApplicationWindow{
 	// Event Listener on Rectangle[#exitButton].onMouseClicked
 	@FXML
 	public void exitButtonClicked(MouseEvent event) {
+		//shut down the Platform
 		System.out.println("exitButtonClicked");
 		Platform.exit();
 	}
 	
 	public void playerNamesInput(MouseEvent event) throws IOException {
+		//loading the stage to enter player names
 		Parent loader = FXMLLoader.load(getClass().getResource("../view/PlayerNameInput.fxml"));
 		Scene nameInputScene = new Scene(loader, 600, 300);
 		Stage primaryStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
@@ -119,34 +122,6 @@ public class MainScreenController extends LaticeApplicationWindow{
         
 	}
 	
-	/*public void startGame(Stage stage) {
-		parentStackPane = parentStackPaneStock;
-		StackPane root = getRootLayout();
-		root.translateYProperty().set(stage.getHeight());
-		System.out.println(parentStackPane);
-		System.out.println(parentStackPaneStock);
-		parentStackPane.getChildren().add(root);
-		
-		players = PlayerFX.displayPlayers(parentStackPane,player1, player2);
-		root.getChildren().addAll(players,LaticeApplicationWindow.borderPane);
-		
-		//parameters of the animation
-		Timeline timeline = new Timeline();
-		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
-        timeline.getKeyFrames().add(kf);
-        
-        //when the animation is finished we're removing the main screen
-        timeline.setOnFinished(t -> {
-            parentStackPane.getChildren().remove(menuBorderPane);
-        });
-        timeline.play();
-        
-        
-        
-        //Règles
-	}*/
-
 	public StackPane getParentStackPane() {
 		System.out.println(parentStackPane);
 		return parentStackPane;
@@ -164,8 +139,6 @@ public class MainScreenController extends LaticeApplicationWindow{
 		for (Color color : Color.values()) {
 			for (Shape shape : Shape.values()) {
 				Tile tile = new Tile(color, shape);
-				//System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
-				
 				listOfTile.add(tile);
 				
 			}
