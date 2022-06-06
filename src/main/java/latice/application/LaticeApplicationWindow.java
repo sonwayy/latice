@@ -64,7 +64,7 @@ public class LaticeApplicationWindow extends Application {
 	//lists for tiles
 	ArrayList<Tile> listRackTile;
 	ArrayList<Image> listOfTilesInRack;
-	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
+	//ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	static StackPane rootLayout;
 
 	public static int indexTileClicked;
@@ -260,21 +260,21 @@ public class LaticeApplicationWindow extends Application {
 
 		
 		//Creating tiles
-		for (Color color : Color.values()) {
+		/*for (Color color : Color.values()) {
 			for (Shape shape : Shape.values()) {
 				Tile tile = new Tile(color, shape);
 				
 				listOfTile.add(tile);
 				
 			}
-		}
+		}*/
 		
-		System.out.println("-----------------");
+		/*System.out.println("-----------------");
 		System.out.println("Notre Deck :");
 		Deck deck = new Deck(listOfTile);
 		System.out.println("-----------------");
 		Rack rack = new Rack(deck);
-		System.out.println("-----------------");
+		System.out.println("-----------------");*/
 		
 		
 		//Player
@@ -299,11 +299,11 @@ public class LaticeApplicationWindow extends Application {
 		changeButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
 		//Buy another action Button
-		Image buyActionImage = new Image("buyAction.png");
+		/*Image buyActionImage = new Image("buyAction.png");
 		ImageView buyActionView = new ImageView(buyActionImage);
 		buyActionButton = new Button("Buy Action (2 points)", buyActionView);
 		buyActionButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
-		buyActionButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
+		buyActionButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);*/
 		
 		confirmButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			//confirming the end of the round and switching round
@@ -320,12 +320,13 @@ public class LaticeApplicationWindow extends Application {
 					e.printStackTrace();
 				}
 				
+				
 				confirmBtnClickedCount++;
-				player.getRack().displayRack();
+				
+				////// for the actual player //////
 				player.getRack().updateRack();
 				
-				player.getRack().displayRack();
-				
+				////// changing player //////
 				//making names colored in red to make the players know which player's round is
 				if (confirmBtnClickedCount%2 == 0) {
 					playerFX.setFillName(Constant.realColor.BLACK);
@@ -339,12 +340,14 @@ public class LaticeApplicationWindow extends Application {
 					playerFX.setFillName(Constant.realColor.RED);
 				}
 				
+				////// for the next player //////
 				isFreePlacement = true;
 				
 				rackTileImage = player.getRack().createTileImage();
+				//Setting drag n drop on tiles
 				setDragnDropOnRack(rackTileImage, player);
 				setDragnDropOnRectangles(rect, board, referee, player);
-				rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+				rackTileImage.getChildren().addAll(confirmButton, changeButton/*, buyActionButton*/);
 				borderPane.setBottom(rackTileImage);
 				
 				
@@ -378,7 +381,7 @@ public class LaticeApplicationWindow extends Application {
 			
 		});
 		
-		//With Image
+		//Rack with Image
 		rackTileImage = player.getRack().createTileImage();
 		
 		//Adding lists to Arraylists
@@ -393,7 +396,7 @@ public class LaticeApplicationWindow extends Application {
 			public void handle(MouseEvent arg0) {
 
 				////// for the actual player //////
-				if (player.getScore() > 1) {
+				if (player.getScore() >= 3) {
 					System.out.println("Changing Rack");
 					confirmBtnClickedCount++;
 					player.getRack().changeRack();
@@ -421,7 +424,7 @@ public class LaticeApplicationWindow extends Application {
 					//Setting drag n drop on tiles
 					setDragnDropOnRack(rackTileImage, player);
 
-					rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+					rackTileImage.getChildren().addAll(confirmButton, changeButton/*, buyActionButton*/);
 					setDragnDropOnRectangles(rect, board, referee, player);
 					borderPane.setBottom(rackTileImage);
 						
@@ -434,16 +437,16 @@ public class LaticeApplicationWindow extends Application {
 			
 		});
 		
-		buyActionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		/*buyActionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
 				gameInfoLabel.setText(player.getName() + ", you can now play another time !");
 			}
 			
-		});
+		});*/
 				
-		rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+		rackTileImage.getChildren().addAll(confirmButton, changeButton/*, buyActionButton*/);
 		setDragnDropOnRack(rackTileImage, player);
 		System.out.println();
 		borderPane.setBottom(rackTileImage);
@@ -564,7 +567,7 @@ public class LaticeApplicationWindow extends Application {
 								
 							}else {
 								//if it's not the first round of the game
-								//not removing the tile from the rack
+								//putting the position of the gameboard's case on the tile from the rack
 								player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
 								
 								//verify if a tile is already placed

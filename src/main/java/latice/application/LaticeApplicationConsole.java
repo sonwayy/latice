@@ -24,7 +24,6 @@ public class LaticeApplicationConsole {
 		for (Color color : Color.values()) {
 			for (Shape shape : Shape.values()) {
 				Tile tile = new Tile(color, shape);
-				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
 				
 				listOfTile.add(tile);
 				
@@ -38,19 +37,14 @@ public class LaticeApplicationConsole {
 		
 		Deck deck1 = new Deck(listOfTile);
 		Deck deck2 = new Deck(listOfTile);
-		Rack rack1 = new Rack(deck1);
-		Rack rack2 = new Rack(deck2);
-		
-		Score scorePlayer1 = new Score();
-		Score scorePlayer2 = new Score();
+
 		Player player1 = new Player("player1", deck1);
 		Player player2 = new Player("player2", deck2);
 		
-		System.out.println("-----------------");
+
 		GameBoard board = new GameBoard();
-		board.displayGameBoard();
 		
-		System.out.println(Objects.equals(board.getGridBoard()[1][0], Tile.class));
+		
 		Scanner play = new Scanner(System.in);
 		Player player;
 		Boolean round;
@@ -74,15 +68,17 @@ public class LaticeApplicationConsole {
 			while (round) {
 				player.getRack().displayRack();
 				System.out.println("Vous avez " + player.getScore() +" points, que voulez-vous faire ?\n"
-						+ "    1. Jouer une Tuile (à partir de la deuxième tuile jouée, cela coûtera 2 points)\n"
-						+ "    2. Acheter une action supplémentaire\n"
+						+ "    1. Jouer une Tuile\n"
+						+ "    2. Acheter une action supplémentaire(coûte 2 points)\n"
 						+ "    3. Changer le Rack et passer(coûte 3 points)\n"
 						+ "    4. Passer\n");
 				
 				System.out.print("Choix : ");
 				int choiceMenu = Integer.parseInt(play.next());
 				switch(choiceMenu) {
+				
 					case 1:	if (freeTile) {	
+								freeTile = false;
 								Boolean rulesCheck = false;
 								
 								while (rulesCheck == false) {
@@ -102,17 +98,25 @@ public class LaticeApplicationConsole {
 								player.getRack().removeTile(tile);
 								board.displayGameBoard();
 								
+							}else {
+								System.out.println("Vous n'avez pas acheter une action pour jouer un autre tuile dans ce tour ! Veuillez en acheter une ou passer votre tour !");
 							}
+							
 							break;
 							
 							
 					case 2:
-							if (player.getScore()>=3) {
-								//Buy another action and remove 2 points from score
-								player.Play(play, board, 0);
-								player.removePointsFromScore(2);
+							if (freeTile) {
+								System.out.println("Vous avez dejà une action pour jouer une tuile ! Veuillez jouer votre tuile d'abord pour ensuite acheter une nouvelle action pour jouer une autre tuile !");
 							}else {
-								System.out.println("Il vous faut 2 points pour acheter une nouvelle action !");
+								if (player.getScore()>=2) {
+									//Buy another action and remove 2 points from score
+									player.Play(play, board, 0);
+									player.removePointsFromScore(2);
+									freeTile = true;
+								}else {
+									System.out.println("Il vous faut 2 points pour acheter une nouvelle action !");
+								}
 							}
 							break;
 								

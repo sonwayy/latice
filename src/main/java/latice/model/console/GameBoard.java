@@ -17,7 +17,7 @@ public class GameBoard {
 		
 		for (int i = 0; i < DIMENSION; i++) {
 			for (int j = 0; j < DIMENSION; j++) {
-				System.out.print("|");
+				
 				if (i == 4 && j == 4) { //Affiche la lune au centre du plateau
 					
 					this.gridBoard[i][j] = MOON;
@@ -38,10 +38,7 @@ public class GameBoard {
 				}else {
 					this.gridBoard[i][j] = BLUE;
 				}
-				
-				if (j == 8) {
-					System.out.println("|");
-				}
+
 			} 
 		}
 	}
@@ -53,28 +50,28 @@ public class GameBoard {
 			System.out.print(i+1 + ". ");
 			for (int j = 0; j < DIMENSION; j++) {
 				System.out.print("|");
-				if (i == 4 && j == 4) { //Affiche la lune au centre du plateau
+				if (i == 4 && j == 4) { //display moon in the center of the board
 					if (this.gridBoardTile[i][j] == null) {
 						System.out.print(this.gridBoard[i][j]);
 					}else {
 						System.out.print(" " + this.gridBoardTile[i][j].getShapeConsole() + this.gridBoardTile[i][j].getColorConsole() + " ");
 					}
 					
-				}else if (i == j && (i <= 2 || i >= 6)) { //Affiche la diagonale ('\') de soleil
+				}else if (i == j && (i <= 2 || i >= 6)) { //display the diagonal ('\') of the sun
 					if (this.gridBoardTile[i][j] == null) {
 						System.out.print(this.gridBoard[i][j]);
 					}else {
 						System.out.print(" " + this.gridBoardTile[i][j].getShapeConsole() + this.gridBoardTile[i][j].getColorConsole() + " ");
 					}
 					
-				}else if (i == DIMENSION-1-j && (i <= 2 || i >= 6)) { //Affiche la diagonale ('/') de soleil
+				}else if (i == DIMENSION-1-j && (i <= 2 || i >= 6)) { //display the diagonal ('/') of the sun
 					if (this.gridBoardTile[i][j] == null) {
 						System.out.print(this.gridBoard[i][j]);
 					}else {
 						System.out.print(" " + this.gridBoardTile[i][j].getShapeConsole() + this.gridBoardTile[i][j].getColorConsole() + " ");
 					}
 					
-				}else if ( ((i == 0 || i == 8)&& j == 4) || (i== 4 && (j == 0 || j == 8)) ) {//Affiche les soleils au mileu de chaque coté ('+')
+				}else if ( ((i == 0 || i == 8)&& j == 4) || (i== 4 && (j == 0 || j == 8)) ) {//display the suns at the middle of each side ('+')
 					if (this.gridBoardTile[i][j] == null) {
 						System.out.print(this.gridBoard[i][j]);
 					}else {

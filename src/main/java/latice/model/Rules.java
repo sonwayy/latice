@@ -111,32 +111,38 @@ public class Rules {
 			return this.moonRule(board, tile);
 		}else {
 			System.out.println("-----------------------------");
-			if (this.sunRule(board, tile)){
-				player.addPointsToScore(2);
-			}
-			int nbr = this.neighborRule(board, tile);
-			if (nbr == 0) {
-				System.out.println("l'emplacement où est posé la tuile n'a pas de voisin ou il n'y a pas de correspondance avec les voisins !");
+			if (this.checkPositionRule(board, tile) == false ) {
+				System.out.println("Erreur ! la tuile ne peut pas être placé ici car il y a déjà une tuile placé");
 				return false;
-				
 			}else {
-				if (nbr == 2) {
-					System.out.println("Vous avez gagné 1 point");
-					player.addPointsToScore(1);
-				}else if (nbr == 3) {
-					System.out.println("Vous avez gagné 2 points");
-					player.addPointsToScore(2);
-				}else if (nbr == 4) {
-					System.out.println("Vous avez gagné 4 points");
-					player.addPointsToScore(4);
+				int nbr = this.neighborRule(board, tile);
+				if (nbr == 0) {
+					System.out.println("Erreur !  L'emplacement où est posé la tuile n'a pas de voisin ou il n'y a pas de correspondance avec les voisins !");
+					return false;
+					
+				}else {
+					if (nbr == 2) {
+						System.out.println("Vous avez gagné 1 point");
+						player.addPointsToScore(1);
+					}else if (nbr == 3) {
+						System.out.println("Vous avez gagné 2 points");
+						player.addPointsToScore(2);
+					}else if (nbr == 4) {
+						System.out.println("Vous avez gagné 4 points");
+						player.addPointsToScore(4);
+					}
+					
+					if (this.sunRule(board, tile)){
+						player.addPointsToScore(2);
+					}
 				}
 				return true;
-				
 			}
+		}
+			
+			
 			
 			
 		}
 		
 	}
-	
-}

@@ -20,7 +20,7 @@ public class Rack {
 		
 		Tile tile;
 		
-		System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
+		//System.out.println("Il y a dans le rack : " + listRackTile.size() + " valeurs");
 		
 		for (int i = 0; i < 5; i++) {
 			int index = (int)(Math.random()*(((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
@@ -28,16 +28,10 @@ public class Rack {
 			tile = (this.deck.getListTile()).get(index);
 			this.listRackTile.add(tile);
 			this.deck.getListTile().remove(index);
-			
-			
-			
-			
-			
-			
-			
+	
 		}
 		
-		System.out.println("Il y a dans le rack : " + this.listRackTile.size() + " valeurs");
+		//System.out.println("Il y a dans le rack : " + this.listRackTile.size() + " valeurs");
 	}
 
 	public ArrayList<Tile> getListRackTile() {
@@ -52,7 +46,7 @@ public class Rack {
 	public void updateRack() {
 		
 		Tile tile;
-		System.out.println("nomdre de tuile dans le rack : " + this.listRackTile.size());
+		//System.out.println("nomdre de tuile dans le rack : " + this.listRackTile.size());
 		for (int i = this.listRackTile.size(); i < 5 ; i++) {
 			int index = (int)(Math.random()*( ((this.deck.getListTile()).size()-1)-0+1)+0); //(int)(Math.random()*(max-min+1)+min);
 			

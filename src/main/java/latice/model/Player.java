@@ -22,20 +22,7 @@ public class Player {
 	
 	public Player(String name, Deck deck) {
 		this(name, new Score(), deck, new Rack(deck));
-	}
-	
-	/*public Player(Score score, Deck deck, Rack rack) {
-		this(namePlayer,score,deck,rack);
-		//Demande le nom du joueur
-		Scanner enterPlayerName = new Scanner(System.in);
-		System.out.println("Veuilez entrer votre nom :");
-		String namePlayer = enterPlayerName.next();
-		
-		
-	}*/
-	
-	
-	
+	}	
 
 	public String getName() {
 		return this.name;

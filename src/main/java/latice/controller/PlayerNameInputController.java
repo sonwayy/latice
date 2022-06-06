@@ -60,8 +60,8 @@ public class PlayerNameInputController {
 			//setting player names
 			String name1 = nomJoueur1.getText();
 			String name2 = nomJoueur2.getText();
+			System.out.println("nom des joueurs :");
 			System.out.println(nomJoueur1.getText());
-			System.out.println("nom des joueurs");
 			System.out.println(nomJoueur2.getText());
 			namePlayer1 = name1;
 			namePlayer2 = name2;
