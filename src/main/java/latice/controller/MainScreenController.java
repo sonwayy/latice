@@ -18,7 +18,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -69,30 +71,17 @@ public class MainScreenController extends LaticeApplicationWindow{
 	@FXML
 	public void rulesButtonClicked(MouseEvent event) {
 		System.out.println("rulesButtonClicked");
-		Stage primaryStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
-		Label secondLabel = new Label("Règles");
-		//TODO règles à saisir
-		StackPane secondaryLayout = new StackPane();
-		secondaryLayout.getChildren().add(secondLabel);
-		
-		Scene secondScene = new Scene(secondaryLayout, 230, 100);
 		
 		// New window (Stage)
 		Stage newWindow = new Stage();
 		newWindow.setTitle("Règles du jeu Latice");
-		newWindow.setScene(secondScene);
 		
-		// Specifies the modality for new window
-		newWindow.initModality(Modality.WINDOW_MODAL);
-		
-		// Specifies the owner window
-		newWindow.initOwner(primaryStage);
-		
-		// Set position of window
-		newWindow.setX(primaryStage.getX() + 300);
-		newWindow.setY(primaryStage.getY() + 175);
-		
-		newWindow.show();
+		WebView webView = new WebView();
+	    webView.getEngine().load("https://latice.com/how/#rules-objective");
+	    VBox videoContainer = new VBox(webView);
+
+	    newWindow.setScene(new Scene(videoContainer, 1100, 680));
+	    newWindow.show();
 	}
 	// Event Listener on Rectangle[#exitButton].onMouseClicked
 	@FXML

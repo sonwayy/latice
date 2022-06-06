@@ -53,13 +53,13 @@ public class Player {
 		return this.deck.getListTile().size() + this.rack.getListRackTile().size();
 	}
 	
-	public Integer addScore(Integer value) {
+	public Integer addPointsToScore(Integer value) {
 		int newScore = this.score.getScore()+value;
 		this.score.setScore(newScore);
 		return this.score.getScore();
 	}
 	
-	public Integer diffScore(Integer value) {
+	public Integer removePointsFromScore(Integer value) {
 		int newScore = this.score.getScore()-value;
 		this.score.setScore(newScore);
 		return this.score.getScore();

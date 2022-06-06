@@ -19,51 +19,44 @@ public class PlayerFX {
 	private VBox infoPlayer;
 	
 	public VBox displayPlayers(StackPane root, Player player) {
-		//###################### display name, score and deck of each player ######################//
-		//HBox players = new HBox();
+		//-------------- display name, score and deck of each player ---------------//
+
+		this.infoPlayer = new VBox();
 		
-		//ArrayList<Player> allPlayers = new ArrayList<>();
-		//allPlayers.add(player1);
-		//allPlayers.add(player2);
+		this.name = new Text();
+		this.name.setFont(Font.font(player.getName(), FontWeight.BOLD, 20));
+		this.name.setText(player.getName());
 		
-		//for (Player namePlayer : allPlayers ) {
-			this.infoPlayer = new VBox();
-			
-			this.name = new Text();
-			this.name.setFont(Font.font(player.getName(), FontWeight.BOLD, 20));
-			this.name.setText(player.getName());
-			
-			this.score = new Text();
-			this.score.setText("Score : " + player.getScore());
-			
-			this.nbrOfTiles = new Text();
-			this.nbrOfTiles.setText("Tuiles restantes : " + player.getNumberOfTilesRemaining());
-			
-			this.infoPlayer.getChildren().addAll(name, score, nbrOfTiles);
-			this.infoPlayer.setSpacing(5);
-			
-			//players.getChildren().add(infoPlayer);
-			//players.setMargin(infoPlayer, new Insets(50,0,0,55));
-		//}
+		this.score = new Text();
+		this.score.setText("Score : " + player.getScore());
 		
-		//players.setSpacing(850);
+		this.nbrOfTiles = new Text();
+		this.nbrOfTiles.setText("Tuiles restantes : " + player.getNumberOfTilesRemaining());
+		
+		this.infoPlayer.getChildren().addAll(name, score, nbrOfTiles);
+		this.infoPlayer.setSpacing(5);
+		
 		return this.infoPlayer;
 	}
 	
+	//setting the player's nickname who plays in red
 	public void setFillName(javafx.scene.paint.Color color) {
 		name.setFill(color);
 	}
 	
-	public void setAddScore(Player player, Integer score) {
-		player.addScore(score);
+	//adding points to player
+	public void setAddPointsToScore(Player player, Integer score) {
+		player.addPointsToScore(score);
 		this.score.setText("Score : " + player.getScore());
 	}
 	
-	public void setDiffScore(Player player, Integer score) {
-		player.diffScore(score);
+	//Removing points from player
+	public void setRemovePointsFromScore(Player player, Integer score) {
+		player.removePointsFromScore(score);
 		this.score.setText("Score : " + player.getScore());
 	}
 	
+	//Setting the tiles remaining
 	public void setTilesRemaining(Player player) {
 		this.nbrOfTiles.setText("Tuiles restantes : " + player.getNumberOfTilesRemaining());
 	}

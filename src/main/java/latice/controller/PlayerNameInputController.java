@@ -47,6 +47,7 @@ public class PlayerNameInputController {
 	public void validBtnClicked(MouseEvent event) {
 		System.out.println("valid Button Clicked");
 		
+		//Verifying if player's names are correct
 		if(nomJoueur1.getText().length() < 3 || nomJoueur1.getText().length() > 16) {
 			label1.setVisible(true);
 		}
@@ -71,7 +72,7 @@ public class PlayerNameInputController {
 			mainScreenController.player1 = mainScreenController.instanciatePlayer(name1);
 			mainScreenController.player2 = mainScreenController.instanciatePlayer(name2);
 			
-			//PlayerFX.displayPlayers(root ,laticeApplicationWindow.player1, laticeApplicationWindow.player2);
+			//Starting game
 			mainScreenController.startGameInstruction(false);
 		}
 	}

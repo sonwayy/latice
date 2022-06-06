@@ -112,7 +112,7 @@ public class Rules {
 		}else {
 			System.out.println("-----------------------------");
 			if (this.sunRule(board, tile)){
-				player.addScore(2);
+				player.addPointsToScore(2);
 			}
 			int nbr = this.neighborRule(board, tile);
 			if (nbr == 0) {
@@ -122,13 +122,13 @@ public class Rules {
 			}else {
 				if (nbr == 2) {
 					System.out.println("Vous avez gagné 1 point");
-					player.addScore(1);
+					player.addPointsToScore(1);
 				}else if (nbr == 3) {
 					System.out.println("Vous avez gagné 2 points");
-					player.addScore(2);
+					player.addPointsToScore(2);
 				}else if (nbr == 4) {
 					System.out.println("Vous avez gagné 4 points");
-					player.addScore(4);
+					player.addPointsToScore(4);
 				}
 				return true;
 				

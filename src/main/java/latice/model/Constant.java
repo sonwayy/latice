@@ -23,7 +23,7 @@ public class Constant {
 
 	public static final int BOX_WIDTH = 52;
 	
-	public static final int ACTION_BUTTONS_WIDTH = 120;
+	public static final int ACTION_BUTTONS_WIDTH = 170;
 	
 	public static final int ACTION_BUTTONS_HEIGHT = 45;
 	

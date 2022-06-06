@@ -202,10 +202,10 @@ class LaticeTest {
 		assertEquals(0, player.getScore());
 		assertEquals(rack, player.getRack());
 		
-		player.addScore(2);
+		player.addPointsToScore(2);
 		assertEquals(2, player.getScore());
 		
-		player.diffScore(1);
+		player.removePointsFromScore(1);
 		assertEquals(1, player.getScore());
 		
 	}

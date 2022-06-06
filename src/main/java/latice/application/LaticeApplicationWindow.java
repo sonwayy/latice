@@ -63,7 +63,7 @@ public class LaticeApplicationWindow extends Application {
 	
 	//lists for tiles
 	ArrayList<Tile> listRackTile;
-	ArrayList<Image> listRackImage;
+	ArrayList<Image> listOfTilesInRack;
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 	static StackPane rootLayout;
 
@@ -92,7 +92,7 @@ public class LaticeApplicationWindow extends Application {
 	Paint tileOnRect;
 	
 	//tile is free when it's the first tile put but tile is payable after
-	Boolean freeOrPayableTile = true;
+	Boolean isFreePlacement = true;
 	
 	public static BorderPane borderPane = new BorderPane();
 	
@@ -102,9 +102,9 @@ public class LaticeApplicationWindow extends Application {
 	
 	Stage primaryStageCopy;
 	StackPane parentStackPane = new StackPane();
-	Label ErrorLabel = new Label();
+	Label gameInfoLabel = new Label();
 	
-	HBox rackImage;
+	HBox rackTileImage;
 	static Label nameWinner = new Label();
 	
 	int confirmBtnClickedCount;
@@ -152,7 +152,7 @@ public class LaticeApplicationWindow extends Application {
 			stage.setScene(menu);
 			
 			parentStackPane.getChildren().remove(root);
-			//parentStackPane.getChildren().add(root);
+			parentStackPane.getChildren().add(root);
             parentStackPane.getChildren().remove(menuBorderPane);
 		}else {
 			
@@ -186,9 +186,9 @@ public class LaticeApplicationWindow extends Application {
 		topVbox.setAlignment(Pos.CENTER);
 		
 		//error label for displaying errors
-		ErrorLabel.setFont(new Font(20));
-		ErrorLabel.setTextFill(Constant.realColor.RED);
-		topVbox.getChildren().add(ErrorLabel);
+		gameInfoLabel.setFont(new Font(20));
+		gameInfoLabel.setTextFill(Constant.realColor.RED);
+		topVbox.getChildren().add(gameInfoLabel);
 		borderPane.setTop(topVbox);
 		
 		//background image
@@ -294,14 +294,14 @@ public class LaticeApplicationWindow extends Application {
 		//RackChange Button
 		Image changeIconImage = new Image("changeIcon.png");
 		ImageView changeIconView = new ImageView(changeIconImage);
-		changeButton = new Button("Change Rack", changeIconView);
+		changeButton = new Button("Change Rack (2 points)", changeIconView);
 		changeButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
 		changeButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
 		//Buy another action Button
 		Image buyActionImage = new Image("buyAction.png");
 		ImageView buyActionView = new ImageView(buyActionImage);
-		buyActionButton = new Button("Buy Action", buyActionView);
+		buyActionButton = new Button("Buy Action (2 points)", buyActionView);
 		buyActionButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
 		buyActionButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
@@ -339,13 +339,13 @@ public class LaticeApplicationWindow extends Application {
 					playerFX.setFillName(Constant.realColor.RED);
 				}
 				
-				freeOrPayableTile = true;
+				isFreePlacement = true;
 				
-				rackImage = player.getRack().createTileImage();
-				setDragnDropOnRack(rackImage, player);
+				rackTileImage = player.getRack().createTileImage();
+				setDragnDropOnRack(rackTileImage, player);
 				setDragnDropOnRectangles(rect, board, referee, player);
-				rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
-				borderPane.setBottom(rackImage);
+				rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+				borderPane.setBottom(rackTileImage);
 				
 				
 			}
@@ -354,7 +354,7 @@ public class LaticeApplicationWindow extends Application {
 				
 				//switching to game finished screen if the game finishes
 				System.out.println("confirmBtnClickedCount : " + confirmBtnClickedCount);
-				if (confirmBtnClickedCount>=2) {
+				if (confirmBtnClickedCount>=20) {
 					Parent loader = FXMLLoader.load(getClass().getResource("../view/GameFinishedScreen.fxml"));
 					Scene gameFinishedScreenScene = new Scene(loader, Constant.SCREEN_WIDTH, Constant.SCREEN_HEIGHT);
 					if (player1.getNumberOfTilesRemaining() < player2.getNumberOfTilesRemaining()) {
@@ -379,13 +379,13 @@ public class LaticeApplicationWindow extends Application {
 		});
 		
 		//With Image
-		rackImage = player.getRack().createTileImage();
+		rackTileImage = player.getRack().createTileImage();
 		
 		//Adding lists to Arraylists
 		listRackTile = player.getRack().getListRackTile();
 		System.out.println(listRackTile);
-		listRackImage = player.getRack().getRackTileImage();
-		System.out.println("listTileImge : " + listRackImage);		
+		listOfTilesInRack = player.getRack().getRackTileImage();
+		System.out.println("listTileImge : " + listOfTilesInRack);		
 		
 		changeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -415,18 +415,19 @@ public class LaticeApplicationWindow extends Application {
 						
 						
 					////// for the next player //////
-					freeOrPayableTile = true;
-					rackImage = player.getRack().createTileImage();
+					isFreePlacement = true;
+					rackTileImage = player.getRack().createTileImage();
 					
 					//Setting drag n drop on tiles
-					setDragnDropOnRack(rackImage, player);
+					setDragnDropOnRack(rackTileImage, player);
 
-					rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+					rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
 					setDragnDropOnRectangles(rect, board, referee, player);
-					borderPane.setBottom(rackImage);
+					borderPane.setBottom(rackTileImage);
 						
 				}else {
 					System.out.println("Not enough points to change the rack");
+					gameInfoLabel.setText("Error !" + player.getName() + ", you haven't enough points to change your rack");
 				}
 			
 			}
@@ -437,22 +438,15 @@ public class LaticeApplicationWindow extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				//TODO verify score and give another play()
-                /*if (player.getScore()>=3) {
-                    //Donner une action supplémentaire et enlever 3 points au joueur
-                    player.Play(play, board, 0);
-                    player.diffScore(3);
-                }else {
-                    System.out.println("Il vous faut 3 points pour acheter une nouvelle action !");
-                }*/
+				gameInfoLabel.setText(player.getName() + ", you can now play another time !");
 			}
 			
 		});
 				
-		rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
-		setDragnDropOnRack(rackImage, player);
+		rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+		setDragnDropOnRack(rackTileImage, player);
 		System.out.println();
-		borderPane.setBottom(rackImage);
+		borderPane.setBottom(rackTileImage);
 		
 		//------------------------------------------------------------------------
 		
@@ -460,7 +454,7 @@ public class LaticeApplicationWindow extends Application {
 		
 
 		System.out.println((indexTileClicked));
-		ImagePattern imagePattern = new ImagePattern(listRackImage.get(getIndexTileClicked()));
+		ImagePattern imagePattern = new ImagePattern(listOfTilesInRack.get(getIndexTileClicked()));
 		
 		//------------------------------------------------------------------------
 
@@ -471,7 +465,7 @@ public class LaticeApplicationWindow extends Application {
 	
 		
 		
-		//------if there is already childrens, remove them all to start or restart game------------------------------------------------------------
+		//------if there is already childrens, remove them all to start or restart game--------------------------------
 		root.getChildren().clear();
 		//adding new childrens
 		root.getChildren().addAll(infoPlayers, borderPane);
@@ -490,27 +484,24 @@ public class LaticeApplicationWindow extends Application {
 		        
 		        
 				rect[a][b].setOnDragEntered(new EventHandler<DragEvent>() {
-	
+					
+					//if we are entering a rectangle
 					@Override
 					public void handle(DragEvent arg0) {
 						
 						
 						tileOnRect = rect[a][b].getFill();
-						if (arg0.getDragboard().hasString()){
-							Dragboard dragboard = arg0.getDragboard();
-							
-							//not putting the virtual image drag on the case because an image is already into it
-							player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
-							if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == true ) {
-							rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(indexTileClicked)));
-							}
+						//not putting the virtual image drag on the case because an image is already into it
+						player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
+						if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == true ) {
+						rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(indexTileClicked)));
 						}
 						arg0.consume();
 					}
 				});
 				
 				rect[a][b].setOnDragExited(new EventHandler<DragEvent>() {
-		
+					//if we are leaving a rectangle
 					@Override
 					public void handle(DragEvent arg0) {
 						if (arg0.isDropCompleted() == false) {
@@ -523,6 +514,8 @@ public class LaticeApplicationWindow extends Application {
 				});
 				
 				rect[a][b].setOnDragOver(new EventHandler <DragEvent>() {
+					
+					//If we are traveling over a rectangle
 					@Override
 				    public void handle(DragEvent arg0) {
 						
@@ -532,26 +525,24 @@ public class LaticeApplicationWindow extends Application {
 				});
 				
 				rect[a][b].setOnDragDropped(new EventHandler<DragEvent>() {
+					
+					//If we are dropping a tile in a rectangle
 					@Override
 					public void handle(DragEvent arg0) {
-						System.out.println("entered");
-						Dragboard dragboard = arg0.getDragboard();
-						System.out.println("OK2");
-						
 						
 						rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(indexTileClicked)));
 						
-						
 						arg0.setDropCompleted(true);
-						System.out.println("OK");
-						ErrorLabel.setText("");
+						gameInfoLabel.setText("");
 						
-						if (referee.checkScoreToPlay(player, freeOrPayableTile) == false) {
-							ErrorLabel.setText("Error ! You haven't enough points to play another tile");
+						//testing if player has enough points
+						if (referee.checkScoreToPlay(player, isFreePlacement) == false) {
+							gameInfoLabel.setText("Error !" + player.getName() + ", you haven't enough points to play another tile");
 							rect[a][b].setFill(tileOnRect);
 							
 						}else {
 							
+							//testing if it's the free round
 							if (Constant.START) {
 								if (rect[a][b] == rect[Constant.MOON_BOX_X][Constant.MOON_BOX_Y]) {
 									//if its's the center box (moon box)
@@ -559,11 +550,11 @@ public class LaticeApplicationWindow extends Application {
 									
 									board.setGridBoardTile(player.getRack().getListRackTile().get(indexTileClicked), a, b);
 									tileDropped = true;
-									freeOrPayableTile = false;
+									isFreePlacement = false;
 									Constant.START = false;
 									
 								}else {
-									ErrorLabel.setText("Error ! Please place the first tile on the moon");
+									gameInfoLabel.setText("Error ! " + player.getName() + ", please place the first tile on the moon");
 									//removing all tiles from gameboard
 									rect[a][b].setFill(Constant.realColor.TRANSPARENT);
 									
@@ -573,13 +564,12 @@ public class LaticeApplicationWindow extends Application {
 								
 							}else {
 								//if it's not the first round of the game
-								System.out.println("OK3");
-								System.out.println("Règle effectué");
+								//not removing the tile from the rack
 								player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
 								
 								//verify if a tile is already placed
 								if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == false ) {
-									ErrorLabel.setText("Error ! The tile can't be placed here because there is already a tile placed");
+									gameInfoLabel.setText("Error ! The tile can't be placed here because there is already a tile placed");
 									rect[a][b].setFill(tileOnRect);
 									
 								}else {
@@ -587,37 +577,41 @@ public class LaticeApplicationWindow extends Application {
 									int nbr = referee.neighborRule(board , player.getRack().getListRackTile().get(indexTileClicked));
 									
 									if (nbr == 0) {
-										ErrorLabel.setText("Error ! The tile isn't place next to another tile or there is no correspondance with the neighbor tiles !!");
+										gameInfoLabel.setText("Error! The tile isn't placed next to another tile or there is no correspondance with the neighbor tiles!");
 										rect[a][b].setFill(Constant.realColor.TRANSPARENT);
 										
 									}else {
 										
-										if (freeOrPayableTile == false) {
-											playerFX.setDiffScore(player, 2);
+										if (isFreePlacement == false) {
+											playerFX.setRemovePointsFromScore(player, 2);
 										}
 										
 										if (nbr == 2) {
 											System.out.println("Vous avez gagné 1 point");
-											playerFX.setAddScore(player, 1);
+											gameInfoLabel.setText(player.getName() + "You won 1 point");
+											playerFX.setAddPointsToScore(player, 1);
 											
 										}else if (nbr == 3) {
 											System.out.println("Vous avez gagné 2 points");
-											playerFX.setAddScore(player, 2);
+											gameInfoLabel.setText(player.getName() + "You won 2 points");
+											playerFX.setAddPointsToScore(player, 2);
 											
 										}else if (nbr == 4) {
 											System.out.println("Vous avez gagné 4 points");
-											playerFX.setAddScore(player, 4);
+											gameInfoLabel.setText(player.getName() + "You won 4 points");
+											playerFX.setAddPointsToScore(player, 4);
 										}
 										
 										board.setGridBoardTile(player.getRack().getListRackTile().get(getIndexTileClicked()), a, b);
 										tileDropped = true;
-										freeOrPayableTile = false;
+										isFreePlacement = false;
 										System.out.println("tuile posé!");
 										
 										//Sun rule
 										if (referee.sunRule(board, player.getRack().getListRackTile().get(indexTileClicked))) {
 											System.out.println("Vous avez gagné 2 points en mettant votre tuile sur un soleil");
-											playerFX.setAddScore(player, 2);
+											gameInfoLabel.setText("Wow!" + player.getName() + "You won 2 points by placing a tile on a sun !");
+											playerFX.setAddPointsToScore(player, 2);
 											
 										}
 									}
@@ -635,18 +629,12 @@ public class LaticeApplicationWindow extends Application {
 	        }
 		}
 	}
-
-
-	
-
-
+	//-------------------------------------------------------------------------------
 
 	private void setDragnDropOnRack(HBox rackBox, Player player) {
 		//Setting drag n drop on tiles
 		for (int i=0; i< player.getRack().getRackTileImage().size(); i++) {
 			int a = i;
-			System.out.println(a);
-			//HBox t = rackBox.getChildren().indexOf(rack);
 			rackBox.getChildren().get(a).setOnDragDetected(new EventHandler<MouseEvent>() {
 				
 				@Override
@@ -668,14 +656,13 @@ public class LaticeApplicationWindow extends Application {
 				public void handle(DragEvent arg0) {
 					if (tileDropped) {
 						player.getRack().getListRackTile().remove(a);
-						rackImage = player.getRack().createTileImage();
+						rackTileImage = player.getRack().createTileImage();
 						
 						//Setting drag n drop on tiles
-						setDragnDropOnRack(rackImage, player);
+						setDragnDropOnRack(rackTileImage, player);
 	
-						rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
-						//setDragnDropOnRectangles(rect, board, referee, player);
-						borderPane.setBottom(rackImage);
+						rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+						borderPane.setBottom(rackTileImage);
 						tileDropped = false;
 						playerFX.setTilesRemaining(player);
 					}
@@ -689,10 +676,6 @@ public class LaticeApplicationWindow extends Application {
 	}
 	public static StackPane getRootLayout() {
 		return rootLayout;
-	}
-
-	public static String getNameWinner() {
-		return nameWinner.getText();
 	}
 
 	//getter to get the index of the mouse clicked tile

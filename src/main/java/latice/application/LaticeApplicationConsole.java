@@ -110,7 +110,7 @@ public class LaticeApplicationConsole {
 							if (player.getScore()>=3) {
 								//Buy another action and remove 2 points from score
 								player.Play(play, board, 0);
-								player.diffScore(2);
+								player.removePointsFromScore(2);
 							}else {
 								System.out.println("Il vous faut 2 points pour acheter une nouvelle action !");
 							}
