@@ -20,9 +20,7 @@ public class LaticeApplicationConsole {
 		
 		ArrayList<Tile> listOfTile = new ArrayList<Tile>();
 		
-		//System.out.println("Hello Latice !");
 		
-		/*
 		for (Color color : Color.values()) {
 			for (Shape shape : Shape.values()) {
 				Tile tile = new Tile(color, shape);
@@ -32,68 +30,7 @@ public class LaticeApplicationConsole {
 				
 			}
 		}
-	
 
-		
-		System.out.println("-----------------");
-		System.out.println("Notre Deck :");
-		Deck deck = new Deck(listOfTile);
-		deck.displayListTile();
-		System.out.println("-----------------");
-		Rack rack = new Rack(deck);
-		System.out.println("-----------------");
-		deck.displayListTile();
-		
-		System.out.println("-----------------");
-		GameBoard board = new GameBoard(); 
-		board.displayGameBoard();
-		System.out.println("-----------------");
-		board.setGridBoard(" NV ", 4, 4);
-		board.displayGameBoard();
-		System.out.println("-----------------");
-		Score scorePlayer1 = new Score();
-		Score scorePlayer2 = new Score();
-		Player player1 = new Player("player1", scorePlayer1);
-		Player player2 = new Player("player2", scorePlayer2);
-		
-		System.out.println(player1.getName() + " a " + scorePlayer1.getScore() +" points");
-		System.out.println(player2.getName() + " a " + scorePlayer2.getScore() +" points");
-		
-		rack.displayRack();
-		
-		*/
-		
-		for (Color color : Color.values()) {
-			for (Shape shape : Shape.values()) {
-				Tile tile = new Tile(color, shape);
-				System.out.println(color.getStringColor() + shape.getStringShape()+ ".png");
-				
-				listOfTile.add(tile);
-				
-			}
-		}
-		
-		System.out.println("-----------------");
-		//System.out.println("Notre Deck :");
-		//Deck deck1 = new Deck(listOfTile);
-		//Deck deck2 = new Deck(listOfTile);
-		//deck1.displayListTile();
-		System.out.println("-----------------");
-		//Rack rack1 = new Rack(deck1);
-		//Rack rack2 = new Rack(deck2);
-		//Score scorePlayer1 = new Score();
-		//Score scorePlayer2 = new Score();
-		//Player player1 = new Player("player1", scorePlayer1);
-		//Player player2 = new Player("player2", scorePlayer2);
-		
-		System.out.println("-----------------");
-		//GameBoard board = new GameBoard(); 
-		//board.displayGameBoard();
-		System.out.println("-----------------");
-		
-		//System.out.println(player1.getName() + " a " + scorePlayer1.getScore() +" points");
-		//System.out.println(player2.getName() + " a " + scorePlayer2.getScore() +" points");
-		//rack1.displayRack();
 
 		
 		System.out.println("Hello Latice !");
@@ -171,7 +108,7 @@ public class LaticeApplicationConsole {
 							
 					case 2:
 							if (player.getScore()>=3) {
-								//Donner une action supplémentaire et enlever 3 points au joueur
+								//Buy another action and remove 2 points from score
 								player.Play(play, board, 0);
 								player.diffScore(2);
 							}else {
