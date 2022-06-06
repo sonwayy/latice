@@ -106,8 +106,8 @@ public class LaticeApplicationConsole {
 		
 		Score scorePlayer1 = new Score();
 		Score scorePlayer2 = new Score();
-		Player player1 = new Player("player1", scorePlayer1, deck1, rack1);
-		Player player2 = new Player("player2", scorePlayer2, deck2, rack2);
+		Player player1 = new Player("player1", deck1);
+		Player player2 = new Player("player2", deck2);
 		
 		System.out.println("-----------------");
 		GameBoard board = new GameBoard();

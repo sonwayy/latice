@@ -58,11 +58,10 @@ import latice.model.window.PlayerFX;
 
 public class LaticeApplicationWindow extends Application {
 	
-	
 	Image image = new Image("backgroundLatice.png");
 	ImageView imageView = new ImageView(image);
 	
-	
+	//lists for tiles
 	ArrayList<Tile> listRackTile;
 	ArrayList<Image> listRackImage;
 	ArrayList<Tile> listOfTile = new ArrayList<Tile>();
@@ -70,10 +69,7 @@ public class LaticeApplicationWindow extends Application {
 
 	public static int indexTileClicked;
 	
-	
 	//settings players
-	//public Player player1;
-	//public Player player2;
 	public Player player;
 	
 	// informations of the player
@@ -84,12 +80,10 @@ public class LaticeApplicationWindow extends Application {
 	Button changeButton;
 	Button buyActionButton;
 	
-	//setting the referee to check rules, the GameBoard where the tile are placed and the Rectangle to put the image tile in the plateau
+	//setting the referee to check rules, the GameBoard where the tile are placed and the Rectangle to put the image tile in the game board
 	Rectangle[][] rect;
 	GameBoard board;
 	Rules referee;
-	
-	
 	
 	//setting to know if the tile is well dropped with the check of rules or not
 	//To start, it's false
@@ -97,10 +91,9 @@ public class LaticeApplicationWindow extends Application {
 	
 	Paint tileOnRect;
 	
-	//tile is free when it the first tile put but tile is payable after
+	//tile is free when it's the first tile put but tile is payable after
 	Boolean freeOrPayableTile = true;
 	
-	//borderPane layout
 	public static BorderPane borderPane = new BorderPane();
 	
 	//StackPane for background image + BorderPane onto it
@@ -116,6 +109,8 @@ public class LaticeApplicationWindow extends Application {
 	
 	int confirmBtnClickedCount;
 	
+	Parent loader;
+	static Scene menu;
 
 	public static void main(String[] args) {
 		Application.launch(args);
@@ -126,8 +121,9 @@ public class LaticeApplicationWindow extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception{
-		Parent loader = FXMLLoader.load(getClass().getResource("../view/MainScreen.fxml"));
-		Scene menu = new Scene(loader, 1280, 720);
+		//setting main menu screen
+		loader = FXMLLoader.load(getClass().getResource("../view/MainScreen.fxml"));
+		menu = new Scene(loader, Constant.SCREEN_WIDTH, Constant.SCREEN_HEIGHT);
 		
 		MainScreenController MSC = new MainScreenController();
 		
@@ -143,29 +139,40 @@ public class LaticeApplicationWindow extends Application {
 		
 	}
 	
-	public void startGame(Stage stage, StackPane parentStackPaneStock, Player player1, Player player2, Object menuBorderPane) {
+	public void startGame(Stage stage, StackPane parentStackPaneStock, Player player1, Player player2, Object menuBorderPane, Boolean isRestart) {
+		//changing layouts to start the game
 		parentStackPane = parentStackPaneStock;
 		StackPane root = getRootLayout();
-		root.translateYProperty().set(stage.getHeight());
 		System.out.println(parentStackPane);
 		System.out.println(parentStackPaneStock);
-		if (parentStackPane.getChildren().contains(root)) {
+		if (isRestart) {
+			//if we're restarting the game then do some settings
+			System.out.println("Voici le menu : " + menu);
+			Constant.START = true;
+			stage.setScene(menu);
+			
 			parentStackPane.getChildren().remove(root);
-		}
-		parentStackPane.getChildren().add(root);
-		
-		
-		//settings for the animation
-		Timeline timeline = new Timeline();
-		KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
-        timeline.getKeyFrames().add(kf);
-        
-        //when the animation is finished we're removing the main screen
-        timeline.setOnFinished(t -> {
+			//parentStackPane.getChildren().add(root);
             parentStackPane.getChildren().remove(menuBorderPane);
-        });
-        timeline.play();
+		}else {
+			
+			//else if it's the first time we're launching it
+			root.translateYProperty().set(stage.getHeight());
+			parentStackPane.getChildren().add(root);
+			
+			
+			//settings for the animation
+			Timeline timeline = new Timeline();
+			KeyValue kv = new KeyValue(root.translateYProperty(), 0, Interpolator.EASE_IN);
+	        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+	        timeline.getKeyFrames().add(kf);
+	        
+	        //when the animation is finished we're removing the main screen
+	        timeline.setOnFinished(t -> {
+	            parentStackPane.getChildren().remove(menuBorderPane);
+	        });
+	        timeline.play();
+		}
         
         
         
@@ -177,12 +184,14 @@ public class LaticeApplicationWindow extends Application {
 		title.setFont(new Font(30));
 		topVbox.getChildren().add(title);
 		topVbox.setAlignment(Pos.CENTER);
+		
+		//error label for displaying errors
 		ErrorLabel.setFont(new Font(20));
 		ErrorLabel.setTextFill(Constant.realColor.RED);
 		topVbox.getChildren().add(ErrorLabel);
 		borderPane.setTop(topVbox);
 		
-		//Image
+		//background image
 		Pane pane = new Pane();
 		BackgroundImage myBG= new BackgroundImage(image,
 		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -234,7 +243,9 @@ public class LaticeApplicationWindow extends Application {
 		
 		//----------- group all players in a HBox to display -----------//
 		HBox infoPlayers = new HBox();
+		
 		infoPlayers.getChildren().addAll(infoPlayer1, infoPlayer2);
+		
 		HBox.setMargin(infoPlayer1, new Insets(50,0,0,55));
 		HBox.setMargin(infoPlayer2, new Insets(50,0,0,55));
 		infoPlayers.setSpacing(850);
@@ -264,7 +275,6 @@ public class LaticeApplicationWindow extends Application {
 		System.out.println("-----------------");
 		Rack rack = new Rack(deck);
 		System.out.println("-----------------");
-		//deck.displayListTile();
 		
 		
 		//Player
@@ -296,6 +306,7 @@ public class LaticeApplicationWindow extends Application {
 		buyActionButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
 		confirmButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			//confirming the end of the round and switching round
 
 			@Override
 			public void handle(MouseEvent arg0) {
@@ -306,7 +317,6 @@ public class LaticeApplicationWindow extends Application {
 				try {
 					switchToGameFinishedScreen();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -314,22 +324,9 @@ public class LaticeApplicationWindow extends Application {
 				player.getRack().displayRack();
 				player.getRack().updateRack();
 				
-				//HBox newRackImage = rack2.createTileImage();
-				//rackImage.getChildren().clear();
-				//listRackTile = rack2.getListRackTile();
-				//System.out.println(listRackTile);
 				player.getRack().displayRack();
 				
-
-				
-				//Setting drag n drop on tiles
-				
-				
-				
-				//setDragnDropOnRectangles(rect, board, referee, player);
-				
-				
-				
+				//making names colored in red to make the players know which player's round is
 				if (confirmBtnClickedCount%2 == 0) {
 					playerFX.setFillName(Constant.realColor.BLACK);
 					player = player1;
@@ -354,16 +351,20 @@ public class LaticeApplicationWindow extends Application {
 			}
 
 			private void switchToGameFinishedScreen() throws IOException {
+				
+				//switching to game finished screen if the game finishes
 				System.out.println("confirmBtnClickedCount : " + confirmBtnClickedCount);
-				if (confirmBtnClickedCount>=20) {
+				if (confirmBtnClickedCount>=2) {
 					Parent loader = FXMLLoader.load(getClass().getResource("../view/GameFinishedScreen.fxml"));
-					Scene gameFinishedScreenScene = new Scene(loader, 1280, 720);
+					Scene gameFinishedScreenScene = new Scene(loader, Constant.SCREEN_WIDTH, Constant.SCREEN_HEIGHT);
 					if (player1.getNumberOfTilesRemaining() < player2.getNumberOfTilesRemaining()) {
 						// if player 1 has less tiles then he wins
 						GameFinishedScreenController.staticNameWinner.setText(player1.getName());
+						GameFinishedScreenController.staticNameLooser.setText(player2.getName());
 					}else {
 						//if player 2 has less tiles then he wins
 						GameFinishedScreenController.staticNameWinner.setText(player2.getName());
+						GameFinishedScreenController.staticNameLooser.setText(player1.getName());
 					}
 					stage.setScene(gameFinishedScreenScene);
 					
@@ -377,35 +378,20 @@ public class LaticeApplicationWindow extends Application {
 			
 		});
 		
-		
 		//With Image
-		//Rack player.getRack() = new Rack(deck);
 		rackImage = player.getRack().createTileImage();
 		
 		//Adding lists to Arraylists
 		listRackTile = player.getRack().getListRackTile();
 		System.out.println(listRackTile);
 		listRackImage = player.getRack().getRackTileImage();
-		System.out.println("listTileImge : " + listRackImage);
-		//HBox rackTile = rack2.createTileImage();
-		
-		
+		System.out.println("listTileImge : " + listRackImage);		
 		
 		changeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				
-				
-				
-				//player.getRack().changeRack();
-				
-				//HBox newRackImage = rack2.createTileImage();
-				//rackImage.getChildren().clear();
-				//listRackTile = rack2.getListRackTile();
-				//System.out.println(listRackTile);
-				
-				
+
 				////// for the actual player //////
 				if (player.getScore() > 1) {
 					System.out.println("Changing Rack");
@@ -462,18 +448,11 @@ public class LaticeApplicationWindow extends Application {
 			}
 			
 		});
-		
-		//HBox rackTile = rack2.createTileImage();
-		
+				
 		rackImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
 		setDragnDropOnRack(rackImage, player);
 		System.out.println();
 		borderPane.setBottom(rackImage);
-		
-		
-		
-		
-		
 		
 		//------------------------------------------------------------------------
 		
@@ -484,12 +463,7 @@ public class LaticeApplicationWindow extends Application {
 		ImagePattern imagePattern = new ImagePattern(listRackImage.get(getIndexTileClicked()));
 		
 		//------------------------------------------------------------------------
-		//###################### creating all rectangles and DragnDrop ######################//
-		//RectangleFX rectFX = new RectangleFX();
-		//rectFX.createRectangle(root, pane);
-		//rectFX.dragnDropOnAllRectangles(player1, indexTileClicked, validateBtnClickedCount);
-		//rectFX.dragnDropOnAllRectangles(player2, indexTileClicked, validateBtnClickedCount);
-		//------------------------------------------------------------------------
+
 		
 		//Setting drag & drop on rectangles
 		setDragnDropOnRectangles(rect, board, referee, player);
@@ -497,8 +471,9 @@ public class LaticeApplicationWindow extends Application {
 	
 		
 		
-		//--------------------------------------------------------------------------------------
-		
+		//------if there is already childrens, remove them all to start or restart game------------------------------------------------------------
+		root.getChildren().clear();
+		//adding new childrens
 		root.getChildren().addAll(infoPlayers, borderPane);
 		
         
@@ -524,7 +499,7 @@ public class LaticeApplicationWindow extends Application {
 						if (arg0.getDragboard().hasString()){
 							Dragboard dragboard = arg0.getDragboard();
 							
-							//not put the virtual image drag on the case because an image is already into it
+							//not putting the virtual image drag on the case because an image is already into it
 							player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
 							if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == true ) {
 							rect[a][b].setFill(new ImagePattern(player.getRack().getRackTileImage().get(indexTileClicked)));
@@ -578,7 +553,8 @@ public class LaticeApplicationWindow extends Application {
 						}else {
 							
 							if (Constant.START) {
-								if (rect[a][b] == rect[4][4]) {
+								if (rect[a][b] == rect[Constant.MOON_BOX_X][Constant.MOON_BOX_Y]) {
+									//if its's the center box (moon box)
 									System.out.println("MOON valid placement");
 									
 									board.setGridBoardTile(player.getRack().getListRackTile().get(indexTileClicked), a, b);
@@ -596,18 +572,18 @@ public class LaticeApplicationWindow extends Application {
 								}
 								
 							}else {
+								//if it's not the first round of the game
 								System.out.println("OK3");
 								System.out.println("Règle effectué");
 								player.getRack().getListRackTile().get(indexTileClicked).setPosition(new Position(a,b));
 								
-								
-								
-								
+								//verify if a tile is already placed
 								if ( referee.checkPositionRule(board, player.getRack().getListRackTile().get(indexTileClicked))  == false ) {
 									ErrorLabel.setText("Error ! The tile can't be placed here because there is already a tile placed");
 									rect[a][b].setFill(tileOnRect);
 									
 								}else {
+									//if there is not already a tile
 									int nbr = referee.neighborRule(board , player.getRack().getListRackTile().get(indexTileClicked));
 									
 									if (nbr == 0) {
@@ -638,7 +614,7 @@ public class LaticeApplicationWindow extends Application {
 										freeOrPayableTile = false;
 										System.out.println("tuile posé!");
 										
-										
+										//Sun rule
 										if (referee.sunRule(board, player.getRack().getListRackTile().get(indexTileClicked))) {
 											System.out.println("Vous avez gagné 2 points en mettant votre tuile sur un soleil");
 											playerFX.setAddScore(player, 2);
@@ -649,13 +625,6 @@ public class LaticeApplicationWindow extends Application {
 							}
 								
 						}
-							
-							
-							
-							
-							
-				        
-						
 						
 						arg0.consume();
 					}

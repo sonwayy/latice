@@ -4,6 +4,12 @@ public class Constant {
 	//for the start of the game
 	public static Boolean START = true;
 	
+	public static final int SCREEN_HEIGHT = 720;
+	public static final int SCREEN_WIDTH = 1280;
+	
+	public static final int MOON_BOX_Y = 4;
+	public static final int MOON_BOX_X = 4;
+	
 	//for creating rectangles
 	public static final int NUMBER_OF_BOX_ON_ONE_LINE = 9;
 

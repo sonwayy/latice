@@ -124,9 +124,10 @@ public class MainScreenController extends LaticeApplicationWindow{
 		nameInputStage.show();
 	}
 	
-	public void startGameInstruction() {
+	public void startGameInstruction(Boolean isRestart) {
 		
-        startGame(mainStage, parentStackPaneStock, player1, player2, menuBorderPane);
+		startGame(mainStage, parentStackPaneStock, player1, player2, menuBorderPane, isRestart);
+        
 	}
 	
 	/*public void startGame(Stage stage) {
@@ -184,7 +185,7 @@ public class MainScreenController extends LaticeApplicationWindow{
 		Deck deck = new Deck(listOfTile);
 		Deck deck2 = new Deck(listOfTile);
 		
-		Player player = new Player(namePlayer, new Score(), deck, new Rack(deck));
+		Player player = new Player(namePlayer, deck);
 		return player;
 	}
 	

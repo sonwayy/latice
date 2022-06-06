@@ -23,12 +23,15 @@ public class GameFinishedScreenController implements Initializable{
 	private Label nameWinner;
 	
 	public static Label staticNameWinner;
+	public static Label staticNameLooser = new Label();
 	
 	// Event Listener on Button[#replayBtn].onMouseClicked
 	@FXML
 	public void replayBtnClicked(MouseEvent event) {
 		MainScreenController MSC = new MainScreenController();
-		MSC.startGameInstruction();
+		MSC.player1 = MSC.instanciatePlayer(staticNameWinner.getText());
+		MSC.player2 = MSC.instanciatePlayer(staticNameLooser.getText());
+		MSC.startGameInstruction(true);
 		System.out.println("replayBtnClicked");
 	}
 	// Event Listener on Button[#quitBtn].onMouseClicked

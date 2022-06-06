@@ -20,6 +20,10 @@ public class Player {
 		this.rack = rack;
 	}
 	
+	public Player(String name, Deck deck) {
+		this(name, new Score(), deck, new Rack(deck));
+	}
+	
 	/*public Player(Score score, Deck deck, Rack rack) {
 		this(namePlayer,score,deck,rack);
 		//Demande le nom du joueur

@@ -53,7 +53,7 @@ public class PlayerNameInputController {
 		if(nomJoueur2.getText().length() < 3 || nomJoueur2.getText().length() > 16) {
 			label2.setVisible(true);
 		}
-		else {
+		if ((nomJoueur1.getText().length() >= 3 && nomJoueur1.getText().length() <= 16 ) && (nomJoueur2.getText().length() >= 3 && nomJoueur2.getText().length() <= 16)) {
 			
 			Stage nameInputStage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
 			//setting player names
@@ -72,7 +72,7 @@ public class PlayerNameInputController {
 			mainScreenController.player2 = mainScreenController.instanciatePlayer(name2);
 			
 			//PlayerFX.displayPlayers(root ,laticeApplicationWindow.player1, laticeApplicationWindow.player2);
-			mainScreenController.startGameInstruction();
+			mainScreenController.startGameInstruction(false);
 		}
 	}
 
