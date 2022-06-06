@@ -152,7 +152,7 @@ public class LaticeApplicationWindow extends Application {
 			stage.setScene(menu);
 			
 			parentStackPane.getChildren().remove(root);
-			parentStackPane.getChildren().add(root);
+			//parentStackPane.getChildren().add(root);
             parentStackPane.getChildren().remove(menuBorderPane);
 		}else {
 			
@@ -243,9 +243,7 @@ public class LaticeApplicationWindow extends Application {
 		
 		//----------- group all players in a HBox to display -----------//
 		HBox infoPlayers = new HBox();
-		if (isRestart) {
-			infoPlayers.getChildren().removeAll(infoPlayer1, infoPlayer2);
-		}
+		
 		infoPlayers.getChildren().addAll(infoPlayer1, infoPlayer2);
 		
 		HBox.setMargin(infoPlayer1, new Insets(50,0,0,55));
@@ -473,14 +471,8 @@ public class LaticeApplicationWindow extends Application {
 	
 		
 		
-		//------if it's à restart game then remove old childrens------------------------------------------------------------
-		
-		if (root.getChildren().contains(infoPlayers)) {
-			root.getChildren().remove(infoPlayers);
-		}
-		if (root.getChildren().contains(borderPane)) {
-			root.getChildren().remove(borderPane);
-		}
+		//------if there is already childrens, remove them all to start or restart game------------------------------------------------------------
+		root.getChildren().clear();
 		//adding new childrens
 		root.getChildren().addAll(infoPlayers, borderPane);
 		

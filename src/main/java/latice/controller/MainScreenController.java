@@ -185,7 +185,7 @@ public class MainScreenController extends LaticeApplicationWindow{
 		Deck deck = new Deck(listOfTile);
 		Deck deck2 = new Deck(listOfTile);
 		
-		Player player = new Player(namePlayer, new Score(), deck, new Rack(deck));
+		Player player = new Player(namePlayer, deck);
 		return player;
 	}
 	
