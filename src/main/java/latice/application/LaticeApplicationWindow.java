@@ -294,7 +294,7 @@ public class LaticeApplicationWindow extends Application {
 		//RackChange Button
 		Image changeIconImage = new Image("changeIcon.png");
 		ImageView changeIconView = new ImageView(changeIconImage);
-		changeButton = new Button("Change Rack (2 points)", changeIconView);
+		changeButton = new Button("Change Rack", changeIconView);
 		changeButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
 		changeButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
