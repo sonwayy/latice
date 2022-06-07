@@ -294,7 +294,7 @@ public class LaticeApplicationWindow extends Application {
 		//RackChange Button
 		Image changeIconImage = new Image("changeIcon.png");
 		ImageView changeIconView = new ImageView(changeIconImage);
-		changeButton = new Button("Change Rack (3 points)", changeIconView);
+		changeButton = new Button("Change Rack (2 points)", changeIconView);
 		changeButton.setPrefWidth(Constant.ACTION_BUTTONS_WIDTH);
 		changeButton.setPrefHeight(Constant.ACTION_BUTTONS_HEIGHT);
 		
@@ -396,7 +396,11 @@ public class LaticeApplicationWindow extends Application {
 			public void handle(MouseEvent arg0) {
 
 				////// for the actual player //////
-				if (player.getScore() >= 3) {
+				if (player.getScore() >= 2 || isFreePlacement) {
+					if (!isFreePlacement) {
+						playerFX.setRemovePointsFromScore(player, 2);
+					}
+					
 					System.out.println("Changing Rack");
 					confirmBtnClickedCount++;
 					player.getRack().changeRack();
@@ -427,10 +431,11 @@ public class LaticeApplicationWindow extends Application {
 					rackTileImage.getChildren().addAll(confirmButton, changeButton/*, buyActionButton*/);
 					setDragnDropOnRectangles(rect, board, referee, player);
 					borderPane.setBottom(rackTileImage);
+					
 						
 				}else {
 					System.out.println("Not enough points to change the rack");
-					gameInfoLabel.setText("Error !" + player.getName() + ", you haven't enough points to change your rack");
+					gameInfoLabel.setText("Error ! " + player.getName() + ", you haven't enough points to change your rack");
 				}
 			
 			}
@@ -540,7 +545,7 @@ public class LaticeApplicationWindow extends Application {
 						
 						//testing if player has enough points
 						if (referee.checkScoreToPlay(player, isFreePlacement) == false) {
-							gameInfoLabel.setText("Error !" + player.getName() + ", you haven't enough points to play another tile");
+							gameInfoLabel.setText("Error ! " + player.getName() + ", you haven't enough points to play another tile");
 							rect[a][b].setFill(tileOnRect);
 							
 						}else {
@@ -591,17 +596,17 @@ public class LaticeApplicationWindow extends Application {
 										
 										if (nbr == 2) {
 											System.out.println("Vous avez gagné 1 point");
-											gameInfoLabel.setText(player.getName() + "You won 1 point");
+											gameInfoLabel.setText(player.getName() + ", you won 1 point");
 											playerFX.setAddPointsToScore(player, 1);
 											
 										}else if (nbr == 3) {
 											System.out.println("Vous avez gagné 2 points");
-											gameInfoLabel.setText(player.getName() + "You won 2 points");
+											gameInfoLabel.setText(player.getName() + ", you won 2 points");
 											playerFX.setAddPointsToScore(player, 2);
 											
 										}else if (nbr == 4) {
 											System.out.println("Vous avez gagné 4 points");
-											gameInfoLabel.setText(player.getName() + "You won 4 points");
+											gameInfoLabel.setText(player.getName() + ", you won 4 points");
 											playerFX.setAddPointsToScore(player, 4);
 										}
 										
@@ -613,7 +618,7 @@ public class LaticeApplicationWindow extends Application {
 										//Sun rule
 										if (referee.sunRule(board, player.getRack().getListRackTile().get(indexTileClicked))) {
 											System.out.println("Vous avez gagné 2 points en mettant votre tuile sur un soleil");
-											gameInfoLabel.setText("Wow!" + player.getName() + "You won 2 points by placing a tile on a sun !");
+											gameInfoLabel.setText("Wow! " + player.getName() + ", you won 2 points by placing a tile on a sun !");
 											playerFX.setAddPointsToScore(player, 2);
 											
 										}
@@ -664,7 +669,7 @@ public class LaticeApplicationWindow extends Application {
 						//Setting drag n drop on tiles
 						setDragnDropOnRack(rackTileImage, player);
 	
-						rackTileImage.getChildren().addAll(confirmButton, changeButton, buyActionButton);
+						rackTileImage.getChildren().addAll(confirmButton, changeButton/*, buyActionButton*/);
 						borderPane.setBottom(rackTileImage);
 						tileDropped = false;
 						playerFX.setTilesRemaining(player);
