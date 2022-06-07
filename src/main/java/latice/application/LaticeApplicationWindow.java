@@ -353,7 +353,7 @@ public class LaticeApplicationWindow extends Application {
 				
 			}
 
-			private void switchToGameFinishedScreen() throws IOException {
+			public void switchToGameFinishedScreen() throws IOException {
 				
 				//switching to game finished screen if the game finishes
 				System.out.println("confirmBtnClickedCount : " + confirmBtnClickedCount);

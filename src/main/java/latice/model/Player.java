@@ -63,7 +63,7 @@ public class Player {
 
 		}
 		
-		System.out.print("Quel tuile voulez-vous jouez ? ");
+		System.out.print("Quelle tuile voulez-vous jouez ? ");
 		this.rack.displayRack();
 		Integer idTileToPlay = Integer.parseInt(play.next())-1;
 		Tile tileToPlay = this.rack.getListRackTile().get(idTileToPlay);
@@ -75,12 +75,6 @@ public class Player {
 		tileToPlay.setPosition(new Position(row, column));
 		return tileToPlay;
 		
-		//.setGridBoard(" "+tileToPlay.getShapeConsole()+tileToPlay.getColorConsole()+" ", row, column);
-		//this.rack.removeTile(tileToPlay);
-		
-		//board.displayGameBoard();
-		
-		//this.rack.updateRack();
 		
 		
 	}

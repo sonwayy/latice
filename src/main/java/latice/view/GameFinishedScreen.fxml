@@ -13,9 +13,9 @@
          <image>
             <Image url="@/gameFinishedImage.png" />
          </image></ImageView>
-      <Label fx:id="nameWinner" alignment="CENTER_RIGHT" layoutX="453.0" layoutY="247.0" prefHeight="22.0" prefWidth="300.0" textAlignment="CENTER">
+      <Label fx:id="nameWinner" alignment="CENTER_RIGHT" layoutX="274.0" layoutY="236.0" prefHeight="51.0" prefWidth="488.0" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="Bell MT" size="40.0" />
+            <Font name="Verdana" size="40.0" />
          </font></Label>
    	<Button fx:id="quitBtn" layoutX="753.0" layoutY="555.0" mnemonicParsing="false" onMouseClicked="#quitBtnClicked" prefHeight="140.0" prefWidth="380.0" style="-fx-background-color: transparent;" textFill="TRANSPARENT" />
       <Button fx:id="replayBtn" layoutX="175.0" layoutY="555.0" mnemonicParsing="false" onMouseClicked="#replayBtnClicked" prefHeight="140.0" prefWidth="380.0" style="-fx-background-color: transparent;" textFill="TRANSPARENT" />

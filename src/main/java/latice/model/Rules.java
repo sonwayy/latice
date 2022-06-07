@@ -6,10 +6,9 @@ import java.util.regex.Pattern;
 import latice.model.console.GameBoard;
 
 public class Rules {
-	//private static boolean START = true;
 	
 	public Rules() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public Boolean moonRule(GameBoard board, Tile tile) {

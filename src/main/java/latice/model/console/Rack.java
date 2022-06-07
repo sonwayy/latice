@@ -158,11 +158,5 @@ public class Rack {
 	}
 	
 	
-	
-	
-	
-	
-	// TODO add method(s) javafx
-
 }
 
