@@ -45,8 +45,9 @@ public class GameBoard {
 	
 	public void displayGameBoard() {
 		System.out.println("     1.   2.   3.   4.   5.   6.   7.   8.   9.");
-		System.out.println("   +----+----+----+----+----+----+----+----+----+");
+		System.out.println("    ____ ____ ____ ____ ____ ____ ____ ____ ____ ");
 		for (int i = 0; i < DIMENSION; i++) {
+			System.out.println("   |    |    |    |    |    |    |    |    |    |");
 			System.out.print(i+1 + ". ");
 			for (int j = 0; j < DIMENSION; j++) {
 				System.out.print("|");
@@ -88,7 +89,7 @@ public class GameBoard {
 				
 				if (j == 8) {
 					System.out.println("|");
-					System.out.println("   +----+----+----+----+----+----+----+----+----+");
+					System.out.println("   |____|____|____|____|____|____|____|____|____|");
 				}
 				
 				

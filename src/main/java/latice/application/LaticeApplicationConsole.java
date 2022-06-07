@@ -43,6 +43,7 @@ public class LaticeApplicationConsole {
 		
 
 		GameBoard board = new GameBoard();
+		board.displayGameBoard();
 		
 		
 		Scanner play = new Scanner(System.in);
